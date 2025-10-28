@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+        
+        .game-container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        canvas {
+            border: 3px solid #fff;
+            border-radius: 10px;
+            background: #000;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        
+        .score {
+            font-size: 24px;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .controls {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .speed-control {
+            margin-top: 10px;
+            font-size: 14px;
+            color: white;
+        }
+        
+        .speed-control label {
+            margin-right: 10px;
+        }
+        
+        .speed-control input[type="range"] {
+            width: 150px;
+            margin: 0 10px;
+            accent-color: #ff6b6b;
+        }
+        
+        .speed-control span {
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .paddle-speed-control {
+            margin-top: 10px;
+            font-size: 14px;
+            color: white;
+        }
+        
+        .paddle-speed-control label {
+            margin-right: 10px;
+        }
+        
+        .paddle-speed-control input[type="range"] {
+            width: 150px;
+            margin: 0 10px;
+            accent-color: #3498db;
+        }
+        
+        .paddle-speed-control span {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .hard-mode-control {
+            margin-top: 15px;
+        }
+        
+        .hard-mode-control button {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            border: 2px solid #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hard-mode-control button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(45deg, #34495e, #2c3e50);
+        }
+        
+        .hard-mode-control button.active {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border-color: #e74c3c;
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+        }
+        
+        .player-mode-control {
+            margin-top: 15px;
+        }
+        
+        .player-mode-control button {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            border: 2px solid #27ae60;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .player-mode-control button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+        }
+        
+        .player-mode-control button.single-player {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            border-color: #f39c12;
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+        }
+        
+        .start-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        h1 {
+            margin: 0 0 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>PONG</h1>
+        <div class="score">
+            <span id="player1Score">0</span> - <span id="player2Score">0</span>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div class="controls" id="controlsText">
+            Player 1: W/S keys | Player 2: ↑/↓ arrows
+        </div>
+        <div class="speed-control">
+            <label for="speedSlider">Ball Speed:</label>
+            <input type="range" id="speedSlider" min="1" max="10" value="4" step="0.5">
+            <span id="speedValue">4</span>
+        </div>
+        <div class="paddle-speed-control">
+            <label for="paddleSpeedSlider">Paddle Speed:</label>
+            <input type="range" id="paddleSpeedSlider" min="1" max="15" value="5" step="0.5">
+            <span id="paddleSpeedValue">5</span>
+        </div>
+        <div class="hard-mode-control">
+            <button id="hardModeToggle" onclick="toggleHardMode()">Hard Mode: OFF</button>
+        </div>
+        <div class="player-mode-control">
+            <button id="playerModeToggle" onclick="togglePlayerMode()">Mode: Two Player</button>
+        </div>
+        
+        <div class="start-screen" id="startScreen">
+            <h2>Welcome to Pong!</h2>
+            <p id="gameModeText">Two Player Mode - First to 5 points wins!</p>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            <h2 id="gameOverText">Game Over!</h2>
+            <p id="winnerText"></p>
+            <button onclick="resetGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game state
+        let gameState = 'start'; // 'start', 'playing', 'paused', 'gameOver'
+        let player1Score = 0;
+        let player2Score = 0;
+        let gameSpeed = 1;
+        let ballSpeed = 4;
+        let paddleSpeed = 5;
+        let hardMode = false;
+        let ballRestartDelay = false;
+        let ballRestartTimer = 0;
+        let singlePlayerMode = false;
+        let ballHasBeenHit = false;
+        
+        // Paddle properties
+        const paddleWidth = 15;
+        const paddleHeight = 80;
+        
+        // Player 1 paddle (left side)
+        let player1Paddle = {
+            x: 20,
+            y: canvas.height / 2 - paddleHeight / 2,
+            width: paddleWidth,
+            height: paddleHeight,
+            velocity: 0,
+            acceleration: 1.2,
+            friction: 0.98
+        };
+        
+        // Player 2 paddle (right side)
+        let player2Paddle = {
+            x: canvas.width - 35,
+            y: canvas.height / 2 - paddleHeight / 2,
+            width: paddleWidth,
+            height: paddleHeight,
+            velocity: 0,
+            acceleration: 1.2,
+            friction: 0.98
+        };
+        
+        // Ball properties
+        let ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 8,
+            dx: 4,
+            dy: 4,
+            speed: 4
+        };
+        
+        // Input handling
+        const keys = {};
+        
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            
+            // Start game with spacebar
+            if (e.key === ' ' && gameState === 'start') {
+                startGame();
+            }
+            
+            // Pause game with spacebar
+            if (e.key === ' ' && gameState === 'playing') {
+                togglePause();
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+        
+        // Game functions
+        function startGame() {
+            gameState = 'playing';
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
+            resetBall();
+            gameLoop();
+        }
+        
+        function resetGame() {
+            player1Score = 0;
+            player2Score = 0;
+            gameSpeed = 1;
+            // Reset paddle velocities
+            player1Paddle.velocity = 0;
+            player2Paddle.velocity = 0;
+            updateScore();
+            startGame();
+        }
+        
+        function togglePause() {
+            if (gameState === 'playing') {
+                gameState = 'paused';
+            } else if (gameState === 'paused') {
+                gameState = 'playing';
+                gameLoop();
+            }
+        }
+        
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            ball.dx = 0; // Stop ball movement
+            ball.dy = 0;
+            ballRestartDelay = true;
+            ballRestartTimer = 0;
+            ballHasBeenHit = false; // Reset hit status for new point
+        }
+        
+        function startBallAfterDelay() {
+            // Start with slow speed (1) before first hit
+            ball.dx = (Math.random() > 0.5 ? 1 : -1) * 1 * gameSpeed;
+            ball.dy = (Math.random() - 0.5) * 1 * gameSpeed;
+            ballRestartDelay = false;
+        }
+        
+        function speedUpBall() {
+            // Speed up ball to normal speed after first hit
+            if (!ballHasBeenHit) {
+                const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                const angle = Math.atan2(ball.dy, ball.dx);
+                ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
+                ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
+                ballHasBeenHit = true;
+            }
+        }
+        
+        function updateScore() {
+            document.getElementById('player1Score').textContent = player1Score;
+            document.getElementById('player2Score').textContent = player2Score;
+        }
+        
+        function checkGameOver() {
+            if (player1Score >= 5 || player2Score >= 5) {
+                gameState = 'gameOver';
+                document.getElementById('gameOver').style.display = 'block';
+                document.getElementById('gameOverText').textContent = 'Game Over!';
+                
+                if (singlePlayerMode) {
+                    document.getElementById('winnerText').textContent = 
+                        player1Score >= 5 ? 'You Win!' : 'Computer Wins!';
+                } else {
+                    document.getElementById('winnerText').textContent = 
+                        player1Score >= 5 ? 'Player 1 Wins!' : 'Player 2 Wins!';
+                }
+            }
+        }
+        
+        function updatePlayer1Paddle() {
+            if (hardMode) {
+                // Ice physics - control acceleration, not direct movement
+                if (keys['w']) {
+                    player1Paddle.velocity -= player1Paddle.acceleration;
+                }
+                if (keys['s']) {
+                    player1Paddle.velocity += player1Paddle.acceleration;
+                }
+                
+                // Apply friction (ice sliding effect) - this happens regardless of key presses
+                player1Paddle.velocity *= player1Paddle.friction;
+                
+                // Update position based on velocity - this happens regardless of key presses
+                player1Paddle.y += player1Paddle.velocity;
+                
+                // Keep paddle on screen with bounce effect
+                if (player1Paddle.y < 0) {
+                    player1Paddle.y = 0;
+                    player1Paddle.velocity *= -0.5; // Bounce with energy loss
+                }
+                if (player1Paddle.y + player1Paddle.height > canvas.height) {
+                    player1Paddle.y = canvas.height - player1Paddle.height;
+                    player1Paddle.velocity *= -0.5; // Bounce with energy loss
+                }
+            } else {
+                // Normal mode - direct movement
+                if (keys['w']) {
+                    player1Paddle.y -= paddleSpeed;
+                }
+                if (keys['s']) {
+                    player1Paddle.y += paddleSpeed;
+                }
+                
+                // Keep paddle on screen
+                if (player1Paddle.y < 0) {
+                    player1Paddle.y = 0;
+                }
+                if (player1Paddle.y + player1Paddle.height > canvas.height) {
+                    player1Paddle.y = canvas.height - player1Paddle.height;
+                }
+            }
+        }
+        
+        function updatePlayer2Paddle() {
+            if (singlePlayerMode) {
+                // AI mode - computer controls Player 2
+                updateAIPaddle();
+            } else {
+                // Two player mode - human controls Player 2
+                if (hardMode) {
+                    // Ice physics - control acceleration, not direct movement
+                    if (keys['ArrowUp']) {
+                        player2Paddle.velocity -= player2Paddle.acceleration;
+                    }
+                    if (keys['ArrowDown']) {
+                        player2Paddle.velocity += player2Paddle.acceleration;
+                    }
+                    
+                    // Apply friction (ice sliding effect) - this happens regardless of key presses
+                    player2Paddle.velocity *= player2Paddle.friction;
+                    
+                    // Update position based on velocity - this happens regardless of key presses
+                    player2Paddle.y += player2Paddle.velocity;
+                    
+                    // Keep paddle on screen with bounce effect
+                    if (player2Paddle.y < 0) {
+                        player2Paddle.y = 0;
+                        player2Paddle.velocity *= -0.5; // Bounce with energy loss
+                    }
+                    if (player2Paddle.y + player2Paddle.height > canvas.height) {
+                        player2Paddle.y = canvas.height - player2Paddle.height;
+                        player2Paddle.velocity *= -0.5; // Bounce with energy loss
+                    }
+                } else {
+                    // Normal mode - direct movement
+                    if (keys['ArrowUp']) {
+                        player2Paddle.y -= paddleSpeed;
+                    }
+                    if (keys['ArrowDown']) {
+                        player2Paddle.y += paddleSpeed;
+                    }
+                    
+                    // Keep paddle on screen
+                    if (player2Paddle.y < 0) {
+                        player2Paddle.y = 0;
+                    }
+                    if (player2Paddle.y + player2Paddle.height > canvas.height) {
+                        player2Paddle.y = canvas.height - player2Paddle.height;
+                    }
+                }
+            }
+        }
+        
+        function updateAIPaddle() {
+            const paddleCenter = player2Paddle.y + player2Paddle.height / 2;
+            const ballY = ball.y;
+            
+            if (hardMode) {
+                // AI with ice physics
+                if (ballY < paddleCenter - 10) {
+                    player2Paddle.velocity -= player2Paddle.acceleration * 0.8; // Slightly slower than player
+                } else if (ballY > paddleCenter + 10) {
+                    player2Paddle.velocity += player2Paddle.acceleration * 0.8;
+                }
+                
+                // Apply friction (ice sliding effect)
+                player2Paddle.velocity *= player2Paddle.friction;
+                
+                // Update position based on velocity
+                player2Paddle.y += player2Paddle.velocity;
+                
+                // Keep paddle on screen with bounce effect
+                if (player2Paddle.y < 0) {
+                    player2Paddle.y = 0;
+                    player2Paddle.velocity *= -0.5; // Bounce with energy loss
+                }
+                if (player2Paddle.y + player2Paddle.height > canvas.height) {
+                    player2Paddle.y = canvas.height - player2Paddle.height;
+                    player2Paddle.velocity *= -0.5; // Bounce with energy loss
+                }
+            } else {
+                // AI with normal physics
+                if (ballY < paddleCenter - 10) {
+                    player2Paddle.y -= paddleSpeed * 0.8; // Slightly slower than player
+                } else if (ballY > paddleCenter + 10) {
+                    player2Paddle.y += paddleSpeed * 0.8;
+                }
+                
+                // Keep paddle on screen
+                if (player2Paddle.y < 0) {
+                    player2Paddle.y = 0;
+                }
+                if (player2Paddle.y + player2Paddle.height > canvas.height) {
+                    player2Paddle.y = canvas.height - player2Paddle.height;
+                }
+            }
+        }
+        
+        
+        function updateBall() {
+            // Handle ball restart delay
+            if (ballRestartDelay) {
+                ballRestartTimer += 1/60; // Assuming 60 FPS
+                if (ballRestartTimer >= 0.5) { // 0.5 second delay
+                    startBallAfterDelay();
+                }
+                return; // Don't update ball position during delay
+            }
+            
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+            
+            // Ball collision with top and bottom walls
+            if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= canvas.height) {
+                ball.dy = -ball.dy;
+            }
+            
+            // Ball collision with paddles
+            // Player 1 paddle collision
+            if (ball.x - ball.radius <= player1Paddle.x + player1Paddle.width &&
+                ball.y >= player1Paddle.y &&
+                ball.y <= player1Paddle.y + player1Paddle.height &&
+                ball.dx < 0) {
+                
+                // Calculate hit position for angle adjustment
+                const hitPos = (ball.y - player1Paddle.y) / player1Paddle.height;
+                const angle = (hitPos - 0.5) * Math.PI / 3; // Max 60 degrees
+                
+                // Always use normal speed for paddle hits
+                ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
+                ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
+                ball.x = player1Paddle.x + player1Paddle.width + ball.radius;
+                
+                // Speed up ball if this is the first hit
+                speedUpBall();
+            }
+            
+            // Player 2 paddle collision
+            if (ball.x + ball.radius >= player2Paddle.x &&
+                ball.y >= player2Paddle.y &&
+                ball.y <= player2Paddle.y + player2Paddle.height &&
+                ball.dx > 0) {
+                
+                // Calculate hit position for angle adjustment
+                const hitPos = (ball.y - player2Paddle.y) / player2Paddle.height;
+                const angle = (hitPos - 0.5) * Math.PI / 3; // Max 60 degrees
+                
+                // Always use normal speed for paddle hits
+                ball.dx = -Math.cos(angle) * ballSpeed * gameSpeed;
+                ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
+                ball.x = player2Paddle.x - ball.radius;
+                
+                // Speed up ball if this is the first hit
+                speedUpBall();
+            }
+            
+            // Ball out of bounds - scoring
+            if (ball.x < 0) {
+                player2Score++;
+                updateScore();
+                checkGameOver();
+                if (gameState === 'playing') {
+                    resetBall();
+                }
+            } else if (ball.x > canvas.width) {
+                player1Score++;
+                updateScore();
+                checkGameOver();
+                if (gameState === 'playing') {
+                    resetBall();
+                }
+            }
+        }
+        
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw center line
+            ctx.setLineDash([10, 10]);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw paddles
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(player1Paddle.x, player1Paddle.y, player1Paddle.width, player1Paddle.height);
+            ctx.fillRect(player2Paddle.x, player2Paddle.y, player2Paddle.width, player2Paddle.height);
+            
+            // Draw ball (with pulsing effect during restart delay)
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            if (ballRestartDelay) {
+                // Pulsing effect during delay
+                const pulse = Math.sin(ballRestartTimer * 20) * 0.3 + 0.7;
+                ctx.fillStyle = `rgba(255, 255, 255, ${pulse})`;
+            } else {
+                ctx.fillStyle = '#fff';
+            }
+            ctx.fill();
+            
+            // Draw pause overlay
+            if (gameState === 'paused') {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#fff';
+                ctx.font = '48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
+                ctx.font = '16px Arial';
+                ctx.fillText('Press SPACE to resume', canvas.width / 2, canvas.height / 2 + 40);
+            }
+        }
+        
+        function gameLoop() {
+            if (gameState === 'playing') {
+                updatePlayer1Paddle();
+                updatePlayer2Paddle();
+                updateBall();
+                draw();
+                requestAnimationFrame(gameLoop);
+            } else if (gameState === 'paused') {
+                draw();
+            }
+        }
+        
+        // Speed slider functionality
+        const speedSlider = document.getElementById('speedSlider');
+        const speedValue = document.getElementById('speedValue');
+        
+        speedSlider.addEventListener('input', function() {
+            ballSpeed = parseFloat(this.value);
+            speedValue.textContent = ballSpeed;
+            
+            // Update ball speed if game is running
+            if (gameState === 'playing') {
+                const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+                const angle = Math.atan2(ball.dy, ball.dx);
+                ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
+                ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
+            }
+        });
+        
+        // Paddle speed slider functionality
+        const paddleSpeedSlider = document.getElementById('paddleSpeedSlider');
+        const paddleSpeedValue = document.getElementById('paddleSpeedValue');
+        
+        paddleSpeedSlider.addEventListener('input', function() {
+            paddleSpeed = parseFloat(this.value);
+            paddleSpeedValue.textContent = paddleSpeed;
+        });
+        
+        // Hard mode toggle function
+        function toggleHardMode() {
+            hardMode = !hardMode;
+            const button = document.getElementById('hardModeToggle');
+            
+            if (hardMode) {
+                button.textContent = 'Hard Mode: ON';
+                button.classList.add('active');
+            } else {
+                button.textContent = 'Hard Mode: OFF';
+                button.classList.remove('active');
+                // Reset velocities when turning off hard mode
+                player1Paddle.velocity = 0;
+                player2Paddle.velocity = 0;
+            }
+        }
+        
+        // Player mode toggle function
+        function togglePlayerMode() {
+            singlePlayerMode = !singlePlayerMode;
+            const button = document.getElementById('playerModeToggle');
+            const controlsText = document.getElementById('controlsText');
+            const gameModeText = document.getElementById('gameModeText');
+            
+            if (singlePlayerMode) {
+                button.textContent = 'Mode: Single Player';
+                button.classList.add('single-player');
+                controlsText.textContent = 'Player: W/S keys | Computer: AI';
+                gameModeText.textContent = 'Single Player Mode - First to 5 points wins!';
+            } else {
+                button.textContent = 'Mode: Two Player';
+                button.classList.remove('single-player');
+                controlsText.textContent = 'Player 1: W/S keys | Player 2: ↑/↓ arrows';
+                gameModeText.textContent = 'Two Player Mode - First to 5 points wins!';
+            }
+            
+            // Reset velocities when switching modes
+            player1Paddle.velocity = 0;
+            player2Paddle.velocity = 0;
+        }
+        
+        // Initialize game
+        draw();
+    </script>
+</body>
+</html>

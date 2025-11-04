@@ -3,26 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong Game</title>
+    <title>Angus Norden's Website</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav ul {
+            list-style: none;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Arial', sans-serif;
-            color: white;
+            gap: 30px;
+            flex-wrap: wrap;
         }
-        
+
+        nav button {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        nav button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        nav button.active {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-color: #ff6b6b;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            padding: 40px 20px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Home Page */
+        #home-page {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #starCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            cursor: pointer;
+        }
+
+        .home-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            pointer-events: none; /* Allow clicks to pass through to canvas */
+        }
+
+        .home-page h1,
+        .home-page p {
+            pointer-events: none; /* Text is not clickable */
+        }
+
+        .home-page h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .home-page p {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+        }
+
+        /* About Me Page */
+        .about-page {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about-page h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .about-content {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            line-height: 1.8;
+        }
+
+        .about-content h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #ffd93d;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .about-content ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .about-content li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .cover-photo {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 15px;
+            margin: 0 auto 30px auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .about-content a {
+            color: #ffd93d;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .about-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Game Page */
         .game-container {
             text-align: center;
             background: rgba(0, 0, 0, 0.3);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .game-container h1 {
+            margin: 0 0 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         canvas {
@@ -31,7 +237,6 @@
             background: #000;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
-        
         
         .score {
             font-size: 24px;
@@ -80,11 +285,6 @@
             width: 150px;
             margin: 0 10px;
             accent-color: #3498db;
-        }
-        
-        .paddle-speed-control span {
-            font-weight: bold;
-            color: #3498db;
         }
         
         .hard-mode-control {
@@ -166,7 +366,7 @@
             text-align: center;
         }
         
-        button {
+        .game-container button {
             background: linear-gradient(45deg, #ff6b6b, #ee5a24);
             border: none;
             color: white;
@@ -179,62 +379,490 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
         
-        button:hover {
+        .game-container button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        h1 {
-            margin: 0 0 20px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <h1>PONG</h1>
-        <div class="score">
-            <span id="player1Score">0</span> - <span id="player2Score">0</span>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
+            <li><button onclick="showPage('about')" id="nav-about">About Me</button></li>
+            <li><button onclick="showPage('game')" id="nav-game">Pong Game</button></li>
+        </ul>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page active">
+        <canvas id="starCanvas"></canvas>
+        <div class="home-page">
+            <h1>Welcome to Angus Norden's Website</h1>
+            <p>Explore my portfolio and enjoy some interactive fun!</p>
+            <p style="font-size: 0.9em; opacity: 0.7; margin-top: 20px;">Click anywhere to fly forward through space!</p>
         </div>
-        
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
-        <div class="controls" id="controlsText">
-            Player 1: W/S keys | Player 2: ↑/↓ arrows
+    </div>
+
+    <!-- About Me Page -->
+    <div id="about-page" class="page">
+        <div class="about-page">
+            <h1>Angus Norden's About Me</h1>
+            <div class="about-content">
+                <img src="IMG_9461.jpg" alt="Angus Norden" class="cover-photo">
+                <h2>Hello!</h2>
+                <p>
+                    Welcome to Angus Norden's personal website! I'm passionate about technology, programming, and creating 
+                    interactive experiences. This website showcases some of my work and interests.
+                </p>
+
+                <h2>Projects</h2>
+                <p>
+                    One of my recent projects is this interactive Pong game, which you can play by clicking 
+                    the "Pong Game" button in the navigation menu. The game features multiple modes, 
+                    customizable speeds, and a challenging hard mode with ice physics!
+                </p>
+
+                <h2>Get in Touch</h2>
+                <p>
+                    Feel free to explore the site and try out the Pong game. If you'd like to connect, 
+                    you can contact me at <a href="mailto:anorden1@hwemail.com">anorden1@hwemail.com</a>.
+                </p>
+            </div>
         </div>
-        <div class="speed-control">
-            <label for="speedSlider">Ball Speed:</label>
-            <input type="range" id="speedSlider" min="1" max="10" value="4" step="0.5">
-            <span id="speedValue">4</span>
-        </div>
-        <div class="paddle-speed-control">
-            <label for="paddleSpeedSlider">Paddle Speed:</label>
-            <input type="range" id="paddleSpeedSlider" min="1" max="15" value="5" step="0.5">
-            <span id="paddleSpeedValue">5</span>
-        </div>
-        <div class="hard-mode-control">
-            <button id="hardModeToggle" onclick="toggleHardMode()">Hard Mode: OFF</button>
-        </div>
-        <div class="player-mode-control">
-            <button id="playerModeToggle" onclick="togglePlayerMode()">Mode: Two Player</button>
-        </div>
-        
-        <div class="start-screen" id="startScreen">
-            <h2>Welcome to Pong!</h2>
-            <p id="gameModeText">Two Player Mode - First to 5 points wins!</p>
-            <button onclick="startGame()">Start Game</button>
-        </div>
-        
-        <div class="game-over" id="gameOver">
-            <h2 id="gameOverText">Game Over!</h2>
-            <p id="winnerText"></p>
-            <button onclick="resetGame()">Play Again</button>
+    </div>
+
+    <!-- Game Page -->
+    <div id="game-page" class="page">
+        <div class="game-container">
+            <h1>PONG</h1>
+            <div class="score">
+                <span id="player1Score">0</span> - <span id="player2Score">0</span>
+            </div>
+            <div class="score" id="singlePlayerScore" style="display: none;">
+                Hits: <span id="hitCount">0</span> | High Score: <span id="highScore">0</span>
+            </div>
+            
+            <canvas id="gameCanvas" width="800" height="400"></canvas>
+            <div class="controls" id="controlsText">
+                Player 1: W/S keys | Player 2: ↑/↓ arrows
+            </div>
+            <div class="speed-control">
+                <label for="speedSlider">Ball Speed:</label>
+                <input type="range" id="speedSlider" min="1" max="10" value="4" step="0.5">
+                <span id="speedValue">4</span>
+            </div>
+            <div class="paddle-speed-control">
+                <label for="paddleSpeedSlider">Paddle Speed:</label>
+                <input type="range" id="paddleSpeedSlider" min="1" max="15" value="5" step="0.5">
+                <span id="paddleSpeedValue">5</span>
+            </div>
+            <div class="hard-mode-control">
+                <button id="hardModeToggle" onclick="toggleHardMode()">Hard Mode: OFF</button>
+            </div>
+            <div class="player-mode-control">
+                <button id="playerModeToggle" onclick="togglePlayerMode()">Mode: Two Player</button>
+            </div>
+            
+            <div class="start-screen" id="startScreen">
+                <h2>Welcome to Pong!</h2>
+                <p id="gameModeText">Two Player Mode - First to 5 points wins!</p>
+                <button onclick="startGame()">Start Game</button>
+            </div>
+            
+            <div class="game-over" id="gameOver">
+                <h2 id="gameOverText">Game Over!</h2>
+                <p id="winnerText"></p>
+                <button onclick="resetGame()">Play Again</button>
+            </div>
         </div>
     </div>
 
     <script>
+        // Navigation functionality
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected page
+            const selectedPage = document.getElementById(pageId + '-page');
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+            
+            // Add active class to corresponding nav button
+            const navButton = document.getElementById('nav-' + pageId);
+            if (navButton) {
+                navButton.classList.add('active');
+            }
+
+            // Initialize game canvas if showing game page
+            if (pageId === 'game') {
+                // Small delay to ensure page is visible
+                setTimeout(() => {
+                    if (gameInitialized) {
+                        draw();
+                    }
+                }, 100);
+            }
+
+            // Initialize starry sky if showing home page
+            if (pageId === 'home') {
+                setTimeout(() => {
+                    initStarField();
+                }, 100);
+            }
+        }
+
+        // Starry Sky Animation
+        let starCanvas, starCtx;
+        let stars = [];
+        let velocity = { x: 0, y: 0, z: 0 };
+        let currentSpeed = 0;
+        let maxSpeed = 30;
+        let lightSpeedMax = 80; // Much faster for click-and-hold
+        let isFlying = false;
+        let flyDuration = 3000; // 3 seconds
+        let flyStartTime = 0;
+        let lastTime = 0;
+        let mousePressed = false;
+        let targetDirection = { x: 0, y: 0 };
+        let acceleration = 50; // Speed up quickly
+        let deceleration = 80; // Slow down quickly
+        let clickStartTime = 0;
+        let isClickAndHold = false;
+
+        function initStarField() {
+            starCanvas = document.getElementById('starCanvas');
+            if (!starCanvas) return;
+            
+            starCtx = starCanvas.getContext('2d');
+            resizeStarCanvas();
+            
+            // Create stars - more stars, distributed across a wider area with more on edges
+            stars = [];
+            const numStars = 2000;
+            const expandFactor = 2.0; // Expand star field beyond screen edges
+            
+            for (let i = 0; i < numStars; i++) {
+                // Bias distribution toward edges - use radial distribution
+                const angle = Math.random() * Math.PI * 2;
+                const centerDist = Math.random(); // 0 to 1
+                // Square it to bias toward edges (edge stars have larger distances)
+                const edgeBias = Math.pow(centerDist, 0.4); // Lower exponent = more edge bias
+                const distance = edgeBias * Math.max(starCanvas.width, starCanvas.height) * expandFactor;
+                
+                // Assign star colors - red, blue, or yellow
+                const colorType = Math.random();
+                let starColor;
+                if (colorType < 0.33) {
+                    // Red stars (red-orange hues)
+                    starColor = `hsl(${Math.random() * 30 + 0}, 100%, ${Math.random() * 20 + 70}%)`;
+                } else if (colorType < 0.66) {
+                    // Blue stars (blue-white hues)
+                    starColor = `hsl(${Math.random() * 60 + 180}, 100%, ${Math.random() * 15 + 80}%)`;
+                } else {
+                    // Yellow stars (yellow-white hues, like our sun)
+                    starColor = `hsl(${Math.random() * 30 + 40}, 100%, ${Math.random() * 20 + 75}%)`;
+                }
+                
+                stars.push({
+                    // Create stars in a wider area, biased toward edges
+                    x: Math.cos(angle) * distance + starCanvas.width / 2,
+                    y: Math.sin(angle) * distance + starCanvas.height / 2,
+                    z: Math.random() * 2000 + 500, // Depth range 500-2500
+                    size: Math.random() * 4.5 + 1.5, // Bigger stars: 1.5 to 6.0
+                    opacity: Math.random() * 0.7 + 0.6, // Brighter: 0.6 to 1.3 (clamped in rendering)
+                    color: starColor
+                });
+            }
+
+            // Mouse down handler - start flying in direction of click
+            starCanvas.addEventListener('mousedown', function(e) {
+                mousePressed = true;
+                clickStartTime = performance.now();
+                isClickAndHold = false;
+                
+                const rect = starCanvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+                
+                const centerX = starCanvas.width / 2;
+                const centerY = starCanvas.height / 2;
+                
+                // Calculate direction vector from center to click point
+                const dx = clickX - centerX;
+                const dy = clickY - centerY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Normalize and store target direction
+                if (distance > 0) {
+                    targetDirection.x = dx / distance;
+                    targetDirection.y = dy / distance;
+                } else {
+                    targetDirection.x = 0;
+                    targetDirection.y = 0;
+                }
+                
+                isFlying = true;
+                flyStartTime = performance.now();
+            });
+
+            // Mouse up handler - stop flying and slow down quickly
+            starCanvas.addEventListener('mouseup', function(e) {
+                const holdDuration = performance.now() - clickStartTime;
+                mousePressed = false;
+                
+                // If it was a quick click (less than 200ms), do a quick burst
+                if (!isClickAndHold && holdDuration < 200) {
+                    // Quick click - small burst of speed
+                    currentSpeed = Math.min(maxSpeed, currentSpeed + maxSpeed * 0.6);
+                    flyStartTime = performance.now();
+                } else {
+                    // Was a hold, now decelerate
+                    flyStartTime = performance.now();
+                }
+            });
+
+            // Mouse leave handler - stop flying if mouse leaves canvas
+            starCanvas.addEventListener('mouseleave', function(e) {
+                mousePressed = false;
+                flyStartTime = performance.now();
+            });
+
+            animateStars(performance.now());
+        }
+
+        function resizeStarCanvas() {
+            if (!starCanvas) return;
+            const homePage = document.getElementById('home-page');
+            if (homePage && homePage.classList.contains('active')) {
+                starCanvas.width = window.innerWidth;
+                starCanvas.height = window.innerHeight;
+                
+                // Recreate stars if canvas was resized
+                if (stars.length > 0) {
+                    const expandFactor = 2.0;
+                    stars.forEach(star => {
+                        // Recreate with edge bias, preserve color
+                        const angle = Math.random() * Math.PI * 2;
+                        const centerDist = Math.random();
+                        const edgeBias = Math.pow(centerDist, 0.4);
+                        const distance = edgeBias * Math.max(starCanvas.width, starCanvas.height) * expandFactor;
+                        star.x = Math.cos(angle) * distance + starCanvas.width / 2;
+                        star.y = Math.sin(angle) * distance + starCanvas.height / 2;
+                        star.z = Math.random() * 2000 + 500;
+                        // Keep existing color
+                    });
+                }
+            }
+        }
+
+        function animateStars(timestamp) {
+            if (!starCtx || !starCanvas) return;
+
+            // Use current time if timestamp not provided
+            const currentTime = timestamp || performance.now();
+            if (lastTime === 0) lastTime = currentTime;
+
+            // Clear canvas with black space background
+            starCtx.fillStyle = '#000000';
+            starCtx.fillRect(0, 0, starCanvas.width, starCanvas.height);
+
+            // Update flying state with acceleration/deceleration
+            if (isFlying) {
+                const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+                const holdDuration = currentTime - clickStartTime;
+                
+                if (mousePressed) {
+                    // Check if this is a click-and-hold (held for more than 150ms)
+                    if (holdDuration > 150 && !isClickAndHold) {
+                        isClickAndHold = true;
+                        // Switch to light speed mode
+                    }
+                    
+                    // Use light speed max if holding, regular max for quick clicks
+                    const activeMaxSpeed = isClickAndHold ? lightSpeedMax : maxSpeed;
+                    const activeAcceleration = isClickAndHold ? acceleration * 1.5 : acceleration;
+                    
+                    // Accelerate quickly to max speed
+                    currentSpeed = Math.min(activeMaxSpeed, currentSpeed + activeAcceleration * deltaTime);
+                    
+                    // Update velocity based on current speed and target direction
+                    velocity.z = currentSpeed;
+                    velocity.x = targetDirection.x * currentSpeed * 0.4;
+                    velocity.y = targetDirection.y * currentSpeed * 0.4;
+                } else {
+                    // Decelerate quickly
+                    currentSpeed = Math.max(0, currentSpeed - deceleration * deltaTime);
+                    
+                    if (currentSpeed <= 0) {
+                        // Completely stopped
+                        isFlying = false;
+                        currentSpeed = 0;
+                        velocity.x = 0;
+                        velocity.y = 0;
+                        velocity.z = 0;
+                        isClickAndHold = false;
+                    } else {
+                        // Maintain direction while slowing
+                        velocity.z = currentSpeed;
+                        velocity.x = targetDirection.x * currentSpeed * 0.4;
+                        velocity.y = targetDirection.y * currentSpeed * 0.4;
+                    }
+                }
+            }
+
+            // Update and draw stars
+            const centerX = starCanvas.width / 2;
+            const centerY = starCanvas.height / 2;
+
+            for (let i = 0; i < stars.length; i++) {
+                const star = stars[i];
+                
+                if (isFlying) {
+                    // Move stars based on velocity (reverse movement for flying effect)
+                    star.x -= velocity.x;
+                    star.y -= velocity.y;
+                    star.z -= velocity.z;
+                }
+                
+                // Reset stars that have passed us or gone too far - bias toward edges
+                if (star.z <= 0 || star.z > 3000) {
+                    const expandFactor = 2.0;
+                    const angle = Math.random() * Math.PI * 2;
+                    const centerDist = Math.random();
+                    const edgeBias = Math.pow(centerDist, 0.4);
+                    const distance = edgeBias * Math.max(starCanvas.width, starCanvas.height) * expandFactor;
+                    star.x = centerX + Math.cos(angle) * distance;
+                    star.y = centerY + Math.sin(angle) * distance;
+                    star.z = 2000 + Math.random() * 500;
+                    
+                    // Reassign color when resetting
+                    const colorType = Math.random();
+                    if (colorType < 0.33) {
+                        star.color = `hsl(${Math.random() * 30 + 0}, 100%, ${Math.random() * 20 + 70}%)`;
+                    } else if (colorType < 0.66) {
+                        star.color = `hsl(${Math.random() * 60 + 180}, 100%, ${Math.random() * 15 + 80}%)`;
+                    } else {
+                        star.color = `hsl(${Math.random() * 30 + 40}, 100%, ${Math.random() * 20 + 75}%)`;
+                    }
+                }
+
+                // Calculate 3D position with perspective
+                const k = 128 / Math.max(star.z, 1); // Perspective factor
+                const px = (star.x - centerX) * k + centerX;
+                const py = (star.y - centerY) * k + centerY;
+                const r = star.size * k;
+
+                // Draw star if it's visible (even if slightly off screen for edge stars)
+                if (r > 0.1) {
+                    // Calculate streak effect based on speed (Star Wars hyperspace effect)
+                    // Use lightSpeedMax for ratio calculation to show streaks at light speed
+                    const effectiveMaxSpeed = Math.max(maxSpeed, lightSpeedMax);
+                    const speedRatio = currentSpeed / effectiveMaxSpeed;
+                    const streakLength = speedRatio * r * 15; // Long streaks at high speed
+                    
+                    // Convert HSL color to RGBA with opacity
+                    const tempDiv = document.createElement('div');
+                    tempDiv.style.color = star.color;
+                    document.body.appendChild(tempDiv);
+                    const rgbColor = window.getComputedStyle(tempDiv).color;
+                    document.body.removeChild(tempDiv);
+                    
+                    // Extract RGB values
+                    const rgbMatch = rgbColor.match(/\d+/g);
+                    let red, green, blue;
+                    if (rgbMatch) {
+                        red = parseInt(rgbMatch[0]);
+                        green = parseInt(rgbMatch[1]);
+                        blue = parseInt(rgbMatch[2]);
+                    } else {
+                        red = 255;
+                        green = 255;
+                        blue = 255;
+                    }
+                    
+                    // Star gets brighter as it approaches
+                    const brightness = Math.min(1, Math.max(0.4, (3000 - star.z) / 700));
+                    const finalOpacity = Math.min(1, star.opacity * brightness * 1.3);
+                    
+                    if (speedRatio > 0.7 && streakLength > 5) {
+                        // Draw hyperspace streak effect
+                        // Calculate streak direction (opposite of velocity, toward center)
+                        const streakDirX = (px - centerX) / Math.max(1, Math.sqrt((px - centerX) * (px - centerX) + (py - centerY) * (py - centerY)));
+                        const streakDirY = (py - centerY) / Math.max(1, Math.sqrt((px - centerX) * (px - centerX) + (py - centerY) * (py - centerY)));
+                        
+                        // Draw streak line
+                        starCtx.beginPath();
+                        starCtx.moveTo(px, py);
+                        starCtx.lineTo(px - streakDirX * streakLength, py - streakDirY * streakLength);
+                        starCtx.strokeStyle = `rgba(${red}, ${green}, ${blue}, ${finalOpacity * 0.9})`;
+                        starCtx.lineWidth = Math.max(1, r * 0.5);
+                        starCtx.stroke();
+                        
+                        // Draw bright head of streak
+                        starCtx.beginPath();
+                        starCtx.arc(px, py, r * 1.2, 0, Math.PI * 2);
+                        starCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${finalOpacity})`;
+                        starCtx.fill();
+                        
+                        // Add intense glow at high speeds
+                        starCtx.shadowBlur = r * 6 * speedRatio;
+                        starCtx.shadowColor = `rgba(${red}, ${green}, ${blue}, 1.0)`;
+                        starCtx.fill();
+                        starCtx.shadowBlur = 0;
+                    } else {
+                        // Normal star rendering (slower speeds)
+                        starCtx.beginPath();
+                        starCtx.arc(px, py, r, 0, Math.PI * 2);
+                        starCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${finalOpacity})`;
+                        starCtx.fill();
+                        
+                        // Add glow for closer stars
+                        if (r > 0.8) {
+                            const glowOpacity = Math.min(1, finalOpacity * 0.8);
+                            const blurRadius = r * 4;
+                            starCtx.shadowBlur = blurRadius;
+                            starCtx.shadowColor = `rgba(${red}, ${green}, ${blue}, ${glowOpacity})`;
+                            starCtx.fill();
+                            starCtx.shadowBlur = 0;
+                        }
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateStars);
+            lastTime = currentTime;
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            resizeStarCanvas();
+        });
+
+        // Initialize star field on page load if home page is active
+        window.addEventListener('load', function() {
+            const homePage = document.getElementById('home-page');
+            if (homePage && homePage.classList.contains('active')) {
+                setTimeout(() => {
+                    initStarField();
+                }, 100);
+            }
+        });
+
         // Game variables
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        let gameInitialized = false;
         
         // Game state
         let gameState = 'start'; // 'start', 'playing', 'paused', 'gameOver'
@@ -248,6 +876,44 @@
         let ballRestartTimer = 0;
         let singlePlayerMode = false;
         let ballHasBeenHit = false;
+        
+        // Single player scoring system
+        let hitCount = 0;
+        let highScore = 0;
+        let ballJustHitPaddle = false; // Flag to prevent multiple hit counts per collision
+        
+        // Load high score from localStorage
+        function loadHighScore() {
+            const savedHighScore = localStorage.getItem('pongHighScore');
+            if (savedHighScore !== null) {
+                highScore = parseInt(savedHighScore, 10);
+                updateHighScoreDisplay();
+            }
+        }
+        
+        // Save high score to localStorage
+        function saveHighScore() {
+            localStorage.setItem('pongHighScore', highScore.toString());
+        }
+        
+        // Update high score display
+        function updateHighScoreDisplay() {
+            const highScoreElement = document.getElementById('highScore');
+            if (highScoreElement) {
+                highScoreElement.textContent = highScore;
+            }
+        }
+        
+        // Update hit count display
+        function updateHitCountDisplay() {
+            const hitCountElement = document.getElementById('hitCount');
+            if (hitCountElement) {
+                hitCountElement.textContent = hitCount;
+            }
+        }
+        
+        // Initialize high score on page load
+        loadHighScore();
         
         // Paddle properties
         const paddleWidth = 15;
@@ -319,6 +985,8 @@
             player1Score = 0;
             player2Score = 0;
             gameSpeed = 1;
+            hitCount = 0; // Reset hit count
+            updateHitCountDisplay();
             // Reset paddle velocities
             player1Paddle.velocity = 0;
             player2Paddle.velocity = 0;
@@ -343,6 +1011,7 @@
             ballRestartDelay = true;
             ballRestartTimer = 0;
             ballHasBeenHit = false; // Reset hit status for new point
+            ballJustHitPaddle = false; // Reset collision flag
         }
         
         function startBallAfterDelay() {
@@ -549,6 +1218,7 @@
                 ball.y <= player1Paddle.y + player1Paddle.height &&
                 ball.dx < 0) {
                 
+                // Always update ball physics on collision
                 // Calculate hit position for angle adjustment
                 const hitPos = (ball.y - player1Paddle.y) / player1Paddle.height;
                 const angle = (hitPos - 0.5) * Math.PI / 3; // Max 60 degrees
@@ -560,6 +1230,23 @@
                 
                 // Speed up ball if this is the first hit
                 speedUpBall();
+                
+                // Only increment hit count once per collision (when flag is false)
+                if (!ballJustHitPaddle && singlePlayerMode) {
+                    hitCount++;
+                    updateHitCountDisplay();
+                    // Update high score if current hit count exceeds it
+                    if (hitCount > highScore) {
+                        highScore = hitCount;
+                        updateHighScoreDisplay();
+                        saveHighScore();
+                    }
+                    // Set flag to prevent multiple counts
+                    ballJustHitPaddle = true;
+                }
+            } else if (ball.x > player1Paddle.x + player1Paddle.width + 10) {
+                // Reset flag when ball has moved away from paddle
+                ballJustHitPaddle = false;
             }
             
             // Player 2 paddle collision
@@ -579,11 +1266,22 @@
                 
                 // Speed up ball if this is the first hit
                 speedUpBall();
+                
+                // Reset flag when ball hits other paddle
+                ballJustHitPaddle = false;
+            } else if (ball.x < player2Paddle.x - 10) {
+                // Reset flag when ball has moved away from paddle
+                ballJustHitPaddle = false;
             }
             
             // Ball out of bounds - scoring
             if (ball.x < 0) {
                 player2Score++;
+                // Reset hit count in single player mode when ball goes out on player's side (player loses)
+                if (singlePlayerMode) {
+                    hitCount = 0;
+                    updateHitCountDisplay();
+                }
                 updateScore();
                 checkGameOver();
                 if (gameState === 'playing') {
@@ -591,6 +1289,7 @@
                 }
             } else if (ball.x > canvas.width) {
                 player1Score++;
+                // Don't reset hit count when player scores - let them continue the streak
                 updateScore();
                 checkGameOver();
                 if (gameState === 'playing') {
@@ -706,17 +1405,32 @@
             const button = document.getElementById('playerModeToggle');
             const controlsText = document.getElementById('controlsText');
             const gameModeText = document.getElementById('gameModeText');
+            const singlePlayerScoreElement = document.getElementById('singlePlayerScore');
             
             if (singlePlayerMode) {
                 button.textContent = 'Mode: Single Player';
                 button.classList.add('single-player');
                 controlsText.textContent = 'Player: W/S keys | Computer: AI';
                 gameModeText.textContent = 'Single Player Mode - First to 5 points wins!';
+                // Show single player score display
+                if (singlePlayerScoreElement) {
+                    singlePlayerScoreElement.style.display = 'block';
+                }
+                // Reset hit count when switching to single player
+                hitCount = 0;
+                updateHitCountDisplay();
             } else {
                 button.textContent = 'Mode: Two Player';
                 button.classList.remove('single-player');
                 controlsText.textContent = 'Player 1: W/S keys | Player 2: ↑/↓ arrows';
                 gameModeText.textContent = 'Two Player Mode - First to 5 points wins!';
+                // Hide single player score display
+                if (singlePlayerScoreElement) {
+                    singlePlayerScoreElement.style.display = 'none';
+                }
+                // Reset hit count when switching modes
+                hitCount = 0;
+                updateHitCountDisplay();
             }
             
             // Reset velocities when switching modes
@@ -725,6 +1439,7 @@
         }
         
         // Initialize game
+        gameInitialized = true;
         draw();
     </script>
 </body>

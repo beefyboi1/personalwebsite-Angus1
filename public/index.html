@@ -1,1943 +1,2700 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Angus Norden's Website</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-            min-height: 100vh;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        min-height: 100vh;
+      }
 
-        /* Navigation */
-        nav {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
+      /* Navigation */
+      nav {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+      }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
+      nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
 
-        nav button {
-            background: transparent;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 12px 30px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
+      nav button {
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
 
-        nav button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.6);
-            transform: translateY(-2px);
-        }
+      nav button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.6);
+        transform: translateY(-2px);
+      }
 
-        nav button.active {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            border-color: #ff6b6b;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-        }
+      nav button.active {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        border-color: #ff6b6b;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      }
 
-        /* Page Sections */
-        .page {
-            display: none;
-            padding: 40px 20px;
-            min-height: calc(100vh - 80px);
-        }
+      /* Page Sections */
+      .page {
+        display: none;
+        padding: 40px 20px;
+        min-height: calc(100vh - 80px);
+      }
 
-        .page.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in;
-        }
+      .page.active {
+        display: block;
+        animation: fadeIn 0.5s ease-in;
+      }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-        /* Home Page */
-        #home-page {
-            position: relative;
-            overflow: hidden;
-        }
+      /* Home Page */
+      #home-page {
+        position: relative;
+        overflow: hidden;
+      }
 
-        #starCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            cursor: pointer;
-        }
+      #starCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        cursor: pointer;
+      }
 
-        .home-page {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-            pointer-events: none; /* Allow clicks to pass through to canvas */
-        }
+      .home-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        pointer-events: none; /* Allow clicks to pass through to canvas */
+      }
 
-        .home-page h1,
-        .home-page p {
-            pointer-events: none; /* Text is not clickable */
-        }
+      .home-page h1,
+      .home-page p {
+        pointer-events: none; /* Text is not clickable */
+      }
 
-        .home-page h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            animation: slideInDown 0.8s ease-out;
-        }
+      .home-page h1 {
+        font-size: 3.5em;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        animation: slideInDown 0.8s ease-out;
+      }
 
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+      @keyframes slideInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-        .home-page p {
-            font-size: 1.3em;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            animation: slideInUp 0.8s ease-out 0.2s both;
-        }
+      .home-page p {
+        font-size: 1.3em;
+        margin-bottom: 40px;
+        opacity: 0.9;
+        animation: slideInUp 0.8s ease-out 0.2s both;
+      }
 
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 0.9;
-                transform: translateY(0);
-            }
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
         }
+        to {
+          opacity: 0.9;
+          transform: translateY(0);
+        }
+      }
 
-        /* About Me Page */
-        .about-page {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+      /* About Me Page */
+      .about-page {
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
-        .about-page h1 {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
+      .about-page h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
 
-        .about-content {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            line-height: 1.8;
-        }
+      .about-content {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        line-height: 1.8;
+      }
 
-        .about-content h2 {
-            margin-top: 30px;
-            margin-bottom: 15px;
-            color: #ffd93d;
-        }
+      .about-content h2 {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        color: #ffd93d;
+      }
 
-        .about-content p {
-            margin-bottom: 20px;
-            font-size: 1.1em;
-        }
+      .about-content p {
+        margin-bottom: 20px;
+        font-size: 1.1em;
+      }
 
-        .about-content ul {
-            margin-left: 30px;
-            margin-bottom: 20px;
-        }
+      .about-content ul {
+        margin-left: 30px;
+        margin-bottom: 20px;
+      }
 
-        .about-content li {
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
+      .about-content li {
+        margin-bottom: 10px;
+        font-size: 1.1em;
+      }
 
-        .cover-photo {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            border-radius: 15px;
-            margin: 0 auto 30px auto;
-            display: block;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
+      .cover-photo {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        border-radius: 15px;
+        margin: 0 auto 30px auto;
+        display: block;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
 
-        .about-content a {
-            color: #ffd93d;
-            text-decoration: none;
-            font-weight: bold;
-        }
+      .about-content a {
+        color: #ffd93d;
+        text-decoration: none;
+        font-weight: bold;
+      }
 
-        .about-content a:hover {
-            text-decoration: underline;
-        }
+      .about-content a:hover {
+        text-decoration: underline;
+      }
 
-        /* Widgets Page */
-        .widgets-page {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+      /* Widgets Page */
+      .widgets-page {
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
-        .widgets-page h1 {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
+      .widgets-page h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
 
-        .widgets-content {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
+      .widgets-content {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
 
-        .widget-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
+      .widget-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+      }
 
-        .widget-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
+      .widget-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
 
-        .widget-item h2 {
-            color: #ffd93d;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
+      .widget-item h2 {
+        color: #ffd93d;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+      }
 
-        .widget-item p {
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
+      .widget-item p {
+        margin-bottom: 15px;
+        font-size: 1.1em;
+        line-height: 1.6;
+      }
 
-        .widget-item button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            border: none;
-            color: white;
-            padding: 12px 30px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            font-weight: 500;
-        }
+      .widget-item button {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        font-weight: 500;
+      }
 
-        .widget-item button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
-            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
-        }
+      .widget-item button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+        background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+      }
 
-        /* Game Page */
-        .game-container {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .game-container h1 {
-            margin: 0 0 20px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        canvas {
-            border: 3px solid #fff;
-            border-radius: 10px;
-            background: #000;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-        
-        .score {
-            font-size: 24px;
-            margin: 10px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .controls {
-            margin-top: 15px;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        
-        .speed-control {
-            margin-top: 10px;
-            font-size: 14px;
-            color: white;
-        }
-        
-        .speed-control label {
-            margin-right: 10px;
-        }
-        
-        .speed-control input[type="range"] {
-            width: 150px;
-            margin: 0 10px;
-            accent-color: #ff6b6b;
-        }
-        
-        .speed-control span {
-            font-weight: bold;
-            color: #ff6b6b;
-        }
-        
-        .paddle-speed-control {
-            margin-top: 10px;
-            font-size: 14px;
-            color: white;
-        }
-        
-        .paddle-speed-control label {
-            margin-right: 10px;
-        }
-        
-        .paddle-speed-control input[type="range"] {
-            width: 150px;
-            margin: 0 10px;
-            accent-color: #3498db;
-        }
-        
-        .hard-mode-control {
-            margin-top: 15px;
-        }
-        
-        .hard-mode-control button {
-            background: linear-gradient(45deg, #2c3e50, #34495e);
-            border: 2px solid #3498db;
-            color: white;
-            padding: 10px 20px;
-            font-size: 14px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .hard-mode-control button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(45deg, #34495e, #2c3e50);
-        }
-        
-        .hard-mode-control button.active {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            border-color: #e74c3c;
-            box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
-        }
-        
-        .player-mode-control {
-            margin-top: 15px;
-        }
-        
-        .player-mode-control button {
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
-            border: 2px solid #27ae60;
-            color: white;
-            padding: 10px 20px;
-            font-size: 14px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .player-mode-control button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
-        }
-        
-        .player-mode-control button.single-player {
-            background: linear-gradient(45deg, #f39c12, #e67e22);
-            border-color: #f39c12;
-            box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
-        }
-        
-        .game-over {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            display: none;
-        }
-        
-        .start-screen {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-        }
-        
-        .game-container button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .game-container button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
+      /* Game Page */
+      .game-container {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
-        /* Pulley Simulator Page */
-        .pulley-container {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .pulley-container h1 {
-            margin: 0 0 20px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .pulley-info {
-            font-size: 18px;
-            margin: 15px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .pulley-info strong {
-            color: #ffd93d;
-        }
-        
-        #pulleyCanvas {
-            border: 3px solid #fff;
-            border-radius: 10px;
-            background: #fff;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            margin: 20px 0;
-        }
-        
-        .pulley-control {
-            margin: 20px 0;
-            font-size: 18px;
-            color: white;
-            text-align: center;
-        }
-        
-        .pulley-control label {
-            margin-right: 10px;
-        }
-        
-        .pulley-control input[type="range"] {
-            width: 200px;
-            margin: 0 10px;
-            accent-color: #ff6b6b;
-        }
-        
-        .pulley-control span {
-            font-weight: bold;
-            color: #ffd93d;
-        }
-        
-        .pulley-control button {
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            border: 2px solid #3498db;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            font-weight: 500;
-        }
-        
-        .pulley-control button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
-            background: linear-gradient(45deg, #2980b9, #3498db);
-        }
-        
-        .pulley-control button.active {
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
-            border-color: #27ae60;
-            box-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
-        }
+      .game-container h1 {
+        margin: 0 0 20px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      canvas {
+        border: 3px solid #fff;
+        border-radius: 10px;
+        background: #000;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      }
+
+      .score {
+        font-size: 24px;
+        margin: 10px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .controls {
+        margin-top: 15px;
+        font-size: 14px;
+        opacity: 0.8;
+      }
+
+      .speed-control {
+        margin-top: 10px;
+        font-size: 14px;
+        color: white;
+      }
+
+      .speed-control label {
+        margin-right: 10px;
+      }
+
+      .speed-control input[type="range"] {
+        width: 150px;
+        margin: 0 10px;
+        accent-color: #ff6b6b;
+      }
+
+      .speed-control span {
+        font-weight: bold;
+        color: #ff6b6b;
+      }
+
+      .paddle-speed-control {
+        margin-top: 10px;
+        font-size: 14px;
+        color: white;
+      }
+
+      .paddle-speed-control label {
+        margin-right: 10px;
+      }
+
+      .paddle-speed-control input[type="range"] {
+        width: 150px;
+        margin: 0 10px;
+        accent-color: #3498db;
+      }
+
+      .hard-mode-control {
+        margin-top: 15px;
+      }
+
+      .hard-mode-control button {
+        background: linear-gradient(45deg, #2c3e50, #34495e);
+        border: 2px solid #3498db;
+        color: white;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .hard-mode-control button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(45deg, #34495e, #2c3e50);
+      }
+
+      .hard-mode-control button.active {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        border-color: #e74c3c;
+        box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+      }
+
+      .player-mode-control {
+        margin-top: 15px;
+      }
+
+      .player-mode-control button {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        border: 2px solid #27ae60;
+        color: white;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .player-mode-control button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(45deg, #2ecc71, #27ae60);
+      }
+
+      .player-mode-control button.single-player {
+        background: linear-gradient(45deg, #f39c12, #e67e22);
+        border-color: #f39c12;
+        box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+      }
+
+      .game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        display: none;
+      }
+
+      .start-screen {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+      }
+
+      .game-container button {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .game-container button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Pulley Simulator Page */
+      .pulley-container {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .pulley-container h1 {
+        margin: 0 0 20px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .pulley-info {
+        font-size: 18px;
+        margin: 15px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .pulley-info strong {
+        color: #ffd93d;
+      }
+
+      #pulleyCanvas {
+        border: 3px solid #fff;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        margin: 20px 0;
+      }
+
+      .pulley-control {
+        margin: 20px 0;
+        font-size: 18px;
+        color: white;
+        text-align: center;
+      }
+
+      .pulley-control label {
+        margin-right: 10px;
+      }
+
+      .pulley-control input[type="range"] {
+        width: 200px;
+        margin: 0 10px;
+        accent-color: #ff6b6b;
+      }
+
+      .pulley-control span {
+        font-weight: bold;
+        color: #ffd93d;
+      }
+
+      .pulley-control button {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        border: 2px solid #3498db;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        font-weight: 500;
+      }
+
+      .pulley-control button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+        background: linear-gradient(45deg, #2980b9, #3498db);
+      }
+
+      .pulley-control button.active {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        border-color: #27ae60;
+        box-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation -->
     <nav>
-        <ul>
-            <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
-            <li><button onclick="showPage('about')" id="nav-about">About Me</button></li>
-            <li><button onclick="showPage('widgets')" id="nav-widgets">Widgets</button></li>
-        </ul>
+      <ul>
+        <li>
+          <button onclick="showPage('home')" id="nav-home" class="active">
+            Home
+          </button>
+        </li>
+        <li>
+          <button onclick="showPage('about')" id="nav-about">About Me</button>
+        </li>
+        <li>
+          <button onclick="showPage('widgets')" id="nav-widgets">
+            Widgets
+          </button>
+        </li>
+      </ul>
     </nav>
 
     <!-- Home Page -->
     <div id="home-page" class="page active">
-        <canvas id="starCanvas"></canvas>
-        <div class="home-page">
-            <h1>Welcome to Angus Norden's Website</h1>
-            <p>Explore my portfolio and enjoy some interactive fun!</p>
-            <p style="font-size: 0.9em; opacity: 0.7; margin-top: 20px;">Click anywhere to fly forward through space!</p>
-        </div>
+      <canvas id="starCanvas"></canvas>
+      <div class="home-page">
+        <h1>Welcome to Angus Norden's Website</h1>
+        <p>Explore my portfolio and enjoy some interactive fun!</p>
+        <p style="font-size: 0.9em; opacity: 0.7; margin-top: 20px">
+          Click anywhere to fly forward through space!
+        </p>
+      </div>
     </div>
 
     <!-- About Me Page -->
     <div id="about-page" class="page">
-        <div class="about-page">
-            <h1>Angus Norden's About Me</h1>
-            <div class="about-content">
-                <img src="IMG_9461.jpg" alt="Angus Norden" class="cover-photo">
-                <h2>Hello!</h2>
-                <p>
-                    Welcome to Angus Norden's personal website! I'm passionate about technology, programming, and creating 
-                    interactive experiences. This website showcases some of my work and interests.
-                </p>
+      <div class="about-page">
+        <h1>Angus Norden's About Me</h1>
+        <div class="about-content">
+          <img src="IMG_9461.jpg" alt="Angus Norden" class="cover-photo" />
+          <h2>Hello!</h2>
+          <p>
+            Welcome to Angus Norden's personal website! I'm passionate about
+            technology, programming, and creating interactive experiences. This
+            website showcases some of my work and interests.
+          </p>
 
-                <h2>Projects</h2>
-                <p>
-                    One of my recent projects is this interactive Pong game, which you can play by clicking 
-                    the "Pong Game" button in the navigation menu. The game features multiple modes, 
-                    customizable speeds, and a challenging hard mode with ice physics!
-                </p>
+          <h2>Projects</h2>
+          <p>
+            One of my recent projects is this interactive Pong game, which you
+            can play by clicking the "Pong Game" button in the navigation menu.
+            The game features multiple modes, customizable speeds, and a
+            challenging hard mode with ice physics!
+          </p>
 
-                <h2>Get in Touch</h2>
-                <p>
-                    Feel free to explore the site and try out the Pong game. If you'd like to connect, 
-                    you can contact me at <a href="mailto:anorden1@hwemail.com">anorden1@hwemail.com</a>.
-                </p>
-            </div>
+          <h2>Get in Touch</h2>
+          <p>
+            Feel free to explore the site and try out the Pong game. If you'd
+            like to connect, you can contact me at
+            <a href="mailto:anorden1@hwemail.com">anorden1@hwemail.com</a>.
+          </p>
         </div>
+      </div>
     </div>
 
     <!-- Widgets Page -->
     <div id="widgets-page" class="page">
-        <div class="widgets-page">
-            <h1>Widgets</h1>
-            <div class="widgets-content">
-                <div class="widget-item">
-                    <h2>Pong Game</h2>
-                    <p>Play the classic Pong game. Features multiple game modes, customizable speeds, and challenging hard mode with ice physics!</p>
-                    <button onclick="showPage('game')">Play Pong Game</button>
-                </div>
-                <div class="widget-item">
-                    <h2>PulleySim (rope dreams come to life)</h2>
-                    <p>Explore a pulley system with mechanical advantage of 2, holding a 1 kg mass.</p>
-                    <button onclick="showPage('pulley')">Open PulleySim</button>
-                </div>
-            </div>
+      <div class="widgets-page">
+        <h1>Widgets</h1>
+        <div class="widgets-content">
+          <div class="widget-item">
+            <h2>Pong Game</h2>
+            <p>
+              Play the classic Pong game. Features multiple game modes,
+              customizable speeds, and challenging hard mode with ice physics!
+            </p>
+            <button onclick="showPage('game')">Play Pong Game</button>
+          </div>
+          <div class="widget-item">
+            <h2>PulleySim (rope dreams come to life)</h2>
+            <p>
+              Explore a pulley system with mechanical advantage of 2, holding a
+              1 kg mass.
+            </p>
+            <button onclick="showPage('pulley')">Open PulleySim</button>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Pulley Simulator Page -->
     <div id="pulley-page" class="page">
-        <div class="pulley-container">
-            <h1>PulleySim (rope dreams come to life)</h1>
-            <div class="pulley-info">
-                <strong>Mechanical Advantage:</strong> <span id="displayMA">1:1</span> | <strong>Mass:</strong> <span id="displayMass">1</span> kg | <strong>Force Required:</strong> <span id="displayForce">9.8</span> N
-            </div>
-            <canvas id="pulleyCanvas" width="800" height="500"></canvas>
-            <div class="pulley-control">
-                <label for="massSlider">Mass:</label>
-                <input type="range" id="massSlider" min="0.5" max="5" value="1" step="0.1">
-                <span id="massValue">1</span> kg
-            </div>
-            <div class="pulley-control">
-                <button id="mechanicalAdvantageToggle" onclick="toggleMechanicalAdvantage()">Mechanical Advantage: 1:1</button>
-            </div>
-            <div class="pulley-info">
-                <p>This pulley system changes the direction of force but doesn't reduce the effort needed.</p>
-                <p id="forceCalculation">Force = Weight = 1 kg × 9.8 m/s² = 9.8 N</p>
-                <p>You pull down to lift the box up!</p>
-            </div>
+      <div class="pulley-container">
+        <h1>PulleySim (rope dreams come to life)</h1>
+        <div class="pulley-info">
+          <strong>Mechanical Advantage:</strong>
+          <span id="displayMA">1:1</span> | <strong>Mass:</strong>
+          <span id="displayMass">1</span> kg | <strong>Force Required:</strong>
+          <span id="displayForce">9.8</span> N
         </div>
+        <canvas id="pulleyCanvas" width="800" height="500"></canvas>
+        <div class="pulley-control">
+          <label for="massSlider">Mass:</label>
+          <input
+            type="range"
+            id="massSlider"
+            min="0.5"
+            max="5"
+            value="1"
+            step="0.1"
+          />
+          <span id="massValue">1</span> kg
+        </div>
+        <div class="pulley-control">
+          <label for="maSlider">Mechanical Advantage:</label>
+          <input
+            type="range"
+            id="maSlider"
+            min="1"
+            max="4"
+            value="1"
+            step="1"
+          />
+          <span id="maValue">1:1</span>
+        </div>
+        <div class="pulley-info">
+          <p>
+            This pulley system changes the direction of force but doesn't reduce
+            the effort needed.
+          </p>
+          <p id="forceCalculation">Force = Weight = 1 kg × 9.8 m/s² = 9.8 N</p>
+          <p>You pull down to lift the box up!</p>
+        </div>
+      </div>
     </div>
 
     <!-- Game Page -->
     <div id="game-page" class="page">
-        <div class="game-container">
-            <h1>PONG</h1>
-            <div class="score">
-                <span id="player1Score">0</span> - <span id="player2Score">0</span>
-            </div>
-            <div class="score" id="singlePlayerScore" style="display: none;">
-                Hits: <span id="hitCount">0</span> | High Score: <span id="highScore">0</span>
-            </div>
-            
-            <canvas id="gameCanvas" width="800" height="400"></canvas>
-            <div class="controls" id="controlsText">
-                Player 1: W/S keys | Player 2: ↑/↓ arrows
-            </div>
-            <div class="speed-control">
-                <label for="speedSlider">Ball Speed:</label>
-                <input type="range" id="speedSlider" min="1" max="10" value="4" step="0.5">
-                <span id="speedValue">4</span>
-            </div>
-            <div class="paddle-speed-control">
-                <label for="paddleSpeedSlider">Paddle Speed:</label>
-                <input type="range" id="paddleSpeedSlider" min="1" max="15" value="5" step="0.5">
-                <span id="paddleSpeedValue">5</span>
-            </div>
-            <div class="hard-mode-control">
-                <button id="hardModeToggle" onclick="toggleHardMode()">Hard Mode: OFF</button>
-            </div>
-            <div class="player-mode-control">
-                <button id="playerModeToggle" onclick="togglePlayerMode()">Mode: Two Player</button>
-            </div>
-            
-            <div class="start-screen" id="startScreen">
-                <h2>Welcome to Pong!</h2>
-                <p id="gameModeText">Two Player Mode - First to 5 points wins!</p>
-                <button onclick="startGame()">Start Game</button>
-            </div>
-            
-            <div class="game-over" id="gameOver">
-                <h2 id="gameOverText">Game Over!</h2>
-                <p id="winnerText"></p>
-                <button onclick="resetGame()">Play Again</button>
-            </div>
+      <div class="game-container">
+        <h1>PONG</h1>
+        <div class="score">
+          <span id="player1Score">0</span> - <span id="player2Score">0</span>
         </div>
+        <div class="score" id="singlePlayerScore" style="display: none">
+          Hits: <span id="hitCount">0</span> | High Score:
+          <span id="highScore">0</span>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div class="controls" id="controlsText">
+          Player 1: W/S keys | Player 2: ↑/↓ arrows
+        </div>
+        <div class="speed-control">
+          <label for="speedSlider">Ball Speed:</label>
+          <input
+            type="range"
+            id="speedSlider"
+            min="1"
+            max="10"
+            value="4"
+            step="0.5"
+          />
+          <span id="speedValue">4</span>
+        </div>
+        <div class="paddle-speed-control">
+          <label for="paddleSpeedSlider">Paddle Speed:</label>
+          <input
+            type="range"
+            id="paddleSpeedSlider"
+            min="1"
+            max="15"
+            value="5"
+            step="0.5"
+          />
+          <span id="paddleSpeedValue">5</span>
+        </div>
+        <div class="hard-mode-control">
+          <button id="hardModeToggle" onclick="toggleHardMode()">
+            Hard Mode: OFF
+          </button>
+        </div>
+        <div class="player-mode-control">
+          <button id="playerModeToggle" onclick="togglePlayerMode()">
+            Mode: Two Player
+          </button>
+        </div>
+
+        <div class="start-screen" id="startScreen">
+          <h2>Welcome to Pong!</h2>
+          <p id="gameModeText">Two Player Mode - First to 5 points wins!</p>
+          <button onclick="startGame()">Start Game</button>
+        </div>
+
+        <div class="game-over" id="gameOver">
+          <h2 id="gameOverText">Game Over!</h2>
+          <p id="winnerText"></p>
+          <button onclick="resetGame()">Play Again</button>
+        </div>
+      </div>
     </div>
 
     <script>
-        // Navigation functionality
-        function showPage(pageId) {
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Remove active class from all nav buttons
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected page
-            const selectedPage = document.getElementById(pageId + '-page');
-            if (selectedPage) {
-                selectedPage.classList.add('active');
-            }
-            
-            // Add active class to corresponding nav button
-            const navButton = document.getElementById('nav-' + pageId);
-            if (navButton) {
-                navButton.classList.add('active');
-            }
+      // Navigation functionality
+      function showPage(pageId) {
+        // Hide all pages
+        document.querySelectorAll(".page").forEach((page) => {
+          page.classList.remove("active");
+        });
 
-            // Initialize game canvas if showing game page
-            if (pageId === 'game') {
-                // Small delay to ensure page is visible
-                setTimeout(() => {
-                    if (gameInitialized) {
-                        draw();
-                    }
-                }, 100);
-            }
+        // Remove active class from all nav buttons
+        document.querySelectorAll("nav button").forEach((btn) => {
+          btn.classList.remove("active");
+        });
 
-            // Initialize starry sky if showing home page
-            if (pageId === 'home') {
-                setTimeout(() => {
-                    initStarField();
-                }, 100);
-            }
-
-            // Initialize pulley canvas if showing pulley page
-            if (pageId === 'pulley') {
-                setTimeout(() => {
-                    drawPulleySystem();
-                }, 100);
-            }
+        // Show selected page
+        const selectedPage = document.getElementById(pageId + "-page");
+        if (selectedPage) {
+          selectedPage.classList.add("active");
         }
-        
-        // Mass slider functionality for pulley system
-        const massSlider = document.getElementById('massSlider');
-        const massValue = document.getElementById('massValue');
-        const displayMass = document.getElementById('displayMass');
-        const displayForce = document.getElementById('displayForce');
-        const forceCalculation = document.getElementById('forceCalculation');
-        
-        if (massSlider) {
-            massSlider.addEventListener('input', function() {
-                const mass = parseFloat(this.value);
-                updatePulleyDisplay(mass, mechanicalAdvantage);
-                drawPulleySystem(mass, mechanicalAdvantage);
-            });
+
+        // Add active class to corresponding nav button
+        const navButton = document.getElementById("nav-" + pageId);
+        if (navButton) {
+          navButton.classList.add("active");
         }
-        
-        // Toggle mechanical advantage function
-        function toggleMechanicalAdvantage() {
-            mechanicalAdvantage = mechanicalAdvantage === 1 ? 2 : 1;
-            const button = document.getElementById('mechanicalAdvantageToggle');
-            
-            if (mechanicalAdvantage === 2) {
-                button.textContent = 'Mechanical Advantage: 2:1';
-                button.classList.add('active');
+
+        // Initialize game canvas if showing game page
+        if (pageId === "game") {
+          // Small delay to ensure page is visible
+          setTimeout(() => {
+            if (gameInitialized) {
+              draw();
+            }
+          }, 100);
+        }
+
+        // Initialize starry sky if showing home page
+        if (pageId === "home") {
+          setTimeout(() => {
+            initStarField();
+          }, 100);
+        }
+
+        // Initialize pulley canvas if showing pulley page
+        if (pageId === "pulley") {
+          setTimeout(() => {
+            drawPulleySystem();
+          }, 100);
+        }
+      }
+
+      // Mass slider functionality for pulley system
+      const massSlider = document.getElementById("massSlider");
+      const massValue = document.getElementById("massValue");
+      const displayMass = document.getElementById("displayMass");
+      const displayForce = document.getElementById("displayForce");
+      const forceCalculation = document.getElementById("forceCalculation");
+
+      if (massSlider) {
+        massSlider.addEventListener("input", function () {
+          const mass = parseFloat(this.value);
+          updatePulleyDisplay(mass, mechanicalAdvantage);
+          drawPulleySystem(mass, mechanicalAdvantage);
+        });
+      }
+
+      // Mechanical advantage slider functionality
+      const maSlider = document.getElementById("maSlider");
+      const maValue = document.getElementById("maValue");
+
+      if (maSlider) {
+        maSlider.addEventListener("input", function () {
+          mechanicalAdvantage = parseInt(this.value);
+          if (maValue) maValue.textContent = mechanicalAdvantage + ":1";
+          updatePulleyDisplay(currentMass, mechanicalAdvantage);
+          drawPulleySystem(currentMass, mechanicalAdvantage);
+        });
+      }
+
+      // Update display values
+      function updatePulleyDisplay(mass, ma) {
+        if (massValue) massValue.textContent = mass.toFixed(1);
+        if (displayMass) displayMass.textContent = mass.toFixed(1);
+
+        // Calculate force based on mechanical advantage
+        const weight = mass * 9.8;
+        const force = weight / ma;
+
+        if (displayForce) displayForce.textContent = force.toFixed(1);
+        if (displayMA) displayMA.textContent = ma + ":1";
+
+        // Update force calculation text
+        if (forceCalculation) {
+          if (ma === 1) {
+            forceCalculation.textContent = `Force = Weight = ${mass.toFixed(
+              1
+            )} kg × 9.8 m/s² = ${force.toFixed(1)} N`;
+          } else {
+            forceCalculation.textContent = `Force = Weight ÷ MA = (${mass.toFixed(
+              1
+            )} kg × 9.8 m/s²) ÷ ${ma} = ${force.toFixed(1)} N`;
+          }
+        }
+      }
+
+      // Starry Sky Animation
+      let starCanvas, starCtx;
+      let stars = [];
+      let velocity = { x: 0, y: 0, z: 0 };
+      let currentSpeed = 0;
+      let maxSpeed = 30;
+      let lightSpeedMax = 80; // Much faster for click-and-hold
+      let isFlying = false;
+      let flyDuration = 3000; // 3 seconds
+      let flyStartTime = 0;
+      let lastTime = 0;
+      let mousePressed = false;
+      let targetDirection = { x: 0, y: 0 };
+      let acceleration = 50; // Speed up quickly
+      let deceleration = 80; // Slow down quickly
+      let clickStartTime = 0;
+      let isClickAndHold = false;
+
+      function initStarField() {
+        starCanvas = document.getElementById("starCanvas");
+        if (!starCanvas) return;
+
+        starCtx = starCanvas.getContext("2d");
+        resizeStarCanvas();
+
+        // Create stars - more stars, distributed across a wider area with more on edges
+        stars = [];
+        const numStars = 2000;
+        const expandFactor = 2.0; // Expand star field beyond screen edges
+
+        for (let i = 0; i < numStars; i++) {
+          // Bias distribution toward edges - use radial distribution
+          const angle = Math.random() * Math.PI * 2;
+          const centerDist = Math.random(); // 0 to 1
+          // Square it to bias toward edges (edge stars have larger distances)
+          const edgeBias = Math.pow(centerDist, 0.4); // Lower exponent = more edge bias
+          const distance =
+            edgeBias *
+            Math.max(starCanvas.width, starCanvas.height) *
+            expandFactor;
+
+          // Assign star colors - red, blue, or yellow
+          const colorType = Math.random();
+          let starColor;
+          if (colorType < 0.33) {
+            // Red stars (red-orange hues)
+            starColor = `hsl(${Math.random() * 30 + 0}, 100%, ${
+              Math.random() * 20 + 70
+            }%)`;
+          } else if (colorType < 0.66) {
+            // Blue stars (blue-white hues)
+            starColor = `hsl(${Math.random() * 60 + 180}, 100%, ${
+              Math.random() * 15 + 80
+            }%)`;
+          } else {
+            // Yellow stars (yellow-white hues, like our sun)
+            starColor = `hsl(${Math.random() * 30 + 40}, 100%, ${
+              Math.random() * 20 + 75
+            }%)`;
+          }
+
+          stars.push({
+            // Create stars in a wider area, biased toward edges
+            x: Math.cos(angle) * distance + starCanvas.width / 2,
+            y: Math.sin(angle) * distance + starCanvas.height / 2,
+            z: Math.random() * 2000 + 500, // Depth range 500-2500
+            size: Math.random() * 4.5 + 1.5, // Bigger stars: 1.5 to 6.0
+            opacity: Math.random() * 0.7 + 0.6, // Brighter: 0.6 to 1.3 (clamped in rendering)
+            color: starColor,
+          });
+        }
+
+        // Mouse down handler - start flying in direction of click
+        starCanvas.addEventListener("mousedown", function (e) {
+          mousePressed = true;
+          clickStartTime = performance.now();
+          isClickAndHold = false;
+
+          const rect = starCanvas.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const clickY = e.clientY - rect.top;
+
+          const centerX = starCanvas.width / 2;
+          const centerY = starCanvas.height / 2;
+
+          // Calculate direction vector from center to click point
+          const dx = clickX - centerX;
+          const dy = clickY - centerY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          // Normalize and store target direction
+          if (distance > 0) {
+            targetDirection.x = dx / distance;
+            targetDirection.y = dy / distance;
+          } else {
+            targetDirection.x = 0;
+            targetDirection.y = 0;
+          }
+
+          isFlying = true;
+          flyStartTime = performance.now();
+        });
+
+        // Mouse up handler - stop flying and slow down quickly
+        starCanvas.addEventListener("mouseup", function (e) {
+          const holdDuration = performance.now() - clickStartTime;
+          mousePressed = false;
+
+          // If it was a quick click (less than 200ms), do a quick burst
+          if (!isClickAndHold && holdDuration < 200) {
+            // Quick click - small burst of speed
+            currentSpeed = Math.min(maxSpeed, currentSpeed + maxSpeed * 0.6);
+            flyStartTime = performance.now();
+          } else {
+            // Was a hold, now decelerate
+            flyStartTime = performance.now();
+          }
+        });
+
+        // Mouse leave handler - stop flying if mouse leaves canvas
+        starCanvas.addEventListener("mouseleave", function (e) {
+          mousePressed = false;
+          flyStartTime = performance.now();
+        });
+
+        animateStars(performance.now());
+      }
+
+      function resizeStarCanvas() {
+        if (!starCanvas) return;
+        const homePage = document.getElementById("home-page");
+        if (homePage && homePage.classList.contains("active")) {
+          starCanvas.width = window.innerWidth;
+          starCanvas.height = window.innerHeight;
+
+          // Recreate stars if canvas was resized
+          if (stars.length > 0) {
+            const expandFactor = 2.0;
+            stars.forEach((star) => {
+              // Recreate with edge bias, preserve color
+              const angle = Math.random() * Math.PI * 2;
+              const centerDist = Math.random();
+              const edgeBias = Math.pow(centerDist, 0.4);
+              const distance =
+                edgeBias *
+                Math.max(starCanvas.width, starCanvas.height) *
+                expandFactor;
+              star.x = Math.cos(angle) * distance + starCanvas.width / 2;
+              star.y = Math.sin(angle) * distance + starCanvas.height / 2;
+              star.z = Math.random() * 2000 + 500;
+              // Keep existing color
+            });
+          }
+        }
+      }
+
+      function animateStars(timestamp) {
+        if (!starCtx || !starCanvas) return;
+
+        // Use current time if timestamp not provided
+        const currentTime = timestamp || performance.now();
+        if (lastTime === 0) lastTime = currentTime;
+
+        // Clear canvas with black space background
+        starCtx.fillStyle = "#000000";
+        starCtx.fillRect(0, 0, starCanvas.width, starCanvas.height);
+
+        // Update flying state with acceleration/deceleration
+        if (isFlying) {
+          const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+          const holdDuration = currentTime - clickStartTime;
+
+          if (mousePressed) {
+            // Check if this is a click-and-hold (held for more than 150ms)
+            if (holdDuration > 150 && !isClickAndHold) {
+              isClickAndHold = true;
+              // Switch to light speed mode
+            }
+
+            // Use light speed max if holding, regular max for quick clicks
+            const activeMaxSpeed = isClickAndHold ? lightSpeedMax : maxSpeed;
+            const activeAcceleration = isClickAndHold
+              ? acceleration * 1.5
+              : acceleration;
+
+            // Accelerate quickly to max speed
+            currentSpeed = Math.min(
+              activeMaxSpeed,
+              currentSpeed + activeAcceleration * deltaTime
+            );
+
+            // Update velocity based on current speed and target direction
+            velocity.z = currentSpeed;
+            velocity.x = targetDirection.x * currentSpeed * 0.4;
+            velocity.y = targetDirection.y * currentSpeed * 0.4;
+          } else {
+            // Decelerate quickly
+            currentSpeed = Math.max(0, currentSpeed - deceleration * deltaTime);
+
+            if (currentSpeed <= 0) {
+              // Completely stopped
+              isFlying = false;
+              currentSpeed = 0;
+              velocity.x = 0;
+              velocity.y = 0;
+              velocity.z = 0;
+              isClickAndHold = false;
             } else {
-                button.textContent = 'Mechanical Advantage: 1:1';
-                button.classList.remove('active');
+              // Maintain direction while slowing
+              velocity.z = currentSpeed;
+              velocity.x = targetDirection.x * currentSpeed * 0.4;
+              velocity.y = targetDirection.y * currentSpeed * 0.4;
             }
-            
-            updatePulleyDisplay(currentMass, mechanicalAdvantage);
-            drawPulleySystem(currentMass, mechanicalAdvantage);
-        }
-        
-        // Update display values
-        function updatePulleyDisplay(mass, ma) {
-            if (massValue) massValue.textContent = mass.toFixed(1);
-            if (displayMass) displayMass.textContent = mass.toFixed(1);
-            
-            // Calculate force based on mechanical advantage
-            const weight = mass * 9.8;
-            const force = weight / ma;
-            
-            if (displayForce) displayForce.textContent = force.toFixed(1);
-            if (displayMA) displayMA.textContent = ma + ':1';
-            
-            // Update force calculation text
-            if (forceCalculation) {
-                if (ma === 1) {
-                    forceCalculation.textContent = `Force = Weight = ${mass.toFixed(1)} kg × 9.8 m/s² = ${force.toFixed(1)} N`;
-                } else {
-                    forceCalculation.textContent = `Force = Weight ÷ MA = (${mass.toFixed(1)} kg × 9.8 m/s²) ÷ 2 = ${force.toFixed(1)} N`;
-                }
-            }
+          }
         }
 
-        // Starry Sky Animation
-        let starCanvas, starCtx;
-        let stars = [];
-        let velocity = { x: 0, y: 0, z: 0 };
-        let currentSpeed = 0;
-        let maxSpeed = 30;
-        let lightSpeedMax = 80; // Much faster for click-and-hold
-        let isFlying = false;
-        let flyDuration = 3000; // 3 seconds
-        let flyStartTime = 0;
-        let lastTime = 0;
-        let mousePressed = false;
-        let targetDirection = { x: 0, y: 0 };
-        let acceleration = 50; // Speed up quickly
-        let deceleration = 80; // Slow down quickly
-        let clickStartTime = 0;
-        let isClickAndHold = false;
+        // Update and draw stars
+        const centerX = starCanvas.width / 2;
+        const centerY = starCanvas.height / 2;
 
-        function initStarField() {
-            starCanvas = document.getElementById('starCanvas');
-            if (!starCanvas) return;
-            
-            starCtx = starCanvas.getContext('2d');
-            resizeStarCanvas();
-            
-            // Create stars - more stars, distributed across a wider area with more on edges
-            stars = [];
-            const numStars = 2000;
-            const expandFactor = 2.0; // Expand star field beyond screen edges
-            
-            for (let i = 0; i < numStars; i++) {
-                // Bias distribution toward edges - use radial distribution
-                const angle = Math.random() * Math.PI * 2;
-                const centerDist = Math.random(); // 0 to 1
-                // Square it to bias toward edges (edge stars have larger distances)
-                const edgeBias = Math.pow(centerDist, 0.4); // Lower exponent = more edge bias
-                const distance = edgeBias * Math.max(starCanvas.width, starCanvas.height) * expandFactor;
-                
-                // Assign star colors - red, blue, or yellow
-                const colorType = Math.random();
-                let starColor;
-                if (colorType < 0.33) {
-                    // Red stars (red-orange hues)
-                    starColor = `hsl(${Math.random() * 30 + 0}, 100%, ${Math.random() * 20 + 70}%)`;
-                } else if (colorType < 0.66) {
-                    // Blue stars (blue-white hues)
-                    starColor = `hsl(${Math.random() * 60 + 180}, 100%, ${Math.random() * 15 + 80}%)`;
-                } else {
-                    // Yellow stars (yellow-white hues, like our sun)
-                    starColor = `hsl(${Math.random() * 30 + 40}, 100%, ${Math.random() * 20 + 75}%)`;
-                }
-                
-                stars.push({
-                    // Create stars in a wider area, biased toward edges
-                    x: Math.cos(angle) * distance + starCanvas.width / 2,
-                    y: Math.sin(angle) * distance + starCanvas.height / 2,
-                    z: Math.random() * 2000 + 500, // Depth range 500-2500
-                    size: Math.random() * 4.5 + 1.5, // Bigger stars: 1.5 to 6.0
-                    opacity: Math.random() * 0.7 + 0.6, // Brighter: 0.6 to 1.3 (clamped in rendering)
-                    color: starColor
-                });
+        for (let i = 0; i < stars.length; i++) {
+          const star = stars[i];
+
+          if (isFlying) {
+            // Move stars based on velocity (reverse movement for flying effect)
+            star.x -= velocity.x;
+            star.y -= velocity.y;
+            star.z -= velocity.z;
+          }
+
+          // Reset stars that have passed us or gone too far - bias toward edges
+          if (star.z <= 0 || star.z > 3000) {
+            const expandFactor = 2.0;
+            const angle = Math.random() * Math.PI * 2;
+            const centerDist = Math.random();
+            const edgeBias = Math.pow(centerDist, 0.4);
+            const distance =
+              edgeBias *
+              Math.max(starCanvas.width, starCanvas.height) *
+              expandFactor;
+            star.x = centerX + Math.cos(angle) * distance;
+            star.y = centerY + Math.sin(angle) * distance;
+            star.z = 2000 + Math.random() * 500;
+
+            // Reassign color when resetting
+            const colorType = Math.random();
+            if (colorType < 0.33) {
+              star.color = `hsl(${Math.random() * 30 + 0}, 100%, ${
+                Math.random() * 20 + 70
+              }%)`;
+            } else if (colorType < 0.66) {
+              star.color = `hsl(${Math.random() * 60 + 180}, 100%, ${
+                Math.random() * 15 + 80
+              }%)`;
+            } else {
+              star.color = `hsl(${Math.random() * 30 + 40}, 100%, ${
+                Math.random() * 20 + 75
+              }%)`;
+            }
+          }
+
+          // Calculate 3D position with perspective
+          const k = 128 / Math.max(star.z, 1); // Perspective factor
+          const px = (star.x - centerX) * k + centerX;
+          const py = (star.y - centerY) * k + centerY;
+          const r = star.size * k;
+
+          // Draw star if it's visible (even if slightly off screen for edge stars)
+          if (r > 0.1) {
+            // Calculate streak effect based on speed (Star Wars hyperspace effect)
+            // Use lightSpeedMax for ratio calculation to show streaks at light speed
+            const effectiveMaxSpeed = Math.max(maxSpeed, lightSpeedMax);
+            const speedRatio = currentSpeed / effectiveMaxSpeed;
+            const streakLength = speedRatio * r * 15; // Long streaks at high speed
+
+            // Convert HSL color to RGBA with opacity
+            const tempDiv = document.createElement("div");
+            tempDiv.style.color = star.color;
+            document.body.appendChild(tempDiv);
+            const rgbColor = window.getComputedStyle(tempDiv).color;
+            document.body.removeChild(tempDiv);
+
+            // Extract RGB values
+            const rgbMatch = rgbColor.match(/\d+/g);
+            let red, green, blue;
+            if (rgbMatch) {
+              red = parseInt(rgbMatch[0]);
+              green = parseInt(rgbMatch[1]);
+              blue = parseInt(rgbMatch[2]);
+            } else {
+              red = 255;
+              green = 255;
+              blue = 255;
             }
 
-            // Mouse down handler - start flying in direction of click
-            starCanvas.addEventListener('mousedown', function(e) {
-                mousePressed = true;
-                clickStartTime = performance.now();
-                isClickAndHold = false;
-                
-                const rect = starCanvas.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const clickY = e.clientY - rect.top;
-                
-                const centerX = starCanvas.width / 2;
-                const centerY = starCanvas.height / 2;
-                
-                // Calculate direction vector from center to click point
-                const dx = clickX - centerX;
-                const dy = clickY - centerY;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                // Normalize and store target direction
-                if (distance > 0) {
-                    targetDirection.x = dx / distance;
-                    targetDirection.y = dy / distance;
-                } else {
-                    targetDirection.x = 0;
-                    targetDirection.y = 0;
-                }
-                
-                isFlying = true;
-                flyStartTime = performance.now();
-            });
+            // Star gets brighter as it approaches
+            const brightness = Math.min(
+              1,
+              Math.max(0.4, (3000 - star.z) / 700)
+            );
+            const finalOpacity = Math.min(1, star.opacity * brightness * 1.3);
 
-            // Mouse up handler - stop flying and slow down quickly
-            starCanvas.addEventListener('mouseup', function(e) {
-                const holdDuration = performance.now() - clickStartTime;
-                mousePressed = false;
-                
-                // If it was a quick click (less than 200ms), do a quick burst
-                if (!isClickAndHold && holdDuration < 200) {
-                    // Quick click - small burst of speed
-                    currentSpeed = Math.min(maxSpeed, currentSpeed + maxSpeed * 0.6);
-                    flyStartTime = performance.now();
-                } else {
-                    // Was a hold, now decelerate
-                    flyStartTime = performance.now();
-                }
-            });
+            if (speedRatio > 0.7 && streakLength > 5) {
+              // Draw hyperspace streak effect
+              // Calculate streak direction (opposite of velocity, toward center)
+              const streakDirX =
+                (px - centerX) /
+                Math.max(
+                  1,
+                  Math.sqrt(
+                    (px - centerX) * (px - centerX) +
+                      (py - centerY) * (py - centerY)
+                  )
+                );
+              const streakDirY =
+                (py - centerY) /
+                Math.max(
+                  1,
+                  Math.sqrt(
+                    (px - centerX) * (px - centerX) +
+                      (py - centerY) * (py - centerY)
+                  )
+                );
 
-            // Mouse leave handler - stop flying if mouse leaves canvas
-            starCanvas.addEventListener('mouseleave', function(e) {
-                mousePressed = false;
-                flyStartTime = performance.now();
-            });
+              // Draw streak line
+              starCtx.beginPath();
+              starCtx.moveTo(px, py);
+              starCtx.lineTo(
+                px - streakDirX * streakLength,
+                py - streakDirY * streakLength
+              );
+              starCtx.strokeStyle = `rgba(${red}, ${green}, ${blue}, ${
+                finalOpacity * 0.9
+              })`;
+              starCtx.lineWidth = Math.max(1, r * 0.5);
+              starCtx.stroke();
 
-            animateStars(performance.now());
+              // Draw bright head of streak
+              starCtx.beginPath();
+              starCtx.arc(px, py, r * 1.2, 0, Math.PI * 2);
+              starCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${finalOpacity})`;
+              starCtx.fill();
+
+              // Add intense glow at high speeds
+              starCtx.shadowBlur = r * 6 * speedRatio;
+              starCtx.shadowColor = `rgba(${red}, ${green}, ${blue}, 1.0)`;
+              starCtx.fill();
+              starCtx.shadowBlur = 0;
+            } else {
+              // Normal star rendering (slower speeds)
+              starCtx.beginPath();
+              starCtx.arc(px, py, r, 0, Math.PI * 2);
+              starCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${finalOpacity})`;
+              starCtx.fill();
+
+              // Add glow for closer stars
+              if (r > 0.8) {
+                const glowOpacity = Math.min(1, finalOpacity * 0.8);
+                const blurRadius = r * 4;
+                starCtx.shadowBlur = blurRadius;
+                starCtx.shadowColor = `rgba(${red}, ${green}, ${blue}, ${glowOpacity})`;
+                starCtx.fill();
+                starCtx.shadowBlur = 0;
+              }
+            }
+          }
         }
 
-        function resizeStarCanvas() {
-            if (!starCanvas) return;
-            const homePage = document.getElementById('home-page');
-            if (homePage && homePage.classList.contains('active')) {
-                starCanvas.width = window.innerWidth;
-                starCanvas.height = window.innerHeight;
-                
-                // Recreate stars if canvas was resized
-                if (stars.length > 0) {
-                    const expandFactor = 2.0;
-                    stars.forEach(star => {
-                        // Recreate with edge bias, preserve color
-                        const angle = Math.random() * Math.PI * 2;
-                        const centerDist = Math.random();
-                        const edgeBias = Math.pow(centerDist, 0.4);
-                        const distance = edgeBias * Math.max(starCanvas.width, starCanvas.height) * expandFactor;
-                        star.x = Math.cos(angle) * distance + starCanvas.width / 2;
-                        star.y = Math.sin(angle) * distance + starCanvas.height / 2;
-                        star.z = Math.random() * 2000 + 500;
-                        // Keep existing color
-                    });
-                }
-            }
+        requestAnimationFrame(animateStars);
+        lastTime = currentTime;
+      }
+
+      // Handle window resize
+      window.addEventListener("resize", function () {
+        resizeStarCanvas();
+      });
+
+      // Initialize star field on page load if home page is active
+      window.addEventListener("load", function () {
+        const homePage = document.getElementById("home-page");
+        if (homePage && homePage.classList.contains("active")) {
+          setTimeout(() => {
+            initStarField();
+          }, 100);
+        }
+      });
+
+      // Game variables
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      let gameInitialized = false;
+
+      // Game state
+      let gameState = "start"; // 'start', 'playing', 'paused', 'gameOver'
+      let player1Score = 0;
+      let player2Score = 0;
+      let gameSpeed = 1;
+      let ballSpeed = 4;
+      let paddleSpeed = 5;
+      let hardMode = false;
+      let ballRestartDelay = false;
+      let ballRestartTimer = 0;
+      let singlePlayerMode = false;
+      let ballHasBeenHit = false;
+
+      // Single player scoring system
+      let hitCount = 0;
+      let highScore = 0;
+      let ballJustHitPaddle = false; // Flag to prevent multiple hit counts per collision
+
+      // Load high score from localStorage
+      function loadHighScore() {
+        const savedHighScore = localStorage.getItem("pongHighScore");
+        if (savedHighScore !== null) {
+          highScore = parseInt(savedHighScore, 10);
+          updateHighScoreDisplay();
+        }
+      }
+
+      // Save high score to localStorage
+      function saveHighScore() {
+        localStorage.setItem("pongHighScore", highScore.toString());
+      }
+
+      // Update high score display
+      function updateHighScoreDisplay() {
+        const highScoreElement = document.getElementById("highScore");
+        if (highScoreElement) {
+          highScoreElement.textContent = highScore;
+        }
+      }
+
+      // Update hit count display
+      function updateHitCountDisplay() {
+        const hitCountElement = document.getElementById("hitCount");
+        if (hitCountElement) {
+          hitCountElement.textContent = hitCount;
+        }
+      }
+
+      // Initialize high score on page load
+      loadHighScore();
+
+      // Paddle properties
+      const paddleWidth = 15;
+      const paddleHeight = 80;
+
+      // Player 1 paddle (left side)
+      let player1Paddle = {
+        x: 20,
+        y: canvas.height / 2 - paddleHeight / 2,
+        width: paddleWidth,
+        height: paddleHeight,
+        velocity: 0,
+        acceleration: 1.2,
+        friction: 0.98,
+      };
+
+      // Player 2 paddle (right side)
+      let player2Paddle = {
+        x: canvas.width - 35,
+        y: canvas.height / 2 - paddleHeight / 2,
+        width: paddleWidth,
+        height: paddleHeight,
+        velocity: 0,
+        acceleration: 1.2,
+        friction: 0.98,
+      };
+
+      // Ball properties
+      let ball = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        radius: 8,
+        dx: 4,
+        dy: 4,
+        speed: 4,
+      };
+
+      // Input handling
+      const keys = {};
+
+      document.addEventListener("keydown", (e) => {
+        keys[e.key] = true;
+
+        // Start game with spacebar
+        if (e.key === " " && gameState === "start") {
+          startGame();
         }
 
-        function animateStars(timestamp) {
-            if (!starCtx || !starCanvas) return;
+        // Pause game with spacebar
+        if (e.key === " " && gameState === "playing") {
+          togglePause();
+        }
+      });
 
-            // Use current time if timestamp not provided
-            const currentTime = timestamp || performance.now();
-            if (lastTime === 0) lastTime = currentTime;
+      document.addEventListener("keyup", (e) => {
+        keys[e.key] = false;
+      });
 
-            // Clear canvas with black space background
-            starCtx.fillStyle = '#000000';
-            starCtx.fillRect(0, 0, starCanvas.width, starCanvas.height);
+      // Game functions
+      function startGame() {
+        gameState = "playing";
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("gameOver").style.display = "none";
+        resetBall();
+        gameLoop();
+      }
 
-            // Update flying state with acceleration/deceleration
-            if (isFlying) {
-                const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
-                const holdDuration = currentTime - clickStartTime;
-                
-                if (mousePressed) {
-                    // Check if this is a click-and-hold (held for more than 150ms)
-                    if (holdDuration > 150 && !isClickAndHold) {
-                        isClickAndHold = true;
-                        // Switch to light speed mode
-                    }
-                    
-                    // Use light speed max if holding, regular max for quick clicks
-                    const activeMaxSpeed = isClickAndHold ? lightSpeedMax : maxSpeed;
-                    const activeAcceleration = isClickAndHold ? acceleration * 1.5 : acceleration;
-                    
-                    // Accelerate quickly to max speed
-                    currentSpeed = Math.min(activeMaxSpeed, currentSpeed + activeAcceleration * deltaTime);
-                    
-                    // Update velocity based on current speed and target direction
-                    velocity.z = currentSpeed;
-                    velocity.x = targetDirection.x * currentSpeed * 0.4;
-                    velocity.y = targetDirection.y * currentSpeed * 0.4;
-                } else {
-                    // Decelerate quickly
-                    currentSpeed = Math.max(0, currentSpeed - deceleration * deltaTime);
-                    
-                    if (currentSpeed <= 0) {
-                        // Completely stopped
-                        isFlying = false;
-                        currentSpeed = 0;
-                        velocity.x = 0;
-                        velocity.y = 0;
-                        velocity.z = 0;
-                        isClickAndHold = false;
-                    } else {
-                        // Maintain direction while slowing
-                        velocity.z = currentSpeed;
-                        velocity.x = targetDirection.x * currentSpeed * 0.4;
-                        velocity.y = targetDirection.y * currentSpeed * 0.4;
-                    }
-                }
+      function resetGame() {
+        player1Score = 0;
+        player2Score = 0;
+        gameSpeed = 1;
+        hitCount = 0; // Reset hit count
+        updateHitCountDisplay();
+        // Reset paddle velocities
+        player1Paddle.velocity = 0;
+        player2Paddle.velocity = 0;
+        updateScore();
+        startGame();
+      }
+
+      function togglePause() {
+        if (gameState === "playing") {
+          gameState = "paused";
+        } else if (gameState === "paused") {
+          gameState = "playing";
+          gameLoop();
+        }
+      }
+
+      function resetBall() {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
+        ball.dx = 0; // Stop ball movement
+        ball.dy = 0;
+        ballRestartDelay = true;
+        ballRestartTimer = 0;
+        ballHasBeenHit = false; // Reset hit status for new point
+        ballJustHitPaddle = false; // Reset collision flag
+      }
+
+      function startBallAfterDelay() {
+        // Start with slow speed (1) before first hit
+        ball.dx = (Math.random() > 0.5 ? 1 : -1) * 1 * gameSpeed;
+        ball.dy = (Math.random() - 0.5) * 1 * gameSpeed;
+        ballRestartDelay = false;
+      }
+
+      function speedUpBall() {
+        // Speed up ball to normal speed after first hit
+        if (!ballHasBeenHit) {
+          const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+          const angle = Math.atan2(ball.dy, ball.dx);
+          ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
+          ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
+          ballHasBeenHit = true;
+        }
+      }
+
+      function updateScore() {
+        document.getElementById("player1Score").textContent = player1Score;
+        document.getElementById("player2Score").textContent = player2Score;
+      }
+
+      function checkGameOver() {
+        if (player1Score >= 5 || player2Score >= 5) {
+          gameState = "gameOver";
+          document.getElementById("gameOver").style.display = "block";
+          document.getElementById("gameOverText").textContent = "Game Over!";
+
+          if (singlePlayerMode) {
+            document.getElementById("winnerText").textContent =
+              player1Score >= 5 ? "You Win!" : "Computer Wins!";
+          } else {
+            document.getElementById("winnerText").textContent =
+              player1Score >= 5 ? "Player 1 Wins!" : "Player 2 Wins!";
+          }
+        }
+      }
+
+      function updatePlayer1Paddle() {
+        if (hardMode) {
+          // Ice physics - control acceleration, not direct movement
+          if (keys["w"]) {
+            player1Paddle.velocity -= player1Paddle.acceleration;
+          }
+          if (keys["s"]) {
+            player1Paddle.velocity += player1Paddle.acceleration;
+          }
+
+          // Apply friction (ice sliding effect) - this happens regardless of key presses
+          player1Paddle.velocity *= player1Paddle.friction;
+
+          // Update position based on velocity - this happens regardless of key presses
+          player1Paddle.y += player1Paddle.velocity;
+
+          // Keep paddle on screen with bounce effect
+          if (player1Paddle.y < 0) {
+            player1Paddle.y = 0;
+            player1Paddle.velocity *= -0.5; // Bounce with energy loss
+          }
+          if (player1Paddle.y + player1Paddle.height > canvas.height) {
+            player1Paddle.y = canvas.height - player1Paddle.height;
+            player1Paddle.velocity *= -0.5; // Bounce with energy loss
+          }
+        } else {
+          // Normal mode - direct movement
+          if (keys["w"]) {
+            player1Paddle.y -= paddleSpeed;
+          }
+          if (keys["s"]) {
+            player1Paddle.y += paddleSpeed;
+          }
+
+          // Keep paddle on screen
+          if (player1Paddle.y < 0) {
+            player1Paddle.y = 0;
+          }
+          if (player1Paddle.y + player1Paddle.height > canvas.height) {
+            player1Paddle.y = canvas.height - player1Paddle.height;
+          }
+        }
+      }
+
+      function updatePlayer2Paddle() {
+        if (singlePlayerMode) {
+          // AI mode - computer controls Player 2
+          updateAIPaddle();
+        } else {
+          // Two player mode - human controls Player 2
+          if (hardMode) {
+            // Ice physics - control acceleration, not direct movement
+            if (keys["ArrowUp"]) {
+              player2Paddle.velocity -= player2Paddle.acceleration;
+            }
+            if (keys["ArrowDown"]) {
+              player2Paddle.velocity += player2Paddle.acceleration;
             }
 
-            // Update and draw stars
-            const centerX = starCanvas.width / 2;
-            const centerY = starCanvas.height / 2;
+            // Apply friction (ice sliding effect) - this happens regardless of key presses
+            player2Paddle.velocity *= player2Paddle.friction;
 
-            for (let i = 0; i < stars.length; i++) {
-                const star = stars[i];
-                
-                if (isFlying) {
-                    // Move stars based on velocity (reverse movement for flying effect)
-                    star.x -= velocity.x;
-                    star.y -= velocity.y;
-                    star.z -= velocity.z;
-                }
-                
-                // Reset stars that have passed us or gone too far - bias toward edges
-                if (star.z <= 0 || star.z > 3000) {
-                    const expandFactor = 2.0;
-                    const angle = Math.random() * Math.PI * 2;
-                    const centerDist = Math.random();
-                    const edgeBias = Math.pow(centerDist, 0.4);
-                    const distance = edgeBias * Math.max(starCanvas.width, starCanvas.height) * expandFactor;
-                    star.x = centerX + Math.cos(angle) * distance;
-                    star.y = centerY + Math.sin(angle) * distance;
-                    star.z = 2000 + Math.random() * 500;
-                    
-                    // Reassign color when resetting
-                    const colorType = Math.random();
-                    if (colorType < 0.33) {
-                        star.color = `hsl(${Math.random() * 30 + 0}, 100%, ${Math.random() * 20 + 70}%)`;
-                    } else if (colorType < 0.66) {
-                        star.color = `hsl(${Math.random() * 60 + 180}, 100%, ${Math.random() * 15 + 80}%)`;
-                    } else {
-                        star.color = `hsl(${Math.random() * 30 + 40}, 100%, ${Math.random() * 20 + 75}%)`;
-                    }
-                }
+            // Update position based on velocity - this happens regardless of key presses
+            player2Paddle.y += player2Paddle.velocity;
 
-                // Calculate 3D position with perspective
-                const k = 128 / Math.max(star.z, 1); // Perspective factor
-                const px = (star.x - centerX) * k + centerX;
-                const py = (star.y - centerY) * k + centerY;
-                const r = star.size * k;
-
-                // Draw star if it's visible (even if slightly off screen for edge stars)
-                if (r > 0.1) {
-                    // Calculate streak effect based on speed (Star Wars hyperspace effect)
-                    // Use lightSpeedMax for ratio calculation to show streaks at light speed
-                    const effectiveMaxSpeed = Math.max(maxSpeed, lightSpeedMax);
-                    const speedRatio = currentSpeed / effectiveMaxSpeed;
-                    const streakLength = speedRatio * r * 15; // Long streaks at high speed
-                    
-                    // Convert HSL color to RGBA with opacity
-                    const tempDiv = document.createElement('div');
-                    tempDiv.style.color = star.color;
-                    document.body.appendChild(tempDiv);
-                    const rgbColor = window.getComputedStyle(tempDiv).color;
-                    document.body.removeChild(tempDiv);
-                    
-                    // Extract RGB values
-                    const rgbMatch = rgbColor.match(/\d+/g);
-                    let red, green, blue;
-                    if (rgbMatch) {
-                        red = parseInt(rgbMatch[0]);
-                        green = parseInt(rgbMatch[1]);
-                        blue = parseInt(rgbMatch[2]);
-                    } else {
-                        red = 255;
-                        green = 255;
-                        blue = 255;
-                    }
-                    
-                    // Star gets brighter as it approaches
-                    const brightness = Math.min(1, Math.max(0.4, (3000 - star.z) / 700));
-                    const finalOpacity = Math.min(1, star.opacity * brightness * 1.3);
-                    
-                    if (speedRatio > 0.7 && streakLength > 5) {
-                        // Draw hyperspace streak effect
-                        // Calculate streak direction (opposite of velocity, toward center)
-                        const streakDirX = (px - centerX) / Math.max(1, Math.sqrt((px - centerX) * (px - centerX) + (py - centerY) * (py - centerY)));
-                        const streakDirY = (py - centerY) / Math.max(1, Math.sqrt((px - centerX) * (px - centerX) + (py - centerY) * (py - centerY)));
-                        
-                        // Draw streak line
-                        starCtx.beginPath();
-                        starCtx.moveTo(px, py);
-                        starCtx.lineTo(px - streakDirX * streakLength, py - streakDirY * streakLength);
-                        starCtx.strokeStyle = `rgba(${red}, ${green}, ${blue}, ${finalOpacity * 0.9})`;
-                        starCtx.lineWidth = Math.max(1, r * 0.5);
-                        starCtx.stroke();
-                        
-                        // Draw bright head of streak
-                        starCtx.beginPath();
-                        starCtx.arc(px, py, r * 1.2, 0, Math.PI * 2);
-                        starCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${finalOpacity})`;
-                        starCtx.fill();
-                        
-                        // Add intense glow at high speeds
-                        starCtx.shadowBlur = r * 6 * speedRatio;
-                        starCtx.shadowColor = `rgba(${red}, ${green}, ${blue}, 1.0)`;
-                        starCtx.fill();
-                        starCtx.shadowBlur = 0;
-                    } else {
-                        // Normal star rendering (slower speeds)
-                        starCtx.beginPath();
-                        starCtx.arc(px, py, r, 0, Math.PI * 2);
-                        starCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${finalOpacity})`;
-                        starCtx.fill();
-                        
-                        // Add glow for closer stars
-                        if (r > 0.8) {
-                            const glowOpacity = Math.min(1, finalOpacity * 0.8);
-                            const blurRadius = r * 4;
-                            starCtx.shadowBlur = blurRadius;
-                            starCtx.shadowColor = `rgba(${red}, ${green}, ${blue}, ${glowOpacity})`;
-                            starCtx.fill();
-                            starCtx.shadowBlur = 0;
-                        }
-                    }
-                }
+            // Keep paddle on screen with bounce effect
+            if (player2Paddle.y < 0) {
+              player2Paddle.y = 0;
+              player2Paddle.velocity *= -0.5; // Bounce with energy loss
+            }
+            if (player2Paddle.y + player2Paddle.height > canvas.height) {
+              player2Paddle.y = canvas.height - player2Paddle.height;
+              player2Paddle.velocity *= -0.5; // Bounce with energy loss
+            }
+          } else {
+            // Normal mode - direct movement
+            if (keys["ArrowUp"]) {
+              player2Paddle.y -= paddleSpeed;
+            }
+            if (keys["ArrowDown"]) {
+              player2Paddle.y += paddleSpeed;
             }
 
-            requestAnimationFrame(animateStars);
-            lastTime = currentTime;
+            // Keep paddle on screen
+            if (player2Paddle.y < 0) {
+              player2Paddle.y = 0;
+            }
+            if (player2Paddle.y + player2Paddle.height > canvas.height) {
+              player2Paddle.y = canvas.height - player2Paddle.height;
+            }
+          }
+        }
+      }
+
+      function updateAIPaddle() {
+        const paddleCenter = player2Paddle.y + player2Paddle.height / 2;
+        const ballY = ball.y;
+
+        if (hardMode) {
+          // AI with ice physics
+          if (ballY < paddleCenter - 10) {
+            player2Paddle.velocity -= player2Paddle.acceleration * 0.8; // Slightly slower than player
+          } else if (ballY > paddleCenter + 10) {
+            player2Paddle.velocity += player2Paddle.acceleration * 0.8;
+          }
+
+          // Apply friction (ice sliding effect)
+          player2Paddle.velocity *= player2Paddle.friction;
+
+          // Update position based on velocity
+          player2Paddle.y += player2Paddle.velocity;
+
+          // Keep paddle on screen with bounce effect
+          if (player2Paddle.y < 0) {
+            player2Paddle.y = 0;
+            player2Paddle.velocity *= -0.5; // Bounce with energy loss
+          }
+          if (player2Paddle.y + player2Paddle.height > canvas.height) {
+            player2Paddle.y = canvas.height - player2Paddle.height;
+            player2Paddle.velocity *= -0.5; // Bounce with energy loss
+          }
+        } else {
+          // AI with normal physics
+          if (ballY < paddleCenter - 10) {
+            player2Paddle.y -= paddleSpeed * 0.8; // Slightly slower than player
+          } else if (ballY > paddleCenter + 10) {
+            player2Paddle.y += paddleSpeed * 0.8;
+          }
+
+          // Keep paddle on screen
+          if (player2Paddle.y < 0) {
+            player2Paddle.y = 0;
+          }
+          if (player2Paddle.y + player2Paddle.height > canvas.height) {
+            player2Paddle.y = canvas.height - player2Paddle.height;
+          }
+        }
+      }
+
+      function updateBall() {
+        // Handle ball restart delay
+        if (ballRestartDelay) {
+          ballRestartTimer += 1 / 60; // Assuming 60 FPS
+          if (ballRestartTimer >= 0.5) {
+            // 0.5 second delay
+            startBallAfterDelay();
+          }
+          return; // Don't update ball position during delay
         }
 
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            resizeStarCanvas();
-        });
+        ball.x += ball.dx;
+        ball.y += ball.dy;
 
-        // Initialize star field on page load if home page is active
-        window.addEventListener('load', function() {
-            const homePage = document.getElementById('home-page');
-            if (homePage && homePage.classList.contains('active')) {
-                setTimeout(() => {
-                    initStarField();
-                }, 100);
-            }
-        });
+        // Ball collision with top and bottom walls
+        if (
+          ball.y - ball.radius <= 0 ||
+          ball.y + ball.radius >= canvas.height
+        ) {
+          ball.dy = -ball.dy;
+        }
 
-        // Game variables
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        let gameInitialized = false;
-        
-        // Game state
-        let gameState = 'start'; // 'start', 'playing', 'paused', 'gameOver'
-        let player1Score = 0;
-        let player2Score = 0;
-        let gameSpeed = 1;
-        let ballSpeed = 4;
-        let paddleSpeed = 5;
-        let hardMode = false;
-        let ballRestartDelay = false;
-        let ballRestartTimer = 0;
-        let singlePlayerMode = false;
-        let ballHasBeenHit = false;
-        
-        // Single player scoring system
-        let hitCount = 0;
-        let highScore = 0;
-        let ballJustHitPaddle = false; // Flag to prevent multiple hit counts per collision
-        
-        // Load high score from localStorage
-        function loadHighScore() {
-            const savedHighScore = localStorage.getItem('pongHighScore');
-            if (savedHighScore !== null) {
-                highScore = parseInt(savedHighScore, 10);
-                updateHighScoreDisplay();
-            }
-        }
-        
-        // Save high score to localStorage
-        function saveHighScore() {
-            localStorage.setItem('pongHighScore', highScore.toString());
-        }
-        
-        // Update high score display
-        function updateHighScoreDisplay() {
-            const highScoreElement = document.getElementById('highScore');
-            if (highScoreElement) {
-                highScoreElement.textContent = highScore;
-            }
-        }
-        
-        // Update hit count display
-        function updateHitCountDisplay() {
-            const hitCountElement = document.getElementById('hitCount');
-            if (hitCountElement) {
-                hitCountElement.textContent = hitCount;
-            }
-        }
-        
-        // Initialize high score on page load
-        loadHighScore();
-        
-        // Paddle properties
-        const paddleWidth = 15;
-        const paddleHeight = 80;
-        
-        // Player 1 paddle (left side)
-        let player1Paddle = {
-            x: 20,
-            y: canvas.height / 2 - paddleHeight / 2,
-            width: paddleWidth,
-            height: paddleHeight,
-            velocity: 0,
-            acceleration: 1.2,
-            friction: 0.98
-        };
-        
-        // Player 2 paddle (right side)
-        let player2Paddle = {
-            x: canvas.width - 35,
-            y: canvas.height / 2 - paddleHeight / 2,
-            width: paddleWidth,
-            height: paddleHeight,
-            velocity: 0,
-            acceleration: 1.2,
-            friction: 0.98
-        };
-        
-        // Ball properties
-        let ball = {
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            radius: 8,
-            dx: 4,
-            dy: 4,
-            speed: 4
-        };
-        
-        // Input handling
-        const keys = {};
-        
-        document.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-            
-            // Start game with spacebar
-            if (e.key === ' ' && gameState === 'start') {
-                startGame();
-            }
-            
-            // Pause game with spacebar
-            if (e.key === ' ' && gameState === 'playing') {
-                togglePause();
-            }
-        });
-        
-        document.addEventListener('keyup', (e) => {
-            keys[e.key] = false;
-        });
-        
-        // Game functions
-        function startGame() {
-            gameState = 'playing';
-            document.getElementById('startScreen').style.display = 'none';
-            document.getElementById('gameOver').style.display = 'none';
-            resetBall();
-            gameLoop();
-        }
-        
-        function resetGame() {
-            player1Score = 0;
-            player2Score = 0;
-            gameSpeed = 1;
-            hitCount = 0; // Reset hit count
+        // Ball collision with paddles
+        // Player 1 paddle collision
+        if (
+          ball.x - ball.radius <= player1Paddle.x + player1Paddle.width &&
+          ball.y >= player1Paddle.y &&
+          ball.y <= player1Paddle.y + player1Paddle.height &&
+          ball.dx < 0
+        ) {
+          // Always update ball physics on collision
+          // Calculate hit position for angle adjustment
+          const hitPos = (ball.y - player1Paddle.y) / player1Paddle.height;
+          const angle = ((hitPos - 0.5) * Math.PI) / 3; // Max 60 degrees
+
+          // Always use normal speed for paddle hits
+          ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
+          ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
+          ball.x = player1Paddle.x + player1Paddle.width + ball.radius;
+
+          // Speed up ball if this is the first hit
+          speedUpBall();
+
+          // Only increment hit count once per collision (when flag is false)
+          if (!ballJustHitPaddle && singlePlayerMode) {
+            hitCount++;
             updateHitCountDisplay();
-            // Reset paddle velocities
-            player1Paddle.velocity = 0;
-            player2Paddle.velocity = 0;
-            updateScore();
-            startGame();
+            // Update high score if current hit count exceeds it
+            if (hitCount > highScore) {
+              highScore = hitCount;
+              updateHighScoreDisplay();
+              saveHighScore();
+            }
+            // Set flag to prevent multiple counts
+            ballJustHitPaddle = true;
+          }
+        } else if (ball.x > player1Paddle.x + player1Paddle.width + 10) {
+          // Reset flag when ball has moved away from paddle
+          ballJustHitPaddle = false;
         }
-        
-        function togglePause() {
-            if (gameState === 'playing') {
-                gameState = 'paused';
-            } else if (gameState === 'paused') {
-                gameState = 'playing';
-                gameLoop();
-            }
-        }
-        
-        function resetBall() {
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height / 2;
-            ball.dx = 0; // Stop ball movement
-            ball.dy = 0;
-            ballRestartDelay = true;
-            ballRestartTimer = 0;
-            ballHasBeenHit = false; // Reset hit status for new point
-            ballJustHitPaddle = false; // Reset collision flag
-        }
-        
-        function startBallAfterDelay() {
-            // Start with slow speed (1) before first hit
-            ball.dx = (Math.random() > 0.5 ? 1 : -1) * 1 * gameSpeed;
-            ball.dy = (Math.random() - 0.5) * 1 * gameSpeed;
-            ballRestartDelay = false;
-        }
-        
-        function speedUpBall() {
-            // Speed up ball to normal speed after first hit
-            if (!ballHasBeenHit) {
-                const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
-                const angle = Math.atan2(ball.dy, ball.dx);
-                ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
-                ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
-                ballHasBeenHit = true;
-            }
-        }
-        
-        function updateScore() {
-            document.getElementById('player1Score').textContent = player1Score;
-            document.getElementById('player2Score').textContent = player2Score;
-        }
-        
-        function checkGameOver() {
-            if (player1Score >= 5 || player2Score >= 5) {
-                gameState = 'gameOver';
-                document.getElementById('gameOver').style.display = 'block';
-                document.getElementById('gameOverText').textContent = 'Game Over!';
-                
-                if (singlePlayerMode) {
-                    document.getElementById('winnerText').textContent = 
-                        player1Score >= 5 ? 'You Win!' : 'Computer Wins!';
-                } else {
-                    document.getElementById('winnerText').textContent = 
-                        player1Score >= 5 ? 'Player 1 Wins!' : 'Player 2 Wins!';
-                }
-            }
-        }
-        
-        function updatePlayer1Paddle() {
-            if (hardMode) {
-                // Ice physics - control acceleration, not direct movement
-                if (keys['w']) {
-                    player1Paddle.velocity -= player1Paddle.acceleration;
-                }
-                if (keys['s']) {
-                    player1Paddle.velocity += player1Paddle.acceleration;
-                }
-                
-                // Apply friction (ice sliding effect) - this happens regardless of key presses
-                player1Paddle.velocity *= player1Paddle.friction;
-                
-                // Update position based on velocity - this happens regardless of key presses
-                player1Paddle.y += player1Paddle.velocity;
-                
-                // Keep paddle on screen with bounce effect
-                if (player1Paddle.y < 0) {
-                    player1Paddle.y = 0;
-                    player1Paddle.velocity *= -0.5; // Bounce with energy loss
-                }
-                if (player1Paddle.y + player1Paddle.height > canvas.height) {
-                    player1Paddle.y = canvas.height - player1Paddle.height;
-                    player1Paddle.velocity *= -0.5; // Bounce with energy loss
-                }
-            } else {
-                // Normal mode - direct movement
-                if (keys['w']) {
-                    player1Paddle.y -= paddleSpeed;
-                }
-                if (keys['s']) {
-                    player1Paddle.y += paddleSpeed;
-                }
-                
-                // Keep paddle on screen
-                if (player1Paddle.y < 0) {
-                    player1Paddle.y = 0;
-                }
-                if (player1Paddle.y + player1Paddle.height > canvas.height) {
-                    player1Paddle.y = canvas.height - player1Paddle.height;
-                }
-            }
-        }
-        
-        function updatePlayer2Paddle() {
-            if (singlePlayerMode) {
-                // AI mode - computer controls Player 2
-                updateAIPaddle();
-            } else {
-                // Two player mode - human controls Player 2
-                if (hardMode) {
-                    // Ice physics - control acceleration, not direct movement
-                    if (keys['ArrowUp']) {
-                        player2Paddle.velocity -= player2Paddle.acceleration;
-                    }
-                    if (keys['ArrowDown']) {
-                        player2Paddle.velocity += player2Paddle.acceleration;
-                    }
-                    
-                    // Apply friction (ice sliding effect) - this happens regardless of key presses
-                    player2Paddle.velocity *= player2Paddle.friction;
-                    
-                    // Update position based on velocity - this happens regardless of key presses
-                    player2Paddle.y += player2Paddle.velocity;
-                    
-                    // Keep paddle on screen with bounce effect
-                    if (player2Paddle.y < 0) {
-                        player2Paddle.y = 0;
-                        player2Paddle.velocity *= -0.5; // Bounce with energy loss
-                    }
-                    if (player2Paddle.y + player2Paddle.height > canvas.height) {
-                        player2Paddle.y = canvas.height - player2Paddle.height;
-                        player2Paddle.velocity *= -0.5; // Bounce with energy loss
-                    }
-                } else {
-                    // Normal mode - direct movement
-                    if (keys['ArrowUp']) {
-                        player2Paddle.y -= paddleSpeed;
-                    }
-                    if (keys['ArrowDown']) {
-                        player2Paddle.y += paddleSpeed;
-                    }
-                    
-                    // Keep paddle on screen
-                    if (player2Paddle.y < 0) {
-                        player2Paddle.y = 0;
-                    }
-                    if (player2Paddle.y + player2Paddle.height > canvas.height) {
-                        player2Paddle.y = canvas.height - player2Paddle.height;
-                    }
-                }
-            }
-        }
-        
-        function updateAIPaddle() {
-            const paddleCenter = player2Paddle.y + player2Paddle.height / 2;
-            const ballY = ball.y;
-            
-            if (hardMode) {
-                // AI with ice physics
-                if (ballY < paddleCenter - 10) {
-                    player2Paddle.velocity -= player2Paddle.acceleration * 0.8; // Slightly slower than player
-                } else if (ballY > paddleCenter + 10) {
-                    player2Paddle.velocity += player2Paddle.acceleration * 0.8;
-                }
-                
-                // Apply friction (ice sliding effect)
-                player2Paddle.velocity *= player2Paddle.friction;
-                
-                // Update position based on velocity
-                player2Paddle.y += player2Paddle.velocity;
-                
-                // Keep paddle on screen with bounce effect
-                if (player2Paddle.y < 0) {
-                    player2Paddle.y = 0;
-                    player2Paddle.velocity *= -0.5; // Bounce with energy loss
-                }
-                if (player2Paddle.y + player2Paddle.height > canvas.height) {
-                    player2Paddle.y = canvas.height - player2Paddle.height;
-                    player2Paddle.velocity *= -0.5; // Bounce with energy loss
-                }
-            } else {
-                // AI with normal physics
-                if (ballY < paddleCenter - 10) {
-                    player2Paddle.y -= paddleSpeed * 0.8; // Slightly slower than player
-                } else if (ballY > paddleCenter + 10) {
-                    player2Paddle.y += paddleSpeed * 0.8;
-                }
-                
-                // Keep paddle on screen
-                if (player2Paddle.y < 0) {
-                    player2Paddle.y = 0;
-                }
-                if (player2Paddle.y + player2Paddle.height > canvas.height) {
-                    player2Paddle.y = canvas.height - player2Paddle.height;
-                }
-            }
-        }
-        
-        
-        function updateBall() {
-            // Handle ball restart delay
-            if (ballRestartDelay) {
-                ballRestartTimer += 1/60; // Assuming 60 FPS
-                if (ballRestartTimer >= 0.5) { // 0.5 second delay
-                    startBallAfterDelay();
-                }
-                return; // Don't update ball position during delay
-            }
-            
-            ball.x += ball.dx;
-            ball.y += ball.dy;
-            
-            // Ball collision with top and bottom walls
-            if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= canvas.height) {
-                ball.dy = -ball.dy;
-            }
-            
-            // Ball collision with paddles
-            // Player 1 paddle collision
-            if (ball.x - ball.radius <= player1Paddle.x + player1Paddle.width &&
-                ball.y >= player1Paddle.y &&
-                ball.y <= player1Paddle.y + player1Paddle.height &&
-                ball.dx < 0) {
-                
-                // Always update ball physics on collision
-                // Calculate hit position for angle adjustment
-                const hitPos = (ball.y - player1Paddle.y) / player1Paddle.height;
-                const angle = (hitPos - 0.5) * Math.PI / 3; // Max 60 degrees
-                
-                // Always use normal speed for paddle hits
-                ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
-                ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
-                ball.x = player1Paddle.x + player1Paddle.width + ball.radius;
-                
-                // Speed up ball if this is the first hit
-                speedUpBall();
-                
-                // Only increment hit count once per collision (when flag is false)
-                if (!ballJustHitPaddle && singlePlayerMode) {
-                    hitCount++;
-                    updateHitCountDisplay();
-                    // Update high score if current hit count exceeds it
-                    if (hitCount > highScore) {
-                        highScore = hitCount;
-                        updateHighScoreDisplay();
-                        saveHighScore();
-                    }
-                    // Set flag to prevent multiple counts
-                    ballJustHitPaddle = true;
-                }
-            } else if (ball.x > player1Paddle.x + player1Paddle.width + 10) {
-                // Reset flag when ball has moved away from paddle
-                ballJustHitPaddle = false;
-            }
-            
-            // Player 2 paddle collision
-            if (ball.x + ball.radius >= player2Paddle.x &&
-                ball.y >= player2Paddle.y &&
-                ball.y <= player2Paddle.y + player2Paddle.height &&
-                ball.dx > 0) {
-                
-                // Calculate hit position for angle adjustment
-                const hitPos = (ball.y - player2Paddle.y) / player2Paddle.height;
-                const angle = (hitPos - 0.5) * Math.PI / 3; // Max 60 degrees
-                
-                // Always use normal speed for paddle hits
-                ball.dx = -Math.cos(angle) * ballSpeed * gameSpeed;
-                ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
-                ball.x = player2Paddle.x - ball.radius;
-                
-                // Speed up ball if this is the first hit
-                speedUpBall();
-                
-                // Reset flag when ball hits other paddle
-                ballJustHitPaddle = false;
-            } else if (ball.x < player2Paddle.x - 10) {
-                // Reset flag when ball has moved away from paddle
-                ballJustHitPaddle = false;
-            }
-            
-            // Ball out of bounds - scoring
-            if (ball.x < 0) {
-                player2Score++;
-                // Reset hit count in single player mode when ball goes out on player's side (player loses)
-                if (singlePlayerMode) {
-                    hitCount = 0;
-                    updateHitCountDisplay();
-                }
-                updateScore();
-                checkGameOver();
-                if (gameState === 'playing') {
-                    resetBall();
-                }
-            } else if (ball.x > canvas.width) {
-                player1Score++;
-                // Don't reset hit count when player scores - let them continue the streak
-                updateScore();
-                checkGameOver();
-                if (gameState === 'playing') {
-                    resetBall();
-                }
-            }
-        }
-        
-        function draw() {
-            // Clear canvas
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw center line
-            ctx.setLineDash([10, 10]);
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(canvas.width / 2, 0);
-            ctx.lineTo(canvas.width / 2, canvas.height);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            
-            // Draw paddles
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(player1Paddle.x, player1Paddle.y, player1Paddle.width, player1Paddle.height);
-            ctx.fillRect(player2Paddle.x, player2Paddle.y, player2Paddle.width, player2Paddle.height);
-            
-            // Draw ball (with pulsing effect during restart delay)
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-            if (ballRestartDelay) {
-                // Pulsing effect during delay
-                const pulse = Math.sin(ballRestartTimer * 20) * 0.3 + 0.7;
-                ctx.fillStyle = `rgba(255, 255, 255, ${pulse})`;
-            } else {
-                ctx.fillStyle = '#fff';
-            }
-            ctx.fill();
-            
-            // Draw pause overlay
-            if (gameState === 'paused') {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#fff';
-                ctx.font = '48px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
-                ctx.font = '16px Arial';
-                ctx.fillText('Press SPACE to resume', canvas.width / 2, canvas.height / 2 + 40);
-            }
-        }
-        
-        function gameLoop() {
-            if (gameState === 'playing') {
-                updatePlayer1Paddle();
-                updatePlayer2Paddle();
-                updateBall();
-                draw();
-                requestAnimationFrame(gameLoop);
-            } else if (gameState === 'paused') {
-                draw();
-            }
-        }
-        
-        // Speed slider functionality
-        const speedSlider = document.getElementById('speedSlider');
-        const speedValue = document.getElementById('speedValue');
-        
-        speedSlider.addEventListener('input', function() {
-            ballSpeed = parseFloat(this.value);
-            speedValue.textContent = ballSpeed;
-            
-            // Update ball speed if game is running
-            if (gameState === 'playing') {
-                const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
-                const angle = Math.atan2(ball.dy, ball.dx);
-                ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
-                ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
-            }
-        });
-        
-        // Paddle speed slider functionality
-        const paddleSpeedSlider = document.getElementById('paddleSpeedSlider');
-        const paddleSpeedValue = document.getElementById('paddleSpeedValue');
-        
-        paddleSpeedSlider.addEventListener('input', function() {
-            paddleSpeed = parseFloat(this.value);
-            paddleSpeedValue.textContent = paddleSpeed;
-        });
-        
-        // Hard mode toggle function
-        function toggleHardMode() {
-            hardMode = !hardMode;
-            const button = document.getElementById('hardModeToggle');
-            
-            if (hardMode) {
-                button.textContent = 'Hard Mode: ON';
-                button.classList.add('active');
-            } else {
-                button.textContent = 'Hard Mode: OFF';
-                button.classList.remove('active');
-                // Reset velocities when turning off hard mode
-                player1Paddle.velocity = 0;
-                player2Paddle.velocity = 0;
-            }
-        }
-        
-        // Player mode toggle function
-        function togglePlayerMode() {
-            singlePlayerMode = !singlePlayerMode;
-            const button = document.getElementById('playerModeToggle');
-            const controlsText = document.getElementById('controlsText');
-            const gameModeText = document.getElementById('gameModeText');
-            const singlePlayerScoreElement = document.getElementById('singlePlayerScore');
-            
-            if (singlePlayerMode) {
-                button.textContent = 'Mode: Single Player';
-                button.classList.add('single-player');
-                controlsText.textContent = 'Player: W/S keys | Computer: AI';
-                gameModeText.textContent = 'Single Player Mode - First to 5 points wins!';
-                // Show single player score display
-                if (singlePlayerScoreElement) {
-                    singlePlayerScoreElement.style.display = 'block';
-                }
-                // Reset hit count when switching to single player
-                hitCount = 0;
-                updateHitCountDisplay();
-            } else {
-                button.textContent = 'Mode: Two Player';
-                button.classList.remove('single-player');
-                controlsText.textContent = 'Player 1: W/S keys | Player 2: ↑/↓ arrows';
-                gameModeText.textContent = 'Two Player Mode - First to 5 points wins!';
-                // Hide single player score display
-                if (singlePlayerScoreElement) {
-                    singlePlayerScoreElement.style.display = 'none';
-                }
-                // Reset hit count when switching modes
-                hitCount = 0;
-                updateHitCountDisplay();
-            }
-            
-            // Reset velocities when switching modes
-            player1Paddle.velocity = 0;
-            player2Paddle.velocity = 0;
-        }
-        
-        // Initialize game
-        gameInitialized = true;
-        draw();
 
-        // Pulley System Drawing
-        let currentMass = 1; // Default mass in kg
-        let mechanicalAdvantage = 1; // 1:1 or 2:1
-        
-        function drawPulleySystem(mass = currentMass, ma = mechanicalAdvantage) {
-            const canvas = document.getElementById('pulleyCanvas');
-            if (!canvas) return;
-            
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            
-            currentMass = mass; // Update current mass
-            mechanicalAdvantage = ma; // Update mechanical advantage
-            
-            // Clear canvas with white background
-            ctx.fillStyle = '#f0f0f0';
-            ctx.fillRect(0, 0, width, height);
-            
-            // Draw ceiling
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(100, 50);
-            ctx.lineTo(700, 50);
-            ctx.stroke();
-            
-            // One fixed pulley on top (centered) - bigger diameter
-            const fixedPulleyX = 400;
-            const fixedPulleyY = 100;
-            const fixedPulleyRadius = 50; // Bigger diameter
-            
-            // Mount dimensions (will be drawn last)
-            const mountWidth = 15;
-            const mountHeight = 110;
-            
-            // Draw fixed pulley (solid grey, no stroke)
-            ctx.fillStyle = '#888';
-            ctx.beginPath();
-            ctx.arc(fixedPulleyX, fixedPulleyY, fixedPulleyRadius, 0, Math.PI * 2);
-            ctx.fill();
-            
-            const massWidth = 80;
-            const massHeight = 60;
-            
-            if (ma === 1) {
-                // 1:1 Mechanical Advantage (Direction Changer)
-                // Left side - where mass hangs (rope goes straight down from pulley)
-                const leftRopeX = fixedPulleyX - fixedPulleyRadius;
-                const massY = 350;
-                
-                // Right side - where you pull (rope goes straight down from pulley) - shorter
-                const rightRopeX = fixedPulleyX + fixedPulleyRadius;
-                const pullEndY = 320;
-                
-                // Draw left rope first (brown)
-                ctx.strokeStyle = '#8B4513';
-                ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.moveTo(leftRopeX, fixedPulleyY);
-                ctx.lineTo(leftRopeX, massY);
-                ctx.stroke();
-                
-                // Draw rope connection point on box
-                ctx.fillStyle = '#8B4513';
-                ctx.beginPath();
-                ctx.arc(leftRopeX, massY, 3, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Draw rope around top of pulley (semicircle from left to right) - brown
-                ctx.strokeStyle = '#8B4513';
-                ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.arc(fixedPulleyX, fixedPulleyY, fixedPulleyRadius, Math.PI, 0);
-                ctx.stroke();
-                
-                // Draw right rope LAST - BROWN, goes straight down from pulley edge (shorter)
-                ctx.strokeStyle = '#8B4513';
-                ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.moveTo(rightRopeX, fixedPulleyY);
-                ctx.lineTo(rightRopeX, pullEndY);
-                ctx.stroke();
-                
-                // Draw mass/box hanging from left side
-                ctx.fillStyle = '#444';
-                ctx.strokeStyle = '#222';
-                ctx.lineWidth = 2;
-                ctx.fillRect(leftRopeX - massWidth/2, massY, massWidth, massHeight);
-                ctx.strokeRect(leftRopeX - massWidth/2, massY, massWidth, massHeight);
-                
-                // Draw mass label on box (dynamic)
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 20px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(mass.toFixed(1) + ' kg', leftRopeX, massY + massHeight/2 + 7);
-                
-                // Draw arrow showing downward pull (on right side rope) - BROWN
-                ctx.fillStyle = '#8B4513';
-                ctx.beginPath();
-                ctx.moveTo(rightRopeX, pullEndY + 30);
-                ctx.lineTo(rightRopeX - 5, pullEndY + 20);
-                ctx.lineTo(rightRopeX + 5, pullEndY + 20);
-                ctx.closePath();
-                ctx.fill();
-                
-                // Draw force labels (dynamic based on mass)
-                const force = mass * 9.8; // Force = mass × gravity
-                ctx.fillStyle = '#000';
-                ctx.font = '16px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('Force = ' + force.toFixed(1) + ' N', rightRopeX, pullEndY + 60);
-                
-                // Draw labels
-                ctx.fillStyle = '#000';
-                ctx.font = '14px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('Fixed Pulley', fixedPulleyX, 30);
-                
-                // Draw mechanical advantage indicator
-                ctx.fillStyle = '#0066cc';
-                ctx.font = 'bold 16px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('Mechanical Advantage: 1:1 (Direction Changer)', width/2, height - 30);
-                
-                // Draw pulley mount LAST - rectangle centered on the pulley circle - BLACK
-                // This ensures it appears on top of everything
-                ctx.fillStyle = '#000';
-                ctx.fillRect(fixedPulleyX - mountWidth/2, fixedPulleyY - mountHeight/2, mountWidth, mountHeight);
-            } else {
-                // 2:1 Mechanical Advantage
-                // Movable pulley at bottom
-                const movablePulleyX = fixedPulleyX;
-                const movablePulleyY = 280;
-                const movablePulleyRadius = 35;
-                
-                // Attachment point on mount (center, where rope attaches at top)
-                const mountAttachmentY = fixedPulleyY - mountHeight/2 + 20;
-                
-                // Pulling point (where the free end of rope hangs, right side)
-                const pullRopeX = fixedPulleyX + fixedPulleyRadius + 80;
-                const pullEndY = 340;
-                
-                // Draw rope path for 2:1 mechanical advantage
-                ctx.strokeStyle = '#8B4513';
-                ctx.lineWidth = 5;
-                
-                // Rope from mount attachment point to left side of top pulley
-                ctx.beginPath();
-                ctx.moveTo(fixedPulleyX, mountAttachmentY);
-                ctx.lineTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
-                ctx.stroke();
-                
-                // Rope from left side of top pulley straight down to left side of bottom pulley
-                ctx.beginPath();
-                ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
-                ctx.lineTo(movablePulleyX - movablePulleyRadius, movablePulleyY);
-                ctx.stroke();
-                
-                // Rope goes BELOW the bottom pulley - upside down semicircle
-                // Draw the bottom half of the circle (from left, down through bottom, to right)
-                ctx.beginPath();
-                ctx.arc(movablePulleyX, movablePulleyY, movablePulleyRadius, Math.PI, 0, false);
-                ctx.stroke();
-                
-                // Rope from bottom pulley (right side) diagonally up to mount attachment point
-                ctx.beginPath();
-                ctx.moveTo(movablePulleyX + movablePulleyRadius, movablePulleyY);
-                ctx.lineTo(fixedPulleyX, mountAttachmentY);
-                ctx.stroke();
-                
-                // Rope from mount attachment point to right side of top pulley (wraps around top)
-                ctx.beginPath();
-                ctx.moveTo(fixedPulleyX, mountAttachmentY);
-                ctx.lineTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
-                ctx.stroke();
-                
-                // Free end: diagonally down from right side of top pulley to pulling point
-                ctx.beginPath();
-                ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
-                ctx.lineTo(pullRopeX, pullEndY);
-                ctx.stroke();
-                
-                // Draw movable pulley (draw after rope so it appears on top)
-                ctx.fillStyle = '#888';
-                ctx.beginPath();
-                ctx.arc(movablePulleyX, movablePulleyY, movablePulleyRadius, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
-                const massY = movablePulleyY + movablePulleyRadius + 20;
-                ctx.strokeStyle = '#8B4513';
-                ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.moveTo(movablePulleyX, movablePulleyY + movablePulleyRadius);
-                ctx.lineTo(movablePulleyX, massY);
-                ctx.stroke();
-                
-                // Draw mass/box hanging from bottom pulley
-                ctx.fillStyle = '#444';
-                ctx.strokeStyle = '#222';
-                ctx.lineWidth = 2;
-                ctx.fillRect(movablePulleyX - massWidth/2, massY, massWidth, massHeight);
-                ctx.strokeRect(movablePulleyX - massWidth/2, massY, massWidth, massHeight);
-                
-                // Draw mass label on box (dynamic)
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 20px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(mass.toFixed(1) + ' kg', movablePulleyX, massY + massHeight/2 + 7);
-                
-                // Draw arrow showing downward pull (on free end of rope) - BROWN
-                ctx.fillStyle = '#8B4513';
-                ctx.beginPath();
-                ctx.moveTo(pullRopeX, pullEndY + 30);
-                ctx.lineTo(pullRopeX - 5, pullEndY + 20);
-                ctx.lineTo(pullRopeX + 5, pullEndY + 20);
-                ctx.closePath();
-                ctx.fill();
-                
-                // Draw force labels (dynamic based on mass - Force = Weight / MA)
-                const force = (mass * 9.8) / 2; // Force = (mass × gravity) / mechanical advantage
-                ctx.fillStyle = '#000';
-                ctx.font = '16px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('Force = ' + force.toFixed(1) + ' N', pullRopeX, pullEndY + 60);
-                
-                // Draw labels
-                ctx.fillStyle = '#000';
-                ctx.font = '14px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('Fixed Pulley', fixedPulleyX, 30);
-                ctx.fillText('Movable Pulley', movablePulleyX, movablePulleyY + 60);
-                
-                // Draw mechanical advantage indicator
-                ctx.fillStyle = '#0066cc';
-                ctx.font = 'bold 16px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('Mechanical Advantage: 2:1', width/2, height - 30);
-                
-                // Draw pulley mount LAST - rectangle centered on the pulley circle - BLACK
-                // This ensures it appears on top of everything
-                ctx.fillStyle = '#000';
-                ctx.fillRect(fixedPulleyX - mountWidth/2, fixedPulleyY - mountHeight/2, mountWidth, mountHeight);
-            }
+        // Player 2 paddle collision
+        if (
+          ball.x + ball.radius >= player2Paddle.x &&
+          ball.y >= player2Paddle.y &&
+          ball.y <= player2Paddle.y + player2Paddle.height &&
+          ball.dx > 0
+        ) {
+          // Calculate hit position for angle adjustment
+          const hitPos = (ball.y - player2Paddle.y) / player2Paddle.height;
+          const angle = ((hitPos - 0.5) * Math.PI) / 3; // Max 60 degrees
+
+          // Always use normal speed for paddle hits
+          ball.dx = -Math.cos(angle) * ballSpeed * gameSpeed;
+          ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
+          ball.x = player2Paddle.x - ball.radius;
+
+          // Speed up ball if this is the first hit
+          speedUpBall();
+
+          // Reset flag when ball hits other paddle
+          ballJustHitPaddle = false;
+        } else if (ball.x < player2Paddle.x - 10) {
+          // Reset flag when ball has moved away from paddle
+          ballJustHitPaddle = false;
         }
+
+        // Ball out of bounds - scoring
+        if (ball.x < 0) {
+          player2Score++;
+          // Reset hit count in single player mode when ball goes out on player's side (player loses)
+          if (singlePlayerMode) {
+            hitCount = 0;
+            updateHitCountDisplay();
+          }
+          updateScore();
+          checkGameOver();
+          if (gameState === "playing") {
+            resetBall();
+          }
+        } else if (ball.x > canvas.width) {
+          player1Score++;
+          // Don't reset hit count when player scores - let them continue the streak
+          updateScore();
+          checkGameOver();
+          if (gameState === "playing") {
+            resetBall();
+          }
+        }
+      }
+
+      function draw() {
+        // Clear canvas
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw center line
+        ctx.setLineDash([10, 10]);
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, 0);
+        ctx.lineTo(canvas.width / 2, canvas.height);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Draw paddles
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(
+          player1Paddle.x,
+          player1Paddle.y,
+          player1Paddle.width,
+          player1Paddle.height
+        );
+        ctx.fillRect(
+          player2Paddle.x,
+          player2Paddle.y,
+          player2Paddle.width,
+          player2Paddle.height
+        );
+
+        // Draw ball (with pulsing effect during restart delay)
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        if (ballRestartDelay) {
+          // Pulsing effect during delay
+          const pulse = Math.sin(ballRestartTimer * 20) * 0.3 + 0.7;
+          ctx.fillStyle = `rgba(255, 255, 255, ${pulse})`;
+        } else {
+          ctx.fillStyle = "#fff";
+        }
+        ctx.fill();
+
+        // Draw pause overlay
+        if (gameState === "paused") {
+          ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          ctx.fillStyle = "#fff";
+          ctx.font = "48px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("PAUSED", canvas.width / 2, canvas.height / 2);
+          ctx.font = "16px Arial";
+          ctx.fillText(
+            "Press SPACE to resume",
+            canvas.width / 2,
+            canvas.height / 2 + 40
+          );
+        }
+      }
+
+      function gameLoop() {
+        if (gameState === "playing") {
+          updatePlayer1Paddle();
+          updatePlayer2Paddle();
+          updateBall();
+          draw();
+          requestAnimationFrame(gameLoop);
+        } else if (gameState === "paused") {
+          draw();
+        }
+      }
+
+      // Speed slider functionality
+      const speedSlider = document.getElementById("speedSlider");
+      const speedValue = document.getElementById("speedValue");
+
+      speedSlider.addEventListener("input", function () {
+        ballSpeed = parseFloat(this.value);
+        speedValue.textContent = ballSpeed;
+
+        // Update ball speed if game is running
+        if (gameState === "playing") {
+          const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+          const angle = Math.atan2(ball.dy, ball.dx);
+          ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
+          ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
+        }
+      });
+
+      // Paddle speed slider functionality
+      const paddleSpeedSlider = document.getElementById("paddleSpeedSlider");
+      const paddleSpeedValue = document.getElementById("paddleSpeedValue");
+
+      paddleSpeedSlider.addEventListener("input", function () {
+        paddleSpeed = parseFloat(this.value);
+        paddleSpeedValue.textContent = paddleSpeed;
+      });
+
+      // Hard mode toggle function
+      function toggleHardMode() {
+        hardMode = !hardMode;
+        const button = document.getElementById("hardModeToggle");
+
+        if (hardMode) {
+          button.textContent = "Hard Mode: ON";
+          button.classList.add("active");
+        } else {
+          button.textContent = "Hard Mode: OFF";
+          button.classList.remove("active");
+          // Reset velocities when turning off hard mode
+          player1Paddle.velocity = 0;
+          player2Paddle.velocity = 0;
+        }
+      }
+
+      // Player mode toggle function
+      function togglePlayerMode() {
+        singlePlayerMode = !singlePlayerMode;
+        const button = document.getElementById("playerModeToggle");
+        const controlsText = document.getElementById("controlsText");
+        const gameModeText = document.getElementById("gameModeText");
+        const singlePlayerScoreElement =
+          document.getElementById("singlePlayerScore");
+
+        if (singlePlayerMode) {
+          button.textContent = "Mode: Single Player";
+          button.classList.add("single-player");
+          controlsText.textContent = "Player: W/S keys | Computer: AI";
+          gameModeText.textContent =
+            "Single Player Mode - First to 5 points wins!";
+          // Show single player score display
+          if (singlePlayerScoreElement) {
+            singlePlayerScoreElement.style.display = "block";
+          }
+          // Reset hit count when switching to single player
+          hitCount = 0;
+          updateHitCountDisplay();
+        } else {
+          button.textContent = "Mode: Two Player";
+          button.classList.remove("single-player");
+          controlsText.textContent =
+            "Player 1: W/S keys | Player 2: ↑/↓ arrows";
+          gameModeText.textContent =
+            "Two Player Mode - First to 5 points wins!";
+          // Hide single player score display
+          if (singlePlayerScoreElement) {
+            singlePlayerScoreElement.style.display = "none";
+          }
+          // Reset hit count when switching modes
+          hitCount = 0;
+          updateHitCountDisplay();
+        }
+
+        // Reset velocities when switching modes
+        player1Paddle.velocity = 0;
+        player2Paddle.velocity = 0;
+      }
+
+      // Initialize game
+      gameInitialized = true;
+      draw();
+
+      // Pulley System Drawing
+      let currentMass = 1; // Default mass in kg
+      let mechanicalAdvantage = 1; // 1:1 or 2:1
+
+      function drawPulleySystem(mass = currentMass, ma = mechanicalAdvantage) {
+        const canvas = document.getElementById("pulleyCanvas");
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        const width = canvas.width;
+        const height = canvas.height;
+
+        currentMass = mass; // Update current mass
+        mechanicalAdvantage = ma; // Update mechanical advantage
+
+        // Clear canvas with white background
+        ctx.fillStyle = "#f0f0f0";
+        ctx.fillRect(0, 0, width, height);
+
+        // Draw ceiling
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(100, 50);
+        ctx.lineTo(700, 50);
+        ctx.stroke();
+
+        // One fixed pulley on top (centered) - bigger diameter
+        const fixedPulleyX = 400;
+        const fixedPulleyY = 100;
+        const fixedPulleyRadius = 50; // Bigger diameter
+
+        // Mount dimensions (will be drawn last)
+        const mountWidth = 15;
+        const mountHeight = 110;
+
+        // Draw fixed pulley (solid grey, no stroke)
+        ctx.fillStyle = "#888";
+        ctx.beginPath();
+        ctx.arc(fixedPulleyX, fixedPulleyY, fixedPulleyRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        const massWidth = 80;
+        const massHeight = 60;
+
+        if (ma === 1) {
+          // 1:1 Mechanical Advantage (Direction Changer)
+          // Left side - where mass hangs (rope goes straight down from pulley)
+          const leftRopeX = fixedPulleyX - fixedPulleyRadius;
+          const massY = 350;
+
+          // Right side - where you pull (rope goes straight down from pulley) - shorter
+          const rightRopeX = fixedPulleyX + fixedPulleyRadius;
+          const pullEndY = 320;
+
+          // Draw left rope first (brown)
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(leftRopeX, fixedPulleyY);
+          ctx.lineTo(leftRopeX, massY);
+          ctx.stroke();
+
+          // Draw rope connection point on box
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(leftRopeX, massY, 3, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Draw rope around top of pulley (semicircle from left to right) - brown
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.arc(fixedPulleyX, fixedPulleyY, fixedPulleyRadius, Math.PI, 0);
+          ctx.stroke();
+
+          // Draw right rope LAST - BROWN, goes straight down from pulley edge (shorter)
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(rightRopeX, fixedPulleyY);
+          ctx.lineTo(rightRopeX, pullEndY);
+          ctx.stroke();
+
+          // Draw mass/box hanging from left side
+          ctx.fillStyle = "#444";
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 2;
+          ctx.fillRect(leftRopeX - massWidth / 2, massY, massWidth, massHeight);
+          ctx.strokeRect(
+            leftRopeX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+
+          // Draw mass label on box (dynamic)
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 20px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            mass.toFixed(1) + " kg",
+            leftRopeX,
+            massY + massHeight / 2 + 7
+          );
+
+          // Draw arrow showing downward pull (on right side rope) - BROWN
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.moveTo(rightRopeX, pullEndY + 30);
+          ctx.lineTo(rightRopeX - 5, pullEndY + 20);
+          ctx.lineTo(rightRopeX + 5, pullEndY + 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Draw force labels (dynamic based on mass)
+          const force = mass * 9.8; // Force = mass × gravity
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            "Force = " + force.toFixed(1) + " N",
+            rightRopeX,
+            pullEndY + 60
+          );
+
+          // Draw labels
+          ctx.fillStyle = "#000";
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Fixed Pulley", fixedPulleyX, 30);
+
+          // Draw mechanical advantage indicator
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Mechanical Advantage: 1:1 (Direction Changer)",
+            20,
+            height - 30
+          );
+
+          // Draw pulley mount LAST - rectangle centered on the pulley circle - BLACK
+          // This ensures it appears on top of everything
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            fixedPulleyX - mountWidth / 2,
+            fixedPulleyY - mountHeight / 2,
+            mountWidth,
+            mountHeight
+          );
+        } else if (ma === 2) {
+          // 2:1 Mechanical Advantage
+          // Movable pulley at bottom
+          const movablePulleyX = fixedPulleyX;
+          const movablePulleyY = 280;
+          const movablePulleyRadius = 35;
+
+          // Draw all grey circles FIRST (in background)
+          ctx.fillStyle = "#888";
+          // Draw movable pulley
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          const pullRopeX = fixedPulleyX + fixedPulleyRadius + 80;
+          const pullEndY = 340;
+
+          // Draw rope path for 2:1 mechanical advantage
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+
+          // Rope from mount attachment point wrapping around left side of top pulley
+          // Draw line from mount to left side (avoiding the top), then arc along top semicircle
+
+          // Now draw the arc along the top semicircle from left to top
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Arc along top semicircle from left to top (left half of top semicircle)
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            Math.PI, // Left side (180°)
+            (3 * Math.PI) / 2, // Top (270°)
+            false // Counterclockwise - goes from left to top along top semicircle
+          );
+          ctx.stroke();
+
+          // Rope path: from left side of top pulley down, around bottom of bottom pulley, then up
+          ctx.beginPath();
+          // Start from left side of top pulley
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Straight down to left side of bottom pulley
+          ctx.lineTo(movablePulleyX - movablePulleyRadius, movablePulleyY);
+          // Semicircle around bottom of bottom pulley (bottom half only)
+          // Arc from left (180°) through bottom (270°) to right (0°) - this is the bottom semicircle
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            Math.PI, // Left side (180°)
+            0, // Right side (0°)
+            true // Clockwise - goes from left through bottom (270°) to right (bottom semicircle)
+          );
+          // Straight up to mount attachment point
+          ctx.lineTo(fixedPulleyX, mountAttachmentY);
+          ctx.stroke();
+
+          // Rope from mount attachment point wrapping around right side of top pulley
+          // Draw line from mount to top of pulley, then arc along right half of top semicircle
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX, mountAttachmentY);
+          ctx.lineTo(fixedPulleyX, fixedPulleyY - fixedPulleyRadius);
+          // Arc along right half of top semicircle: from top (270°) to right (0°)
+          // This is 90 degrees along the top semicircle
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            0, // Right side (0°)
+            false // Counterclockwise - goes from top to right along top semicircle
+          );
+          ctx.stroke();
+
+          // Free end: diagonally down from right side of top pulley to pulling point
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
+          ctx.lineTo(pullRopeX, pullEndY);
+          ctx.stroke();
+
+          // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
+          const massY = movablePulleyY + movablePulleyRadius + 20;
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX, movablePulleyY + movablePulleyRadius);
+          ctx.lineTo(movablePulleyX, massY);
+          ctx.stroke();
+
+          // Draw mass/box hanging from bottom pulley
+          ctx.fillStyle = "#444";
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 2;
+          ctx.fillRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+          ctx.strokeRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+
+          // Draw mass label on box (dynamic)
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 20px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            mass.toFixed(1) + " kg",
+            movablePulleyX,
+            massY + massHeight / 2 + 7
+          );
+
+          // Draw arrow showing downward pull (on free end of rope) - BROWN
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX, pullEndY + 30);
+          ctx.lineTo(pullRopeX - 5, pullEndY + 20);
+          ctx.lineTo(pullRopeX + 5, pullEndY + 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Draw force labels (dynamic based on mass - Force = Weight / MA)
+          const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            "Force = " + force.toFixed(1) + " N",
+            pullRopeX,
+            pullEndY + 60
+          );
+
+          // Draw labels
+          ctx.fillStyle = "#000";
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Fixed Pulley", fixedPulleyX, 30);
+
+          // Draw "Movable Pulley" label to the left of the bottom pulley
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Movable Pulley",
+            movablePulleyX - movablePulleyRadius - 10,
+            movablePulleyY
+          );
+
+          // Draw mechanical advantage indicator
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 20, height - 30);
+
+          // Draw pulley mount LAST - rectangle centered on the pulley circle - BLACK
+          // This ensures it appears on top of everything
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            fixedPulleyX - mountWidth / 2,
+            fixedPulleyY - mountHeight / 2,
+            mountWidth,
+            mountHeight
+          );
+        } else if (ma === 3) {
+          // 3:1 Mechanical Advantage
+          // Movable pulley at bottom
+          const movablePulleyX = fixedPulleyX;
+          const movablePulleyY = 320; // Lowered from 280
+          const movablePulleyRadius = 35;
+
+          // Define smaller pulley position (needed for rope path)
+          const bottomMountWidth = 15;
+          const bottomMountHeight = 70; // Height of the rectangle on the bottom pulley
+          const ropeWidth = 5; // Width of the brown rope
+          const gapSize = ropeWidth * 2; // Gap between the two top pulleys (2 times rope width)
+          const smallerPulleyRadius = 30;
+          // Position smaller pulley so gap is between edges (not centers)
+          // Top pulley bottom edge + gap + smaller pulley radius = smaller pulley center
+          const smallerPulleyY =
+            fixedPulleyY + fixedPulleyRadius + gapSize + smallerPulleyRadius;
+
+          // Draw all grey circles FIRST (in background)
+          ctx.fillStyle = "#888";
+          // Draw movable pulley
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          // Draw smaller grey circle below the fixed pulley
+          ctx.beginPath();
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          const pullRopeX = fixedPulleyX + fixedPulleyRadius + 80;
+          const pullEndY = 340;
+
+          // Draw rope path for 3:1 mechanical advantage
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+
+          // Rope from mount attachment point wrapping around left side of top pulley
+          // Draw line from mount to left side (avoiding the top), then arc along top semicircle
+
+          // Now draw the arc along the top semicircle from left to top
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Arc along top semicircle from left to top (left half of top semicircle)
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            Math.PI, // Left side (180°)
+            (3 * Math.PI) / 2, // Top (270°)
+            false // Counterclockwise - goes from left to top along top semicircle
+          );
+          ctx.stroke();
+
+          // Rope path: from left side of top pulley down, around bottom of bottom pulley, then up
+          ctx.beginPath();
+          // Start from left side of top pulley
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Straight down to left side of bottom pulley
+          ctx.lineTo(movablePulleyX - movablePulleyRadius, movablePulleyY);
+          // Semicircle around bottom of bottom pulley (bottom half only)
+          // Arc from left (180°) through bottom (270°) to right (0°) - this is the bottom semicircle
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            Math.PI, // Left side (180°)
+            0, // Right side (0°)
+            true // Clockwise - goes from left through bottom (270°) to right (bottom semicircle)
+          );
+          // Straight up to right side of smallest grey circle (below top fixed pulley)
+          ctx.lineTo(fixedPulleyX + smallerPulleyRadius, smallerPulleyY);
+          ctx.stroke();
+
+          // Rope from mount attachment point wrapping around right side of top pulley
+          // Draw line from mount to top of pulley, then arc along right half of top semicircle
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX, mountAttachmentY);
+          ctx.lineTo(fixedPulleyX, fixedPulleyY - fixedPulleyRadius);
+          // Arc along right half of top semicircle: from top (270°) to right (0°)
+          // This is 90 degrees along the top semicircle
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            0, // Right side (0°)
+            false // Counterclockwise - goes from top to right along top semicircle
+          );
+          ctx.stroke();
+
+          // Free end: from right side of top grey circle (fixed pulley) to pulling point
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
+          ctx.lineTo(pullRopeX, pullEndY);
+          ctx.stroke();
+
+          // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
+          const massY = movablePulleyY + movablePulleyRadius + 20;
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX, movablePulleyY + movablePulleyRadius);
+          ctx.lineTo(movablePulleyX, massY);
+          ctx.stroke();
+
+          // Draw mass/box hanging from bottom pulley
+          ctx.fillStyle = "#444";
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 2;
+          ctx.fillRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+          ctx.strokeRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+
+          // Draw mass label on box (dynamic)
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 20px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            mass.toFixed(1) + " kg",
+            movablePulleyX,
+            massY + massHeight / 2 + 7
+          );
+
+          // Draw arrow showing downward pull (on free end of rope) - BROWN
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX, pullEndY + 30);
+          ctx.lineTo(pullRopeX - 5, pullEndY + 20);
+          ctx.lineTo(pullRopeX + 5, pullEndY + 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Draw force labels (dynamic based on mass - Force = Weight / MA)
+          const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            "Force = " + force.toFixed(1) + " N",
+            pullRopeX,
+            pullEndY + 60
+          );
+
+          // Draw labels
+          ctx.fillStyle = "#000";
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Fixed Pulley", fixedPulleyX, 30);
+
+          // Draw "Movable Pulley" label to the left of the bottom pulley
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Movable Pulley",
+            movablePulleyX - movablePulleyRadius - 10,
+            movablePulleyY
+          );
+
+          // Draw mechanical advantage indicator
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 20, height - 30);
+
+          // Rope semicircle around top of smallest grey circle (from right to left)
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + smallerPulleyRadius, smallerPulleyY);
+          // Arc along top semicircle from right (0°) to left (180°)
+          // Split into two arcs: right to top, then top to left
+          // First arc: from right (0°) to top (270°) going counterclockwise
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            0, // Right side (0°)
+            (3 * Math.PI) / 2, // Top (270°)
+            true // Counterclockwise - goes from right through top
+          );
+          // Second arc: from top (270°) to left (180°) going counterclockwise
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            Math.PI, // Left side (180°)
+            true // Counterclockwise - goes from top to left
+          );
+          ctx.stroke();
+
+          // Brown line from left side of middle grey circle to center of bottom grey circle
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - smallerPulleyRadius, smallerPulleyY); // Left side of middle circle
+          ctx.lineTo(movablePulleyX, movablePulleyY); // Center of bottom circle
+          ctx.stroke();
+
+          // Draw extended pulley mount - rectangle that covers both pulleys with gap - BLACK
+          const extendedMountHeight =
+            smallerPulleyY +
+            smallerPulleyRadius -
+            (fixedPulleyY - mountHeight / 2);
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            fixedPulleyX - mountWidth / 2,
+            fixedPulleyY - mountHeight / 2,
+            mountWidth,
+            extendedMountHeight
+          );
+
+          // Draw black rectangle vertically on the bottom movable pulley LAST (only for 3:1)
+          // This ensures it appears on top of everything including the rope
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            movablePulleyX - bottomMountWidth / 2,
+            movablePulleyY - bottomMountHeight / 2,
+            bottomMountWidth,
+            bottomMountHeight
+          );
+        } else if (ma === 4) {
+          // 4:1 Mechanical Advantage
+          // Movable pulley at bottom
+          const movablePulleyX = fixedPulleyX;
+          const movablePulleyY = 360; // Lowered further for 4:1
+          const movablePulleyRadius = 35;
+
+          // Define smaller pulley position (needed for rope path)
+          const bottomMountWidth = 15;
+          const bottomMountHeight = 70; // Height of the rectangle on the bottom pulley
+          const ropeWidth = 5; // Width of the brown rope
+          const gapSize = ropeWidth * 2; // Gap between the two top pulleys (2 times rope width)
+          const smallerPulleyRadius = 30;
+          // Position smaller pulley so gap is between edges (not centers)
+          // Top pulley bottom edge + gap + smaller pulley radius = smaller pulley center
+          const smallerPulleyY =
+            fixedPulleyY + fixedPulleyRadius + gapSize + smallerPulleyRadius;
+
+          // Define smaller pulley above bottom movable pulley (only for 4:1)
+          const smallerBottomPulleyRadius = 25; // Smaller radius than bottom pulley
+          // Position smaller bottom pulley so gap is between edges (not centers)
+          // Bottom pulley top edge - gap - smaller pulley radius = smaller pulley center
+          const smallerBottomPulleyY =
+            movablePulleyY -
+            movablePulleyRadius -
+            gapSize -
+            smallerBottomPulleyRadius;
+
+          // Draw all grey circles FIRST (in background)
+          ctx.fillStyle = "#888";
+          // Draw smaller grey circle above bottom movable pulley
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX,
+            smallerBottomPulleyY,
+            smallerBottomPulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          // Draw movable pulley
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          // Draw smaller grey circle below the fixed pulley
+          ctx.beginPath();
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          const pullRopeX = fixedPulleyX + fixedPulleyRadius + 80;
+          const pullEndY = 340;
+
+          // Draw rope path for 4:1 mechanical advantage
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+
+          // Rope from mount attachment point wrapping around left side of top pulley
+          // Draw line from mount to left side (avoiding the top), then arc along top semicircle
+
+          // Now draw the arc along the top semicircle from left to top
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Arc along top semicircle from left to top (left half of top semicircle)
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            Math.PI, // Left side (180°)
+            (3 * Math.PI) / 2, // Top (270°)
+            false // Counterclockwise - goes from left to top along top semicircle
+          );
+          ctx.stroke();
+
+          // Rope path: from left side of top pulley down, around bottom of bottom pulley, then up
+          ctx.beginPath();
+          // Start from left side of top pulley
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Straight down to left side of bottom pulley
+          ctx.lineTo(movablePulleyX - movablePulleyRadius, movablePulleyY);
+          // Semicircle around bottom of bottom pulley (bottom half only)
+          // Arc from left (180°) through bottom (270°) to right (0°) - this is the bottom semicircle
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            Math.PI, // Left side (180°)
+            0, // Right side (0°)
+            true // Clockwise - goes from left through bottom (270°) to right (bottom semicircle)
+          );
+          // Straight up to right side of smallest grey circle (below top fixed pulley)
+          ctx.lineTo(fixedPulleyX + smallerPulleyRadius, smallerPulleyY);
+          ctx.stroke();
+
+          // Rope from mount attachment point wrapping around right side of top pulley
+          // Draw line from mount to top of pulley, then arc along right half of top semicircle
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX, mountAttachmentY);
+          ctx.lineTo(fixedPulleyX, fixedPulleyY - fixedPulleyRadius);
+          // Arc along right half of top semicircle: from top (270°) to right (0°)
+          // This is 90 degrees along the top semicircle
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            0, // Right side (0°)
+            false // Counterclockwise - goes from top to right along top semicircle
+          );
+          ctx.stroke();
+
+          // Free end: from right side of top grey circle (fixed pulley) to pulling point
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
+          ctx.lineTo(pullRopeX, pullEndY);
+          ctx.stroke();
+
+          // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
+          const massY = movablePulleyY + movablePulleyRadius + 20;
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX, movablePulleyY + movablePulleyRadius);
+          ctx.lineTo(movablePulleyX, massY);
+          ctx.stroke();
+
+          // Draw mass/box hanging from bottom pulley
+          ctx.fillStyle = "#444";
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 2;
+          ctx.fillRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+          ctx.strokeRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+
+          // Draw mass label on box (dynamic)
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 20px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            mass.toFixed(1) + " kg",
+            movablePulleyX,
+            massY + massHeight / 2 + 7
+          );
+
+          // Draw arrow showing downward pull (on free end of rope) - BROWN
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX, pullEndY + 30);
+          ctx.lineTo(pullRopeX - 5, pullEndY + 20);
+          ctx.lineTo(pullRopeX + 5, pullEndY + 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Draw force labels (dynamic based on mass - Force = Weight / MA)
+          const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            "Force = " + force.toFixed(1) + " N",
+            pullRopeX,
+            pullEndY + 60
+          );
+
+          // Draw labels
+          ctx.fillStyle = "#000";
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Fixed Pulley", fixedPulleyX, 30);
+
+          // Draw "Movable Pulley" label to the left of the bottom pulley
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Movable Pulley",
+            movablePulleyX - movablePulleyRadius - 10,
+            movablePulleyY
+          );
+
+          // Draw mechanical advantage indicator
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 20, height - 30);
+
+          // Rope semicircle around top of smallest grey circle (from right to left)
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + smallerPulleyRadius, smallerPulleyY);
+          // Arc along top semicircle from right (0°) to left (180°)
+          // Split into two arcs: right to top, then top to left
+          // First arc: from right (0°) to top (270°) going counterclockwise
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            0, // Right side (0°)
+            (3 * Math.PI) / 2, // Top (270°)
+            true // Counterclockwise - goes from right through top
+          );
+          // Second arc: from top (270°) to left (180°) going counterclockwise
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            Math.PI, // Left side (180°)
+            true // Counterclockwise - goes from top to left
+          );
+          ctx.stroke();
+
+          // Brown line from left side of middle grey circle (second from top) to left side of second-from-bottom grey circle (only for 4:1)
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - smallerPulleyRadius, smallerPulleyY); // Left side of middle circle (second from top)
+          ctx.lineTo(
+            movablePulleyX - smallerBottomPulleyRadius,
+            smallerBottomPulleyY
+          ); // Left side of second-from-bottom circle
+          ctx.stroke();
+
+          // Semicircle around bottom of second-from-bottom grey circle (from left to right)
+          ctx.beginPath();
+          ctx.moveTo(
+            movablePulleyX - smallerBottomPulleyRadius,
+            smallerBottomPulleyY
+          ); // Start at left side
+          // Arc along bottom semicircle from left (180°) through bottom (270°) to right (0°)
+          ctx.arc(
+            movablePulleyX,
+            smallerBottomPulleyY,
+            smallerBottomPulleyRadius,
+            Math.PI, // Left side (180°)
+            0, // Right side (0°)
+            true // Clockwise - goes from left through bottom (270°) to right (bottom semicircle)
+          );
+          ctx.stroke();
+
+          // Line from right side of second-from-bottom grey circle to center of top grey circle (drawn before mount to appear behind)
+          ctx.beginPath();
+          ctx.moveTo(
+            movablePulleyX + smallerBottomPulleyRadius,
+            smallerBottomPulleyY
+          ); // Right side of second-from-bottom circle
+          ctx.lineTo(fixedPulleyX, fixedPulleyY); // Center of top grey circle
+          ctx.stroke();
+
+          // Draw extended pulley mount - rectangle that covers both pulleys with gap - BLACK
+          const extendedMountHeight =
+            smallerPulleyY +
+            smallerPulleyRadius -
+            (fixedPulleyY - mountHeight / 2);
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            fixedPulleyX - mountWidth / 2,
+            fixedPulleyY - mountHeight / 2,
+            mountWidth,
+            extendedMountHeight
+          );
+
+          // Draw black rectangle connecting smaller bottom pulley to bottom movable pulley (only for 4:1)
+          // This connects the two bottom pulleys with a gap
+          const bottomExtendedMountHeight =
+            movablePulleyY +
+            movablePulleyRadius -
+            (smallerBottomPulleyY - smallerBottomPulleyRadius);
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            movablePulleyX - bottomMountWidth / 2,
+            smallerBottomPulleyY - smallerBottomPulleyRadius,
+            bottomMountWidth,
+            bottomExtendedMountHeight
+          );
+        }
+      }
     </script>
-</body>
+  </body>
 </html>

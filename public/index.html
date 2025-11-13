@@ -529,6 +529,365 @@
         border-color: #27ae60;
         box-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
       }
+
+      /* Neighborhoods Page */
+      .neighborhoods-page {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .neighborhoods-page h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .neighborhoods-content {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+        font-size: 1.2em;
+        color: #ffd93d;
+      }
+
+      .error {
+        text-align: center;
+        padding: 40px;
+        font-size: 1.2em;
+        color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.2);
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .neighborhoods-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .neighborhood-card {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 25px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .neighborhood-card:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .neighborhood-card h2 {
+        color: #ffd93d;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+      }
+
+      .neighborhood-card p {
+        margin-bottom: 10px;
+        font-size: 1em;
+        line-height: 1.6;
+      }
+
+      .neighborhood-card .field-label {
+        color: #ffd93d;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+
+      .neighborhood-card .field-value {
+        color: #fff;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2em;
+      }
+
+      .neighborhoods-map-container {
+        width: 100%;
+        margin-bottom: 30px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.3);
+        position: relative;
+      }
+
+      #neighborhoods-map-image {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .neighborhood-marker {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        transform: translate(-50%, -100%);
+        z-index: 10;
+      }
+
+      .neighborhood-marker::before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        border-top: 20px solid #ff6b6b;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+      }
+
+      .neighborhood-marker::after {
+        content: '';
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 8px;
+        background: #fff;
+        border-radius: 50%;
+        border: 2px solid #ff6b6b;
+      }
+
+      .neighborhood-marker:hover {
+        z-index: 20;
+      }
+
+      .marker-tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        white-space: nowrap;
+        margin-bottom: 5px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        z-index: 30;
+      }
+
+      .neighborhood-marker:hover .marker-tooltip {
+        opacity: 1;
+      }
+
+      /* Add Neighborhood Button */
+      .add-neighborhood-btn {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        font-weight: 500;
+        margin-bottom: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .add-neighborhood-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+        background: linear-gradient(45deg, #2ecc71, #27ae60);
+      }
+
+      /* Modal Styles */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .modal-header h2 {
+        margin: 0;
+        color: white;
+        font-size: 2em;
+      }
+
+      .modal-close {
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        color: #ffd93d;
+        margin-bottom: 8px;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        font-size: 16px;
+        font-family: inherit;
+        box-sizing: border-box;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #ffd93d;
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .form-group input[type="checkbox"] {
+        width: auto;
+        margin-right: 10px;
+        cursor: pointer;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+      }
+
+      .checkbox-group label {
+        margin-bottom: 0;
+        cursor: pointer;
+      }
+
+      .form-group small {
+        display: block;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 5px;
+        font-size: 0.9em;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .form-actions button {
+        flex: 1;
+        padding: 15px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-submit {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        color: white;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+      }
+
+      .btn-cancel {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .form-error {
+        color: #ff6b6b;
+        margin-top: 10px;
+        font-size: 0.9em;
+        display: none;
+      }
+
+      .form-error.active {
+        display: block;
+      }
     </style>
   </head>
   <body>
@@ -546,6 +905,11 @@
         <li>
           <button onclick="showPage('widgets')" id="nav-widgets">
             Widgets
+          </button>
+        </li>
+        <li>
+          <button onclick="showPage('neighborhoods')" id="nav-neighborhoods">
+            Neighborhoods
           </button>
         </li>
       </ul>
@@ -616,6 +980,68 @@
             <button onclick="showPage('pulley')">Open PulleySim</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Neighborhoods Page -->
+    <div id="neighborhoods-page" class="page">
+      <div class="neighborhoods-page">
+        <h1>Neighborhoods</h1>
+        <button class="add-neighborhood-btn" onclick="openAddNeighborhoodModal()">
+          + Add New Neighborhood
+        </button>
+        <div class="neighborhoods-map-container">
+          <img id="neighborhoods-map-image" src="LAMap.png" alt="Los Angeles County Map" />
+          <div id="neighborhoods-markers"></div>
+        </div>
+        <div class="neighborhoods-content">
+          <div id="neighborhoods-loading" class="loading">
+            Loading neighborhoods...
+          </div>
+          <div id="neighborhoods-error" class="error" style="display: none;"></div>
+          <div id="neighborhoods-grid" class="neighborhoods-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Neighborhood Modal -->
+    <div id="add-neighborhood-modal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Add New Neighborhood</h2>
+          <button class="modal-close" onclick="closeAddNeighborhoodModal()">&times;</button>
+        </div>
+        <form id="add-neighborhood-form">
+          <div class="form-group">
+            <label for="neighborhood-name">Neighborhood Name *</label>
+            <input type="text" id="neighborhood-name" required placeholder="e.g., Downtown LA" />
+          </div>
+          <div class="form-group">
+            <label for="neighborhood-population">Population</label>
+            <input type="number" id="neighborhood-population" placeholder="e.g., 50000" />
+          </div>
+          <div class="form-group">
+            <label for="neighborhood-location">Location (Coordinates)</label>
+            <input type="text" id="neighborhood-location-lat" placeholder="Latitude (e.g., 34.0522)" />
+            <input type="text" id="neighborhood-location-lng" placeholder="Longitude (e.g., -118.2437)" style="margin-top: 10px;" />
+            <small>Enter coordinates as numbers, or leave blank</small>
+          </div>
+          <div class="form-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="neighborhood-isCool" />
+              <label for="neighborhood-isCool">Is Cool</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="neighborhood-whoLivesThere">Who Lives There</label>
+            <textarea id="neighborhood-whoLivesThere" placeholder="Describe who lives in this neighborhood"></textarea>
+          </div>
+          <div class="form-error" id="form-error"></div>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="closeAddNeighborhoodModal()">Cancel</button>
+            <button type="submit" class="btn-submit">Add Neighborhood</button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -730,6 +1156,353 @@
       </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+      // Import Firebase functions
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+      import { getFirestore, collection, getDocs, addDoc, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+      // Firebase configuration
+      // TODO: Replace with your Firebase project configuration
+      // You can find this in Firebase Console > Project Settings > General > Your apps
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "personalwebsite-angus.firebaseapp.com",
+        projectId: "personalwebsite-angus",
+        storageBucket: "personalwebsite-angus.appspot.com",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      // Initialize Firebase
+      let app;
+      let db;
+      
+      try {
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        window.firestoreDb = db; // Make db available globally
+      } catch (error) {
+        console.error("Firebase initialization error:", error);
+        window.firestoreDb = null;
+      }
+
+      // Function to load neighborhoods from Firestore
+      window.loadNeighborhoods = async function() {
+        const loadingEl = document.getElementById('neighborhoods-loading');
+        const errorEl = document.getElementById('neighborhoods-error');
+        const gridEl = document.getElementById('neighborhoods-grid');
+
+        if (!window.firestoreDb) {
+          loadingEl.style.display = 'none';
+          errorEl.style.display = 'block';
+          errorEl.textContent = 'Firebase is not initialized. Please configure your Firebase credentials.';
+          return;
+        }
+
+        try {
+          loadingEl.style.display = 'block';
+          errorEl.style.display = 'none';
+          gridEl.innerHTML = '';
+
+          const neighborhoodsRef = collection(window.firestoreDb, 'neighborhoods');
+          const snapshot = await getDocs(neighborhoodsRef);
+
+          loadingEl.style.display = 'none';
+
+          if (snapshot.empty) {
+            gridEl.innerHTML = '<div class="empty-state">No neighborhoods found in the database.</div>';
+            return;
+          }
+
+          // Store neighborhoods data for map
+          const neighborhoodsData = [];
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            neighborhoodsData.push({ id: doc.id, data: data });
+            const card = document.createElement('div');
+            card.className = 'neighborhood-card';
+            
+            let cardContent = `<h2>${doc.id}</h2>`;
+            
+            // Define the order of fields to display - always show in this exact order
+            const fieldOrder = ['population', 'location', 'isCool', 'whoLivesThere'];
+            
+            // Helper function to format and display a field
+            const displayField = (key) => {
+              const value = data[key];
+              let displayValue = value;
+              
+              // Format the value based on its type
+              if (value === null || value === undefined || !(key in data)) {
+                displayValue = 'N/A';
+              } else if (typeof value === 'object') {
+                displayValue = JSON.stringify(value, null, 2);
+              } else if (typeof value === 'boolean') {
+                displayValue = value ? 'Yes' : 'No';
+              }
+              
+              cardContent += `<p><span class="field-label">${key}:</span> <span class="field-value">${displayValue}</span></p>`;
+            };
+            
+            // Always display fields in the specified order (even if missing, show N/A)
+            fieldOrder.forEach(key => {
+              displayField(key);
+            });
+            
+            // Display any remaining fields that weren't in the ordered list
+            Object.keys(data).forEach(key => {
+              if (!fieldOrder.includes(key)) {
+                displayField(key);
+              }
+            });
+            
+            card.innerHTML = cardContent;
+            gridEl.appendChild(card);
+          });
+          
+          // Initialize map with markers
+          initializeNeighborhoodsMap(neighborhoodsData);
+        } catch (error) {
+          console.error('Error loading neighborhoods:', error);
+          loadingEl.style.display = 'none';
+          errorEl.style.display = 'block';
+          errorEl.textContent = `Error loading neighborhoods: ${error.message}`;
+        }
+      };
+
+      // Initialize custom map with LA.png image
+      window.initializeNeighborhoodsMap = function(neighborhoodsData) {
+        const mapImage = document.getElementById('neighborhoods-map-image');
+        const markersContainer = document.getElementById('neighborhoods-markers');
+        
+        if (!mapImage || !markersContainer) {
+          console.error('Map elements not found');
+          return;
+        }
+
+        // Map bounds (from user specification)
+        const topLeft = { lat: 34.282587, lng: -118.735801 };
+        const bottomRight = { lat: 33.746624, lng: -118.119682 };
+        
+        // Function to convert lat/lng to pixel coordinates
+        const latLngToPixel = (lat, lng, imageWidth, imageHeight) => {
+          // Calculate percentage from bounds
+          const lngPercent = (lng - topLeft.lng) / (bottomRight.lng - topLeft.lng);
+          const latPercent = (topLeft.lat - lat) / (topLeft.lat - bottomRight.lat);
+          
+          // Convert to pixel coordinates
+          const x = lngPercent * imageWidth;
+          const y = latPercent * imageHeight;
+          
+          return { x, y };
+        };
+
+        // Function to extract coordinates from location data
+        const getCoordinates = (location) => {
+          if (!location || location === 'N/A') return null;
+          
+          // Check if location is coordinates object
+          if (typeof location === 'object' && location !== null) {
+            if (location.lat !== undefined && location.lng !== undefined) {
+              return { lat: location.lat, lng: location.lng };
+            } else if (location.latitude !== undefined && location.longitude !== undefined) {
+              return { lat: location.latitude, lng: location.longitude };
+            }
+          }
+          
+          return null;
+        };
+
+        // Function to create marker on image
+        const createMarker = (pixelX, pixelY, neighborhood) => {
+          const marker = document.createElement('div');
+          marker.className = 'neighborhood-marker';
+          marker.style.left = pixelX + 'px';
+          marker.style.top = pixelY + 'px';
+          
+          // Create tooltip
+          const tooltip = document.createElement('div');
+          tooltip.className = 'marker-tooltip';
+          tooltip.textContent = neighborhood.id;
+          marker.appendChild(tooltip);
+          
+          // Add click handler to show info
+          marker.addEventListener('click', () => {
+            const info = `
+              Neighborhood: ${neighborhood.id}
+              ${neighborhood.data.population ? `Population: ${neighborhood.data.population}` : ''}
+              ${neighborhood.data.location ? `Location: ${JSON.stringify(neighborhood.data.location)}` : ''}
+              ${neighborhood.data.isCool !== undefined ? `Is Cool: ${neighborhood.data.isCool ? 'Yes' : 'No'}` : ''}
+            `;
+            alert(info);
+          });
+          
+          markersContainer.appendChild(marker);
+        };
+
+        // Wait for image to load to get its dimensions
+        const placeMarkers = () => {
+          const imageWidth = mapImage.offsetWidth;
+          const imageHeight = mapImage.offsetHeight;
+          
+          // Clear existing markers
+          markersContainer.innerHTML = '';
+          
+          // Add markers for each neighborhood
+          neighborhoodsData.forEach(neighborhood => {
+            const location = neighborhood.data.location;
+            const coords = getCoordinates(location);
+            
+            if (coords) {
+              // Check if coordinates are within bounds
+              if (coords.lat >= bottomRight.lat && coords.lat <= topLeft.lat &&
+                  coords.lng >= topLeft.lng && coords.lng <= bottomRight.lng) {
+                const pixelPos = latLngToPixel(coords.lat, coords.lng, imageWidth, imageHeight);
+                createMarker(pixelPos.x, pixelPos.y, neighborhood);
+              } else {
+                console.warn(`Coordinates for ${neighborhood.id} are outside map bounds`);
+              }
+            }
+          });
+        };
+
+        // Place markers when image loads or if already loaded
+        if (mapImage.complete) {
+          placeMarkers();
+        } else {
+          mapImage.addEventListener('load', placeMarkers);
+        }
+        
+        // Also place markers on window resize to adjust for image size changes
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(placeMarkers, 250);
+        });
+      };
+
+      // Modal functions for adding neighborhoods
+      window.openAddNeighborhoodModal = function() {
+        const modal = document.getElementById('add-neighborhood-modal');
+        if (modal) {
+          modal.classList.add('active');
+          // Reset form
+          document.getElementById('add-neighborhood-form').reset();
+          document.getElementById('form-error').classList.remove('active');
+        }
+      };
+
+      window.closeAddNeighborhoodModal = function() {
+        const modal = document.getElementById('add-neighborhood-modal');
+        if (modal) {
+          modal.classList.remove('active');
+        }
+      };
+
+      // Close modal when clicking outside
+      document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('add-neighborhood-modal');
+        if (modal) {
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              closeAddNeighborhoodModal();
+            }
+          });
+        }
+
+        // Handle form submission
+        const form = document.getElementById('add-neighborhood-form');
+        if (form) {
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await handleAddNeighborhood();
+          });
+        }
+      });
+
+      // Function to add neighborhood to Firestore
+      window.handleAddNeighborhood = async function() {
+        const errorEl = document.getElementById('form-error');
+        const submitBtn = document.querySelector('#add-neighborhood-form .btn-submit');
+        
+        if (!window.firestoreDb) {
+          errorEl.textContent = 'Firebase is not initialized. Please configure your Firebase credentials.';
+          errorEl.classList.add('active');
+          return;
+        }
+
+        // Get form values
+        const name = document.getElementById('neighborhood-name').value.trim();
+        const population = document.getElementById('neighborhood-population').value.trim();
+        const locationLat = document.getElementById('neighborhood-location-lat').value.trim();
+        const locationLng = document.getElementById('neighborhood-location-lng').value.trim();
+        const isCool = document.getElementById('neighborhood-isCool').checked;
+        const whoLivesThere = document.getElementById('neighborhood-whoLivesThere').value.trim();
+
+        // Validate name
+        if (!name) {
+          errorEl.textContent = 'Neighborhood name is required.';
+          errorEl.classList.add('active');
+          return;
+        }
+
+        // Build data object
+        const neighborhoodData = {};
+
+        if (population) {
+          neighborhoodData.population = parseInt(population) || 0;
+        }
+
+        // Handle location - create object if both lat and lng are provided
+        if (locationLat && locationLng) {
+          const lat = parseFloat(locationLat);
+          const lng = parseFloat(locationLng);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            neighborhoodData.location = { lat: lat, lng: lng };
+          }
+        }
+
+        neighborhoodData.isCool = isCool;
+
+        if (whoLivesThere) {
+          neighborhoodData.whoLivesThere = whoLivesThere;
+        }
+
+        try {
+          // Disable submit button
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Adding...';
+          errorEl.classList.remove('active');
+
+          // Add document with custom ID (neighborhood name)
+          const { setDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+          const neighborhoodRef = doc(window.firestoreDb, 'neighborhoods', name);
+          await setDoc(neighborhoodRef, neighborhoodData);
+
+          // Success - close modal and reload neighborhoods
+          closeAddNeighborhoodModal();
+          
+          // Reload neighborhoods
+          if (window.loadNeighborhoods) {
+            await window.loadNeighborhoods();
+          }
+
+          // Show success message (optional)
+          alert(`Neighborhood "${name}" added successfully!`);
+        } catch (error) {
+          console.error('Error adding neighborhood:', error);
+          errorEl.textContent = `Error adding neighborhood: ${error.message}`;
+          errorEl.classList.add('active');
+        } finally {
+          // Re-enable submit button
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Add Neighborhood';
+        }
+      };
+    </script>
+
     <script>
       // Navigation functionality
       function showPage(pageId) {
@@ -776,6 +1549,15 @@
         if (pageId === "pulley") {
           setTimeout(() => {
             drawPulleySystem();
+          }, 100);
+        }
+
+        // Load neighborhoods if showing neighborhoods page
+        if (pageId === "neighborhoods") {
+          setTimeout(() => {
+            if (window.loadNeighborhoods) {
+              window.loadNeighborhoods();
+            }
           }, 100);
         }
       }
@@ -847,6 +1629,7 @@
       let lastTime = 0;
       let mousePressed = false;
       let targetDirection = { x: 0, y: 0 };
+      let mouseDistanceFromCenter = 0; // Track distance from center for angle scaling
       let acceleration = 50; // Speed up quickly
       let deceleration = 80; // Slow down quickly
       let clickStartTime = 0;
@@ -906,23 +1689,22 @@
           });
         }
 
-        // Mouse down handler - start flying in direction of click
-        starCanvas.addEventListener("mousedown", function (e) {
-          mousePressed = true;
-          clickStartTime = performance.now();
-          isClickAndHold = false;
-
+        // Helper function to update direction based on mouse position
+        const updateDirectionFromMouse = function(e) {
           const rect = starCanvas.getBoundingClientRect();
-          const clickX = e.clientX - rect.left;
-          const clickY = e.clientY - rect.top;
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
 
           const centerX = starCanvas.width / 2;
           const centerY = starCanvas.height / 2;
 
-          // Calculate direction vector from center to click point
-          const dx = clickX - centerX;
-          const dy = clickY - centerY;
+          // Calculate direction vector from center to mouse position
+          const dx = mouseX - centerX;
+          const dy = mouseY - centerY;
           const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          // Store distance from center for angle scaling
+          mouseDistanceFromCenter = distance;
 
           // Normalize and store target direction
           if (distance > 0) {
@@ -931,10 +1713,29 @@
           } else {
             targetDirection.x = 0;
             targetDirection.y = 0;
+            mouseDistanceFromCenter = 0;
           }
+        };
+
+        // Mouse down handler - start flying in direction of click
+        starCanvas.addEventListener("mousedown", function (e) {
+          mousePressed = true;
+          clickStartTime = performance.now();
+          isClickAndHold = false;
+
+          // Update direction from initial click position
+          updateDirectionFromMouse(e);
 
           isFlying = true;
           flyStartTime = performance.now();
+        });
+
+        // Mouse move handler - update direction while mouse is pressed
+        starCanvas.addEventListener("mousemove", function (e) {
+          if (mousePressed) {
+            // Update direction based on current mouse position
+            updateDirectionFromMouse(e);
+          }
         });
 
         // Mouse up handler - stop flying and slow down quickly
@@ -1025,10 +1826,22 @@
               currentSpeed + activeAcceleration * deltaTime
             );
 
-            // Update velocity based on current speed and target direction
+            // Calculate angle scaling factor based on distance from center
+            // Max distance is approximately half the diagonal of the canvas
+            const maxDistance = Math.sqrt(starCanvas.width * starCanvas.width + starCanvas.height * starCanvas.height) / 2;
+            const normalizedDistance = Math.min(mouseDistanceFromCenter / maxDistance, 1);
+            
+            // Apply non-linear scaling: square the normalized distance to make extreme positions more extreme
+            // Then scale from 0.4 (center) to 1.2 (far edges) for more dramatic angles
+            const angleMultiplier = 0.4 + (normalizedDistance * normalizedDistance * 0.8);
+            
+            // Increase vertical sensitivity slightly for more noticeable up/down movement
+            const verticalMultiplier = angleMultiplier * 1.1; // 10% more sensitive vertically
+            
+            // Update velocity based on current speed and target direction with angle scaling
             velocity.z = currentSpeed;
-            velocity.x = targetDirection.x * currentSpeed * 0.4;
-            velocity.y = targetDirection.y * currentSpeed * 0.4;
+            velocity.x = targetDirection.x * currentSpeed * angleMultiplier;
+            velocity.y = targetDirection.y * currentSpeed * verticalMultiplier;
           } else {
             // Decelerate quickly
             currentSpeed = Math.max(0, currentSpeed - deceleration * deltaTime);
@@ -1042,10 +1855,18 @@
               velocity.z = 0;
               isClickAndHold = false;
             } else {
+              // Calculate angle scaling factor based on last known distance from center
+              const maxDistance = Math.sqrt(starCanvas.width * starCanvas.width + starCanvas.height * starCanvas.height) / 2;
+              const normalizedDistance = Math.min(mouseDistanceFromCenter / maxDistance, 1);
+              const angleMultiplier = 0.4 + (normalizedDistance * normalizedDistance * 0.8);
+              
+              // Increase vertical sensitivity slightly for more noticeable up/down movement
+              const verticalMultiplier = angleMultiplier * 1.1; // 10% more sensitive vertically
+              
               // Maintain direction while slowing
               velocity.z = currentSpeed;
-              velocity.x = targetDirection.x * currentSpeed * 0.4;
-              velocity.y = targetDirection.y * currentSpeed * 0.4;
+              velocity.x = targetDirection.x * currentSpeed * angleMultiplier;
+              velocity.y = targetDirection.y * currentSpeed * verticalMultiplier;
             }
           }
         }

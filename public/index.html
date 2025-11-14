@@ -888,6 +888,169 @@
       .form-error.active {
         display: block;
       }
+
+      /* Accessed Page */
+      .accessed-page {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .accessed-page h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .accessed-content {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .accessed-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .accessed-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .accessed-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .accessed-item .device-name {
+        color: #ffd93d;
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .accessed-item .ip-address {
+        color: #fff;
+        font-size: 1.1em;
+      }
+
+      .accessed-item .ip-label {
+        color: #ffd93d;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+
+      /* Username Entry Modal - Blocks page until name is entered */
+      .username-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 10000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .username-modal-overlay.active {
+        display: flex;
+      }
+
+      .username-modal-content {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        padding: 50px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+      }
+
+      .username-modal-content h2 {
+        color: white;
+        font-size: 2em;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .username-modal-content p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.1em;
+        margin-bottom: 30px;
+      }
+
+      .username-input-group {
+        margin-bottom: 20px;
+      }
+
+      .username-input-group input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        font-size: 18px;
+        font-family: inherit;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      .username-input-group input:focus {
+        outline: none;
+        border-color: #ffd93d;
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      .username-input-group input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .username-submit-btn {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        border: none;
+        color: white;
+        padding: 15px 40px;
+        font-size: 18px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        font-weight: 500;
+        width: 100%;
+      }
+
+      .username-submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+      }
+
+      .username-submit-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .username-error {
+        color: #ff6b6b;
+        margin-top: 10px;
+        font-size: 0.9em;
+        display: none;
+      }
+
+      .username-error.active {
+        display: block;
+      }
     </style>
   </head>
   <body>
@@ -910,6 +1073,11 @@
         <li>
           <button onclick="showPage('neighborhoods')" id="nav-neighborhoods">
             Neighborhoods
+          </button>
+        </li>
+        <li>
+          <button onclick="showPage('accessed')" id="nav-accessed">
+            Accessed
           </button>
         </li>
       </ul>
@@ -1041,6 +1209,44 @@
             <button type="button" class="btn-cancel" onclick="closeAddNeighborhoodModal()">Cancel</button>
             <button type="submit" class="btn-submit">Add Neighborhood</button>
           </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Accessed Page -->
+    <div id="accessed-page" class="page">
+      <div class="accessed-page">
+        <h1>Accessed</h1>
+        <div class="accessed-content">
+          <div id="accessed-loading" class="loading">
+            Loading accessed users...
+          </div>
+          <div id="accessed-error" class="error" style="display: none;"></div>
+          <div id="accessed-list" class="accessed-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Username Entry Modal - Blocks page until name is entered -->
+    <div id="username-modal" class="username-modal-overlay">
+      <div class="username-modal-content">
+        <h2>Welcome!</h2>
+        <p>Please enter your name/username to continue:</p>
+        <form id="username-form">
+          <div class="username-input-group">
+            <input 
+              type="text" 
+              id="username-input" 
+              placeholder="Enter your name/username" 
+              required 
+              autofocus
+              minlength="1"
+            />
+            <div class="username-error" id="username-error">Please enter a valid name/username</div>
+          </div>
+          <button type="submit" class="username-submit-btn" id="username-submit-btn">
+            Continue
+          </button>
         </form>
       </div>
     </div>
@@ -1186,6 +1392,347 @@
         console.error("Firebase initialization error:", error);
         window.firestoreDb = null;
       }
+
+      // Cookie helper functions
+      function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+      }
+
+      function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+
+      // Function to get username from cookie
+      function getUsername() {
+        return getCookie('userUsername') || null;
+      }
+
+      // Function to set username in cookie
+      function setUsername(username) {
+        // Store in cookie (expires in 365 days)
+        setCookie('userUsername', username, 365);
+        // Also store in localStorage as backup
+        localStorage.setItem('userUsername', username);
+      }
+
+      // Flag to track if form handler is already attached
+      let usernameFormHandlerAttached = false;
+
+      // Function to show username modal (mandatory)
+      function showUsernameModal() {
+        const modal = document.getElementById('username-modal');
+        const input = document.getElementById('username-input');
+        const form = document.getElementById('username-form');
+        const errorEl = document.getElementById('username-error');
+        
+        if (!modal || !form) return;
+        
+        // Show modal
+        modal.classList.add('active');
+        
+        // Clear any previous input
+        input.value = '';
+        errorEl.classList.remove('active');
+        
+        // Focus input
+        setTimeout(() => {
+          input.focus();
+        }, 100);
+        
+        // Handle form submission (only attach once)
+        if (!usernameFormHandlerAttached) {
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = input.value.trim();
+            
+            if (!username || username.length === 0) {
+              errorEl.classList.add('active');
+              return;
+            }
+            
+            // Save username
+            setUsername(username);
+            
+            // Hide modal
+            modal.classList.remove('active');
+            
+            // Store IP after getting username
+            setTimeout(() => {
+              storeUserIP();
+            }, 500);
+          });
+          usernameFormHandlerAttached = true;
+        }
+        
+        // Prevent closing modal by clicking outside
+        const preventClose = (e) => {
+          if (e.target === modal) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        };
+        modal.addEventListener('click', preventClose);
+        
+        // Prevent ESC key from closing
+        const preventEsc = (e) => {
+          if (e.key === 'Escape' && modal.classList.contains('active')) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        };
+        document.addEventListener('keydown', preventEsc);
+      }
+
+      // Function to get device name from user agent
+      function getDeviceName() {
+        const ua = navigator.userAgent;
+        let deviceName = "Unknown Device";
+        
+        // Try to extract device/browser info
+        if (ua.includes("Windows")) {
+          deviceName = "Windows Device";
+        } else if (ua.includes("Mac")) {
+          deviceName = "Mac Device";
+        } else if (ua.includes("Linux")) {
+          deviceName = "Linux Device";
+        } else if (ua.includes("Android")) {
+          deviceName = "Android Device";
+        } else if (ua.includes("iPhone") || ua.includes("iPad")) {
+          deviceName = "iOS Device";
+        }
+        
+        // Add browser info
+        if (ua.includes("Chrome") && !ua.includes("Edg")) {
+          deviceName += " - Chrome";
+        } else if (ua.includes("Firefox")) {
+          deviceName += " - Firefox";
+        } else if (ua.includes("Safari") && !ua.includes("Chrome")) {
+          deviceName += " - Safari";
+        } else if (ua.includes("Edg")) {
+          deviceName += " - Edge";
+        }
+        
+        // Add a unique identifier based on screen resolution and timezone
+        const screenInfo = `${screen.width}x${screen.height}`;
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const uniqueId = btoa(screenInfo + timezone).substring(0, 8);
+        
+        return `${deviceName} - ${uniqueId}`;
+      }
+
+      // Function to get IP address
+      async function getUserIP() {
+        try {
+          // Try multiple IP services for reliability
+          const services = [
+            'https://api.ipify.org?format=json',
+            'https://api64.ipify.org?format=json',
+            'https://ipapi.co/json/'
+          ];
+          
+          for (const service of services) {
+            try {
+              // Create a timeout promise
+              const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Timeout')), 5000)
+              );
+              
+              // Race between fetch and timeout
+              const response = await Promise.race([
+                fetch(service),
+                timeoutPromise
+              ]);
+              
+              const data = await response.json();
+              
+              // Different services return IP in different formats
+              if (data.ip) {
+                return data.ip;
+              } else if (data.query) {
+                return data.query;
+              }
+            } catch (e) {
+              continue; // Try next service
+            }
+          }
+          
+          return "Unknown";
+        } catch (error) {
+          console.error("Error fetching IP:", error);
+          return "Unknown";
+        }
+      }
+
+      // Function to reset all cookies
+      function resetAllCookies() {
+        // Delete all cookies by setting them to expire in the past
+        const cookies = document.cookie.split(';');
+        cookies.forEach(cookie => {
+          const eqPos = cookie.indexOf('=');
+          const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+          if (name) {
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+          }
+        });
+        // Also clear localStorage
+        localStorage.clear();
+        console.log('All cookies and localStorage cleared');
+      }
+
+      // Function to store IP in Firestore
+      async function storeUserIP() {
+        // Check if username exists in cookie - if not, don't store
+        const username = getUsername();
+        if (!username) {
+          console.log('No username found, cannot store IP');
+          return;
+        }
+
+        if (!window.firestoreDb) {
+          console.error('Firestore not initialized');
+          return;
+        }
+
+        try {
+          const deviceName = getDeviceName();
+          const userIP = await getUserIP();
+          
+          // Import setDoc for setting document with custom ID
+          const { setDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+          
+          // Use device name as document ID (for uniqueness), but store username in the document
+          const ipRef = doc(window.firestoreDb, 'IPs', deviceName);
+          await setDoc(ipRef, {
+            IP: userIP,
+            username: username,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            screenResolution: `${screen.width}x${screen.height}`,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+          }, { merge: true }); // Use merge to update if document exists
+          
+          console.log(`Stored IP ${userIP} for user ${username}`);
+        } catch (error) {
+          console.error('Error storing user IP:', error);
+        }
+      }
+
+      // Check for username and show modal or store IP when page loads
+      window.addEventListener('load', () => {
+        const username = getUsername();
+        
+        if (!username) {
+          // No username found - show mandatory modal
+          setTimeout(() => {
+            showUsernameModal();
+          }, 100);
+        } else {
+          // Username exists - store IP (will update if already exists)
+          setTimeout(() => {
+            storeUserIP();
+          }, 1000);
+        }
+      });
+
+      // Make resetAllCookies available globally for testing/debugging
+      window.resetAllCookies = resetAllCookies;
+
+      // Function to load accessed users from Firestore
+      window.loadAccessedUsers = async function() {
+        const loadingEl = document.getElementById('accessed-loading');
+        const errorEl = document.getElementById('accessed-error');
+        const listEl = document.getElementById('accessed-list');
+
+        if (!window.firestoreDb) {
+          loadingEl.style.display = 'none';
+          errorEl.style.display = 'block';
+          errorEl.textContent = 'Firebase is not initialized. Please configure your Firebase credentials.';
+          return;
+        }
+
+        try {
+          loadingEl.style.display = 'block';
+          errorEl.style.display = 'none';
+          listEl.innerHTML = '';
+
+          const ipsRef = collection(window.firestoreDb, 'IPs');
+          const snapshot = await getDocs(ipsRef);
+
+          loadingEl.style.display = 'none';
+
+          if (snapshot.empty) {
+            listEl.innerHTML = '<div class="empty-state">No users have accessed the website yet.</div>';
+            return;
+          }
+
+          // Use a Map to deduplicate by username, keeping the most recent IP
+          const uniqueUsers = new Map();
+          
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const username = data.username || 'Anonymous';
+            const ip = data.IP || 'Unknown';
+            const timestamp = data.timestamp || '';
+            
+            // Use username as the key - if we've seen this username before, update with newer IP
+            if (!uniqueUsers.has(username)) {
+              uniqueUsers.set(username, {
+                username: username,
+                ip: ip,
+                timestamp: timestamp
+              });
+            } else {
+              // Compare timestamps to keep the most recent IP
+              const existing = uniqueUsers.get(username);
+              if (timestamp > existing.timestamp) {
+                uniqueUsers.set(username, {
+                  username: username,
+                  ip: ip,
+                  timestamp: timestamp
+                });
+              }
+            }
+          });
+
+          // Convert map to array and sort by username
+          const usersArray = Array.from(uniqueUsers.values())
+            .map(user => ({ username: user.username, ip: user.ip })) // Remove timestamp from display
+            .sort((a, b) => a.username.localeCompare(b.username));
+
+          if (usersArray.length === 0) {
+            listEl.innerHTML = '<div class="empty-state">No users have accessed the website yet.</div>';
+            return;
+          }
+
+          // Display each unique user
+          usersArray.forEach(user => {
+            const item = document.createElement('div');
+            item.className = 'accessed-item';
+            item.innerHTML = `
+              <div class="device-name">${user.username}</div>
+              <div class="ip-address">
+                <span class="ip-label">IP:</span>${user.ip}
+              </div>
+            `;
+            listEl.appendChild(item);
+          });
+        } catch (error) {
+          console.error('Error loading accessed users:', error);
+          loadingEl.style.display = 'none';
+          errorEl.style.display = 'block';
+          errorEl.textContent = `Error loading accessed users: ${error.message}`;
+        }
+      };
 
       // Function to load neighborhoods from Firestore
       window.loadNeighborhoods = async function() {
@@ -1557,6 +2104,15 @@
           setTimeout(() => {
             if (window.loadNeighborhoods) {
               window.loadNeighborhoods();
+            }
+          }, 100);
+        }
+
+        // Load accessed users if showing accessed page
+        if (pageId === "accessed") {
+          setTimeout(() => {
+            if (window.loadAccessedUsers) {
+              window.loadAccessedUsers();
             }
           }, 100);
         }

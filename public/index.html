@@ -280,175 +280,6 @@
         background: linear-gradient(45deg, #ee5a24, #ff6b6b);
       }
 
-      /* Game Page */
-      .game-container {
-        text-align: center;
-        background: rgba(0, 0, 0, 0.3);
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        max-width: 900px;
-        margin: 0 auto;
-      }
-
-      .game-container h1 {
-        margin: 0 0 20px 0;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      }
-
-      canvas {
-        border: 3px solid #fff;
-        border-radius: 10px;
-        background: #000;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-      }
-
-      .score {
-        font-size: 24px;
-        margin: 10px 0;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      }
-
-      .controls {
-        margin-top: 15px;
-        font-size: 14px;
-        opacity: 0.8;
-      }
-
-      .speed-control {
-        margin-top: 10px;
-        font-size: 14px;
-        color: white;
-      }
-
-      .speed-control label {
-        margin-right: 10px;
-      }
-
-      .speed-control input[type="range"] {
-        width: 150px;
-        margin: 0 10px;
-        accent-color: #ff6b6b;
-      }
-
-      .speed-control span {
-        font-weight: bold;
-        color: #ff6b6b;
-      }
-
-      .paddle-speed-control {
-        margin-top: 10px;
-        font-size: 14px;
-        color: white;
-      }
-
-      .paddle-speed-control label {
-        margin-right: 10px;
-      }
-
-      .paddle-speed-control input[type="range"] {
-        width: 150px;
-        margin: 0 10px;
-        accent-color: #3498db;
-      }
-
-      .hard-mode-control {
-        margin-top: 15px;
-      }
-
-      .hard-mode-control button {
-        background: linear-gradient(45deg, #2c3e50, #34495e);
-        border: 2px solid #3498db;
-        color: white;
-        padding: 10px 20px;
-        font-size: 14px;
-        border-radius: 25px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      }
-
-      .hard-mode-control button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        background: linear-gradient(45deg, #34495e, #2c3e50);
-      }
-
-      .hard-mode-control button.active {
-        background: linear-gradient(45deg, #e74c3c, #c0392b);
-        border-color: #e74c3c;
-        box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
-      }
-
-      .player-mode-control {
-        margin-top: 15px;
-      }
-
-      .player-mode-control button {
-        background: linear-gradient(45deg, #27ae60, #2ecc71);
-        border: 2px solid #27ae60;
-        color: white;
-        padding: 10px 20px;
-        font-size: 14px;
-        border-radius: 25px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      }
-
-      .player-mode-control button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        background: linear-gradient(45deg, #2ecc71, #27ae60);
-      }
-
-      .player-mode-control button.single-player {
-        background: linear-gradient(45deg, #f39c12, #e67e22);
-        border-color: #f39c12;
-        box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
-      }
-
-      .game-over {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.8);
-        padding: 30px;
-        border-radius: 15px;
-        text-align: center;
-        display: none;
-      }
-
-      .start-screen {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.8);
-        padding: 30px;
-        border-radius: 15px;
-        text-align: center;
-      }
-
-      .game-container button {
-        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-        border: none;
-        color: white;
-        padding: 12px 24px;
-        font-size: 16px;
-        border-radius: 25px;
-        cursor: pointer;
-        margin: 10px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      }
-
-      .game-container button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      }
-
       /* Pulley Simulator Page */
       .pulley-container {
         text-align: center;
@@ -528,6 +359,272 @@
         background: linear-gradient(45deg, #27ae60, #2ecc71);
         border-color: #27ae60;
         box-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
+      }
+
+      /* Pong Game Page */
+      .pong-container {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .pong-container h1 {
+        margin: 0 0 20px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .score {
+        color: white;
+        font-size: 1.5em;
+        margin-bottom: 15px;
+        font-weight: bold;
+      }
+
+      #gameCanvas {
+        background: #000;
+        border: 3px solid white;
+        border-radius: 10px;
+        display: block;
+        margin: 0 auto;
+      }
+
+      .pong-controls {
+        color: white;
+        margin-top: 15px;
+        font-size: 14px;
+      }
+
+      .start-screen {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        color: white;
+      }
+
+      .game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        color: white;
+        display: none;
+      }
+
+      .game-over button {
+        background: linear-gradient(45deg, #ffd93d, #ffed4e);
+        border: 3px solid #ffd93d;
+        color: #1e3c72;
+        padding: 15px 35px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 25px rgba(255, 217, 61, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .game-over button:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 30px rgba(255, 217, 61, 0.8);
+        background: linear-gradient(45deg, #ffed4e, #ffd93d);
+      }
+
+      .game-over button:active {
+        transform: translateY(-1px) scale(1.02);
+      }
+
+      .canvas-wrapper {
+        position: relative;
+        display: inline-block;
+      }
+
+      .speed-control {
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .speed-control label {
+        color: white;
+        font-weight: bold;
+        min-width: 120px;
+      }
+
+      .speed-control input[type="range"] {
+        flex: 1;
+        max-width: 300px;
+        accent-color: #ff6b6b;
+      }
+
+      .speed-control span {
+        color: #ff6b6b;
+        font-weight: bold;
+        min-width: 30px;
+        text-align: left;
+      }
+
+      .paddle-speed-control {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .paddle-speed-control label {
+        color: white;
+        font-weight: bold;
+        min-width: 120px;
+      }
+
+      .paddle-speed-control input[type="range"] {
+        flex: 1;
+        max-width: 300px;
+        accent-color: #3498db;
+      }
+
+      .paddle-speed-control span {
+        color: #3498db;
+        font-weight: bold;
+        min-width: 30px;
+        text-align: left;
+      }
+
+      .mode-control {
+        margin-top: 15px;
+      }
+
+      .mode-control button {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        border: 2px solid #27ae60;
+        color: white;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .mode-control button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(45deg, #2ecc71, #27ae60);
+      }
+
+      .mode-control button.two-player {
+        background: linear-gradient(45deg, #f39c12, #e67e22);
+        border-color: #f39c12;
+        box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+      }
+
+      .hard-mode-control {
+        margin-top: 10px;
+      }
+
+      .hard-mode-control button {
+        background: linear-gradient(45deg, #2c3e50, #34495e);
+        border: 2px solid #3498db;
+        color: white;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .hard-mode-control button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(45deg, #34495e, #2c3e50);
+      }
+
+      .hard-mode-control button.active {
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        border-color: #e74c3c;
+        box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+      }
+
+      /* Leaderboard Styles */
+      .leaderboard {
+        margin-top: 30px;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .leaderboard h2 {
+        color: #ffd93d;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      .leaderboard-table th {
+        background: rgba(255, 217, 61, 0.2);
+        color: #ffd93d;
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+        border-bottom: 2px solid rgba(255, 217, 61, 0.4);
+      }
+
+      .leaderboard-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      .leaderboard-table tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .leaderboard-table .rank {
+        font-weight: bold;
+        color: #ffd93d;
+        width: 60px;
+      }
+
+      .leaderboard-table .name {
+        font-weight: 500;
+      }
+
+      .leaderboard-table .hits {
+        text-align: right;
+        font-weight: bold;
+        color: #ff6b6b;
+      }
+
+      .leaderboard-loading {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.7);
+        padding: 20px;
       }
 
       /* Neighborhoods Page */
@@ -1110,16 +1207,12 @@
 
           <h2>Projects</h2>
           <p>
-            One of my recent projects is this interactive Pong game, which you
-            can play by clicking the "Pong Game" button in the navigation menu.
-            The game features multiple modes, customizable speeds, and a
-            challenging hard mode with ice physics!
+            This website showcases some of my work and interests.
           </p>
 
           <h2>Get in Touch</h2>
           <p>
-            Feel free to explore the site and try out the Pong game. If you'd
-            like to connect, you can contact me at
+            If you'd like to connect, you can contact me at
             <a href="mailto:anorden1@hwemail.com">anorden1@hwemail.com</a>.
           </p>
         </div>
@@ -1132,20 +1225,19 @@
         <h1>Widgets</h1>
         <div class="widgets-content">
           <div class="widget-item">
-            <h2>Pong Game</h2>
-            <p>
-              Play the classic Pong game. Features multiple game modes,
-              customizable speeds, and challenging hard mode with ice physics!
-            </p>
-            <button onclick="showPage('game')">Play Pong Game</button>
-          </div>
-          <div class="widget-item">
             <h2>PulleySim (rope dreams come to life)</h2>
             <p>
               Explore a pulley system with mechanical advantage of 2, holding a
               1 kg mass.
             </p>
             <button onclick="showPage('pulley')">Open PulleySim</button>
+          </div>
+          <div class="widget-item">
+            <h2>Pong Game</h2>
+            <p>
+              Classic Pong game with customizable speed, paddle controls, and multiple game modes.
+            </p>
+            <button onclick="showPage('pong')">Play Pong</button>
           </div>
         </div>
       </div>
@@ -1297,67 +1389,80 @@
       </div>
     </div>
 
-    <!-- Game Page -->
-    <div id="game-page" class="page">
-      <div class="game-container">
+    <!-- Pong Game Page -->
+    <div id="pong-page" class="page">
+      <div class="pong-container">
         <h1>PONG</h1>
         <div class="score">
-          <span id="player1Score">0</span> - <span id="player2Score">0</span>
+          You: <span id="player1Score">0</span> - Computer: <span id="player2Score">0</span>
         </div>
-        <div class="score" id="singlePlayerScore" style="display: none">
-          Hits: <span id="hitCount">0</span> | High Score:
-          <span id="highScore">0</span>
+        <div class="score" style="margin-top: 10px; font-size: 1.2em;">
+          Your High Score: <span id="playerHighScore">0</span> hits | Current Round: <span id="currentHits">0</span> hits
         </div>
-
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
-        <div class="controls" id="controlsText">
-          Player 1: W/S keys | Player 2: ↑/↓ arrows
+        <div class="canvas-wrapper">
+          <canvas id="gameCanvas" width="800" height="400"></canvas>
+          <div class="start-screen" id="startScreen">
+            <h2>Welcome to Pong!</h2>
+            <p>First to 5 points wins!</p>
+            <button onclick="startPongGame()">Start Game</button>
+          </div>
+          <div class="game-over" id="gameOver">
+            <h2 id="gameOverText">Game Over!</h2>
+            <p id="winnerText"></p>
+            <button onclick="resetPongGame()">Play Again</button>
+          </div>
+        </div>
+        <div class="pong-controls">
+          Use W/S keys to move your paddle
         </div>
         <div class="speed-control">
           <label for="speedSlider">Ball Speed:</label>
           <input
             type="range"
             id="speedSlider"
-            min="1"
-            max="10"
-            value="4"
+            min="2"
+            max="20"
+            value="5"
             step="0.5"
           />
-          <span id="speedValue">4</span>
+          <span id="speedValue">5</span>
         </div>
         <div class="paddle-speed-control">
           <label for="paddleSpeedSlider">Paddle Speed:</label>
           <input
             type="range"
             id="paddleSpeedSlider"
-            min="1"
-            max="15"
-            value="5"
+            min="2"
+            max="10"
+            value="6"
             step="0.5"
           />
-          <span id="paddleSpeedValue">5</span>
+          <span id="paddleSpeedValue">6</span>
+        </div>
+        <div class="mode-control">
+          <button id="modeToggle" onclick="togglePlayerMode()">
+            Mode: Single Player
+          </button>
         </div>
         <div class="hard-mode-control">
           <button id="hardModeToggle" onclick="toggleHardMode()">
             Hard Mode: OFF
           </button>
         </div>
-        <div class="player-mode-control">
-          <button id="playerModeToggle" onclick="togglePlayerMode()">
-            Mode: Two Player
-          </button>
-        </div>
-
-        <div class="start-screen" id="startScreen">
-          <h2>Welcome to Pong!</h2>
-          <p id="gameModeText">Two Player Mode - First to 5 points wins!</p>
-          <button onclick="startGame()">Start Game</button>
-        </div>
-
-        <div class="game-over" id="gameOver">
-          <h2 id="gameOverText">Game Over!</h2>
-          <p id="winnerText"></p>
-          <button onclick="resetGame()">Play Again</button>
+        <div class="leaderboard">
+          <h2>Top 5 High Scores</h2>
+          <div id="leaderboard-loading" class="leaderboard-loading">Loading leaderboard...</div>
+          <table class="leaderboard-table" id="leaderboard-table" style="display: none;">
+            <thead>
+              <tr>
+                <th class="rank">Rank</th>
+                <th class="name">Name</th>
+                <th class="hits">Score</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -1393,15 +1498,15 @@
         window.firestoreDb = null;
       }
 
-      // Cookie helper functions
-      function setCookie(name, value, days) {
+      // Cookie helper functions (make globally accessible)
+      window.setCookie = function(name, value, days) {
         const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         const expires = "expires=" + date.toUTCString();
         document.cookie = name + "=" + value + ";" + expires + ";path=/";
-      }
+      };
 
-      function getCookie(name) {
+      window.getCookie = function(name) {
         const nameEQ = name + "=";
         const ca = document.cookie.split(';');
         for (let i = 0; i < ca.length; i++) {
@@ -1410,17 +1515,17 @@
           if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
         }
         return null;
-      }
+      };
 
       // Function to get username from cookie
       function getUsername() {
-        return getCookie('userUsername') || null;
+        return window.getCookie('userUsername') || null;
       }
 
       // Function to set username in cookie
       function setUsername(username) {
         // Store in cookie (expires in 365 days)
-        setCookie('userUsername', username, 365);
+        window.setCookie('userUsername', username, 365);
         // Also store in localStorage as backup
         localStorage.setItem('userUsername', username);
       }
@@ -2075,16 +2180,6 @@
           navButton.classList.add("active");
         }
 
-        // Initialize game canvas if showing game page
-        if (pageId === "game") {
-          // Small delay to ensure page is visible
-          setTimeout(() => {
-            if (gameInitialized) {
-              draw();
-            }
-          }, 100);
-        }
-
         // Initialize starry sky if showing home page
         if (pageId === "home") {
           setTimeout(() => {
@@ -2096,6 +2191,18 @@
         if (pageId === "pulley") {
           setTimeout(() => {
             drawPulleySystem();
+          }, 100);
+        }
+
+        // Initialize pong game if showing pong page
+        if (pageId === "pong") {
+          setTimeout(() => {
+            initPongGame();
+            loadPongLeaderboard();
+            // Initialize user's leaderboard entry (creates with score 0 if doesn't exist)
+            setTimeout(() => {
+              initializeUserLeaderboardEntry();
+            }, 500);
           }, 100);
         }
 
@@ -2597,612 +2704,6 @@
           }, 100);
         }
       });
-
-      // Game variables
-      const canvas = document.getElementById("gameCanvas");
-      const ctx = canvas.getContext("2d");
-      let gameInitialized = false;
-
-      // Game state
-      let gameState = "start"; // 'start', 'playing', 'paused', 'gameOver'
-      let player1Score = 0;
-      let player2Score = 0;
-      let gameSpeed = 1;
-      let ballSpeed = 4;
-      let paddleSpeed = 5;
-      let hardMode = false;
-      let ballRestartDelay = false;
-      let ballRestartTimer = 0;
-      let singlePlayerMode = false;
-      let ballHasBeenHit = false;
-
-      // Single player scoring system
-      let hitCount = 0;
-      let highScore = 0;
-      let ballJustHitPaddle = false; // Flag to prevent multiple hit counts per collision
-
-      // Load high score from localStorage
-      function loadHighScore() {
-        const savedHighScore = localStorage.getItem("pongHighScore");
-        if (savedHighScore !== null) {
-          highScore = parseInt(savedHighScore, 10);
-          updateHighScoreDisplay();
-        }
-      }
-
-      // Save high score to localStorage
-      function saveHighScore() {
-        localStorage.setItem("pongHighScore", highScore.toString());
-      }
-
-      // Update high score display
-      function updateHighScoreDisplay() {
-        const highScoreElement = document.getElementById("highScore");
-        if (highScoreElement) {
-          highScoreElement.textContent = highScore;
-        }
-      }
-
-      // Update hit count display
-      function updateHitCountDisplay() {
-        const hitCountElement = document.getElementById("hitCount");
-        if (hitCountElement) {
-          hitCountElement.textContent = hitCount;
-        }
-      }
-
-      // Initialize high score on page load
-      loadHighScore();
-
-      // Paddle properties
-      const paddleWidth = 15;
-      const paddleHeight = 80;
-
-      // Player 1 paddle (left side)
-      let player1Paddle = {
-        x: 20,
-        y: canvas.height / 2 - paddleHeight / 2,
-        width: paddleWidth,
-        height: paddleHeight,
-        velocity: 0,
-        acceleration: 1.2,
-        friction: 0.98,
-      };
-
-      // Player 2 paddle (right side)
-      let player2Paddle = {
-        x: canvas.width - 35,
-        y: canvas.height / 2 - paddleHeight / 2,
-        width: paddleWidth,
-        height: paddleHeight,
-        velocity: 0,
-        acceleration: 1.2,
-        friction: 0.98,
-      };
-
-      // Ball properties
-      let ball = {
-        x: canvas.width / 2,
-        y: canvas.height / 2,
-        radius: 8,
-        dx: 4,
-        dy: 4,
-        speed: 4,
-      };
-
-      // Input handling
-      const keys = {};
-
-      document.addEventListener("keydown", (e) => {
-        keys[e.key] = true;
-
-        // Start game with spacebar
-        if (e.key === " " && gameState === "start") {
-          startGame();
-        }
-
-        // Pause game with spacebar
-        if (e.key === " " && gameState === "playing") {
-          togglePause();
-        }
-      });
-
-      document.addEventListener("keyup", (e) => {
-        keys[e.key] = false;
-      });
-
-      // Game functions
-      function startGame() {
-        gameState = "playing";
-        document.getElementById("startScreen").style.display = "none";
-        document.getElementById("gameOver").style.display = "none";
-        resetBall();
-        gameLoop();
-      }
-
-      function resetGame() {
-        player1Score = 0;
-        player2Score = 0;
-        gameSpeed = 1;
-        hitCount = 0; // Reset hit count
-        updateHitCountDisplay();
-        // Reset paddle velocities
-        player1Paddle.velocity = 0;
-        player2Paddle.velocity = 0;
-        updateScore();
-        startGame();
-      }
-
-      function togglePause() {
-        if (gameState === "playing") {
-          gameState = "paused";
-        } else if (gameState === "paused") {
-          gameState = "playing";
-          gameLoop();
-        }
-      }
-
-      function resetBall() {
-        ball.x = canvas.width / 2;
-        ball.y = canvas.height / 2;
-        ball.dx = 0; // Stop ball movement
-        ball.dy = 0;
-        ballRestartDelay = true;
-        ballRestartTimer = 0;
-        ballHasBeenHit = false; // Reset hit status for new point
-        ballJustHitPaddle = false; // Reset collision flag
-      }
-
-      function startBallAfterDelay() {
-        // Start with slow speed (1) before first hit
-        ball.dx = (Math.random() > 0.5 ? 1 : -1) * 1 * gameSpeed;
-        ball.dy = (Math.random() - 0.5) * 1 * gameSpeed;
-        ballRestartDelay = false;
-      }
-
-      function speedUpBall() {
-        // Speed up ball to normal speed after first hit
-        if (!ballHasBeenHit) {
-          const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
-          const angle = Math.atan2(ball.dy, ball.dx);
-          ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
-          ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
-          ballHasBeenHit = true;
-        }
-      }
-
-      function updateScore() {
-        document.getElementById("player1Score").textContent = player1Score;
-        document.getElementById("player2Score").textContent = player2Score;
-      }
-
-      function checkGameOver() {
-        if (player1Score >= 5 || player2Score >= 5) {
-          gameState = "gameOver";
-          document.getElementById("gameOver").style.display = "block";
-          document.getElementById("gameOverText").textContent = "Game Over!";
-
-          if (singlePlayerMode) {
-            document.getElementById("winnerText").textContent =
-              player1Score >= 5 ? "You Win!" : "Computer Wins!";
-          } else {
-            document.getElementById("winnerText").textContent =
-              player1Score >= 5 ? "Player 1 Wins!" : "Player 2 Wins!";
-          }
-        }
-      }
-
-      function updatePlayer1Paddle() {
-        if (hardMode) {
-          // Ice physics - control acceleration, not direct movement
-          if (keys["w"]) {
-            player1Paddle.velocity -= player1Paddle.acceleration;
-          }
-          if (keys["s"]) {
-            player1Paddle.velocity += player1Paddle.acceleration;
-          }
-
-          // Apply friction (ice sliding effect) - this happens regardless of key presses
-          player1Paddle.velocity *= player1Paddle.friction;
-
-          // Update position based on velocity - this happens regardless of key presses
-          player1Paddle.y += player1Paddle.velocity;
-
-          // Keep paddle on screen with bounce effect
-          if (player1Paddle.y < 0) {
-            player1Paddle.y = 0;
-            player1Paddle.velocity *= -0.5; // Bounce with energy loss
-          }
-          if (player1Paddle.y + player1Paddle.height > canvas.height) {
-            player1Paddle.y = canvas.height - player1Paddle.height;
-            player1Paddle.velocity *= -0.5; // Bounce with energy loss
-          }
-        } else {
-          // Normal mode - direct movement
-          if (keys["w"]) {
-            player1Paddle.y -= paddleSpeed;
-          }
-          if (keys["s"]) {
-            player1Paddle.y += paddleSpeed;
-          }
-
-          // Keep paddle on screen
-          if (player1Paddle.y < 0) {
-            player1Paddle.y = 0;
-          }
-          if (player1Paddle.y + player1Paddle.height > canvas.height) {
-            player1Paddle.y = canvas.height - player1Paddle.height;
-          }
-        }
-      }
-
-      function updatePlayer2Paddle() {
-        if (singlePlayerMode) {
-          // AI mode - computer controls Player 2
-          updateAIPaddle();
-        } else {
-          // Two player mode - human controls Player 2
-          if (hardMode) {
-            // Ice physics - control acceleration, not direct movement
-            if (keys["ArrowUp"]) {
-              player2Paddle.velocity -= player2Paddle.acceleration;
-            }
-            if (keys["ArrowDown"]) {
-              player2Paddle.velocity += player2Paddle.acceleration;
-            }
-
-            // Apply friction (ice sliding effect) - this happens regardless of key presses
-            player2Paddle.velocity *= player2Paddle.friction;
-
-            // Update position based on velocity - this happens regardless of key presses
-            player2Paddle.y += player2Paddle.velocity;
-
-            // Keep paddle on screen with bounce effect
-            if (player2Paddle.y < 0) {
-              player2Paddle.y = 0;
-              player2Paddle.velocity *= -0.5; // Bounce with energy loss
-            }
-            if (player2Paddle.y + player2Paddle.height > canvas.height) {
-              player2Paddle.y = canvas.height - player2Paddle.height;
-              player2Paddle.velocity *= -0.5; // Bounce with energy loss
-            }
-          } else {
-            // Normal mode - direct movement
-            if (keys["ArrowUp"]) {
-              player2Paddle.y -= paddleSpeed;
-            }
-            if (keys["ArrowDown"]) {
-              player2Paddle.y += paddleSpeed;
-            }
-
-            // Keep paddle on screen
-            if (player2Paddle.y < 0) {
-              player2Paddle.y = 0;
-            }
-            if (player2Paddle.y + player2Paddle.height > canvas.height) {
-              player2Paddle.y = canvas.height - player2Paddle.height;
-            }
-          }
-        }
-      }
-
-      function updateAIPaddle() {
-        const paddleCenter = player2Paddle.y + player2Paddle.height / 2;
-        const ballY = ball.y;
-
-        if (hardMode) {
-          // AI with ice physics
-          if (ballY < paddleCenter - 10) {
-            player2Paddle.velocity -= player2Paddle.acceleration * 0.8; // Slightly slower than player
-          } else if (ballY > paddleCenter + 10) {
-            player2Paddle.velocity += player2Paddle.acceleration * 0.8;
-          }
-
-          // Apply friction (ice sliding effect)
-          player2Paddle.velocity *= player2Paddle.friction;
-
-          // Update position based on velocity
-          player2Paddle.y += player2Paddle.velocity;
-
-          // Keep paddle on screen with bounce effect
-          if (player2Paddle.y < 0) {
-            player2Paddle.y = 0;
-            player2Paddle.velocity *= -0.5; // Bounce with energy loss
-          }
-          if (player2Paddle.y + player2Paddle.height > canvas.height) {
-            player2Paddle.y = canvas.height - player2Paddle.height;
-            player2Paddle.velocity *= -0.5; // Bounce with energy loss
-          }
-        } else {
-          // AI with normal physics
-          if (ballY < paddleCenter - 10) {
-            player2Paddle.y -= paddleSpeed * 0.8; // Slightly slower than player
-          } else if (ballY > paddleCenter + 10) {
-            player2Paddle.y += paddleSpeed * 0.8;
-          }
-
-          // Keep paddle on screen
-          if (player2Paddle.y < 0) {
-            player2Paddle.y = 0;
-          }
-          if (player2Paddle.y + player2Paddle.height > canvas.height) {
-            player2Paddle.y = canvas.height - player2Paddle.height;
-          }
-        }
-      }
-
-      function updateBall() {
-        // Handle ball restart delay
-        if (ballRestartDelay) {
-          ballRestartTimer += 1 / 60; // Assuming 60 FPS
-          if (ballRestartTimer >= 0.5) {
-            // 0.5 second delay
-            startBallAfterDelay();
-          }
-          return; // Don't update ball position during delay
-        }
-
-        ball.x += ball.dx;
-        ball.y += ball.dy;
-
-        // Ball collision with top and bottom walls
-        if (
-          ball.y - ball.radius <= 0 ||
-          ball.y + ball.radius >= canvas.height
-        ) {
-          ball.dy = -ball.dy;
-        }
-
-        // Ball collision with paddles
-        // Player 1 paddle collision
-        if (
-          ball.x - ball.radius <= player1Paddle.x + player1Paddle.width &&
-          ball.y >= player1Paddle.y &&
-          ball.y <= player1Paddle.y + player1Paddle.height &&
-          ball.dx < 0
-        ) {
-          // Always update ball physics on collision
-          // Calculate hit position for angle adjustment
-          const hitPos = (ball.y - player1Paddle.y) / player1Paddle.height;
-          const angle = ((hitPos - 0.5) * Math.PI) / 3; // Max 60 degrees
-
-          // Always use normal speed for paddle hits
-          ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
-          ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
-          ball.x = player1Paddle.x + player1Paddle.width + ball.radius;
-
-          // Speed up ball if this is the first hit
-          speedUpBall();
-
-          // Only increment hit count once per collision (when flag is false)
-          if (!ballJustHitPaddle && singlePlayerMode) {
-            hitCount++;
-            updateHitCountDisplay();
-            // Update high score if current hit count exceeds it
-            if (hitCount > highScore) {
-              highScore = hitCount;
-              updateHighScoreDisplay();
-              saveHighScore();
-            }
-            // Set flag to prevent multiple counts
-            ballJustHitPaddle = true;
-          }
-        } else if (ball.x > player1Paddle.x + player1Paddle.width + 10) {
-          // Reset flag when ball has moved away from paddle
-          ballJustHitPaddle = false;
-        }
-
-        // Player 2 paddle collision
-        if (
-          ball.x + ball.radius >= player2Paddle.x &&
-          ball.y >= player2Paddle.y &&
-          ball.y <= player2Paddle.y + player2Paddle.height &&
-          ball.dx > 0
-        ) {
-          // Calculate hit position for angle adjustment
-          const hitPos = (ball.y - player2Paddle.y) / player2Paddle.height;
-          const angle = ((hitPos - 0.5) * Math.PI) / 3; // Max 60 degrees
-
-          // Always use normal speed for paddle hits
-          ball.dx = -Math.cos(angle) * ballSpeed * gameSpeed;
-          ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
-          ball.x = player2Paddle.x - ball.radius;
-
-          // Speed up ball if this is the first hit
-          speedUpBall();
-
-          // Reset flag when ball hits other paddle
-          ballJustHitPaddle = false;
-        } else if (ball.x < player2Paddle.x - 10) {
-          // Reset flag when ball has moved away from paddle
-          ballJustHitPaddle = false;
-        }
-
-        // Ball out of bounds - scoring
-        if (ball.x < 0) {
-          player2Score++;
-          // Reset hit count in single player mode when ball goes out on player's side (player loses)
-          if (singlePlayerMode) {
-            hitCount = 0;
-            updateHitCountDisplay();
-          }
-          updateScore();
-          checkGameOver();
-          if (gameState === "playing") {
-            resetBall();
-          }
-        } else if (ball.x > canvas.width) {
-          player1Score++;
-          // Don't reset hit count when player scores - let them continue the streak
-          updateScore();
-          checkGameOver();
-          if (gameState === "playing") {
-            resetBall();
-          }
-        }
-      }
-
-      function draw() {
-        // Clear canvas
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Draw center line
-        ctx.setLineDash([10, 10]);
-        ctx.strokeStyle = "#fff";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(canvas.width / 2, 0);
-        ctx.lineTo(canvas.width / 2, canvas.height);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Draw paddles
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(
-          player1Paddle.x,
-          player1Paddle.y,
-          player1Paddle.width,
-          player1Paddle.height
-        );
-        ctx.fillRect(
-          player2Paddle.x,
-          player2Paddle.y,
-          player2Paddle.width,
-          player2Paddle.height
-        );
-
-        // Draw ball (with pulsing effect during restart delay)
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-        if (ballRestartDelay) {
-          // Pulsing effect during delay
-          const pulse = Math.sin(ballRestartTimer * 20) * 0.3 + 0.7;
-          ctx.fillStyle = `rgba(255, 255, 255, ${pulse})`;
-        } else {
-          ctx.fillStyle = "#fff";
-        }
-        ctx.fill();
-
-        // Draw pause overlay
-        if (gameState === "paused") {
-          ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-          ctx.fillStyle = "#fff";
-          ctx.font = "48px Arial";
-          ctx.textAlign = "center";
-          ctx.fillText("PAUSED", canvas.width / 2, canvas.height / 2);
-          ctx.font = "16px Arial";
-          ctx.fillText(
-            "Press SPACE to resume",
-            canvas.width / 2,
-            canvas.height / 2 + 40
-          );
-        }
-      }
-
-      function gameLoop() {
-        if (gameState === "playing") {
-          updatePlayer1Paddle();
-          updatePlayer2Paddle();
-          updateBall();
-          draw();
-          requestAnimationFrame(gameLoop);
-        } else if (gameState === "paused") {
-          draw();
-        }
-      }
-
-      // Speed slider functionality
-      const speedSlider = document.getElementById("speedSlider");
-      const speedValue = document.getElementById("speedValue");
-
-      speedSlider.addEventListener("input", function () {
-        ballSpeed = parseFloat(this.value);
-        speedValue.textContent = ballSpeed;
-
-        // Update ball speed if game is running
-        if (gameState === "playing") {
-          const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
-          const angle = Math.atan2(ball.dy, ball.dx);
-          ball.dx = Math.cos(angle) * ballSpeed * gameSpeed;
-          ball.dy = Math.sin(angle) * ballSpeed * gameSpeed;
-        }
-      });
-
-      // Paddle speed slider functionality
-      const paddleSpeedSlider = document.getElementById("paddleSpeedSlider");
-      const paddleSpeedValue = document.getElementById("paddleSpeedValue");
-
-      paddleSpeedSlider.addEventListener("input", function () {
-        paddleSpeed = parseFloat(this.value);
-        paddleSpeedValue.textContent = paddleSpeed;
-      });
-
-      // Hard mode toggle function
-      function toggleHardMode() {
-        hardMode = !hardMode;
-        const button = document.getElementById("hardModeToggle");
-
-        if (hardMode) {
-          button.textContent = "Hard Mode: ON";
-          button.classList.add("active");
-        } else {
-          button.textContent = "Hard Mode: OFF";
-          button.classList.remove("active");
-          // Reset velocities when turning off hard mode
-          player1Paddle.velocity = 0;
-          player2Paddle.velocity = 0;
-        }
-      }
-
-      // Player mode toggle function
-      function togglePlayerMode() {
-        singlePlayerMode = !singlePlayerMode;
-        const button = document.getElementById("playerModeToggle");
-        const controlsText = document.getElementById("controlsText");
-        const gameModeText = document.getElementById("gameModeText");
-        const singlePlayerScoreElement =
-          document.getElementById("singlePlayerScore");
-
-        if (singlePlayerMode) {
-          button.textContent = "Mode: Single Player";
-          button.classList.add("single-player");
-          controlsText.textContent = "Player: W/S keys | Computer: AI";
-          gameModeText.textContent =
-            "Single Player Mode - First to 5 points wins!";
-          // Show single player score display
-          if (singlePlayerScoreElement) {
-            singlePlayerScoreElement.style.display = "block";
-          }
-          // Reset hit count when switching to single player
-          hitCount = 0;
-          updateHitCountDisplay();
-        } else {
-          button.textContent = "Mode: Two Player";
-          button.classList.remove("single-player");
-          controlsText.textContent =
-            "Player 1: W/S keys | Player 2: ↑/↓ arrows";
-          gameModeText.textContent =
-            "Two Player Mode - First to 5 points wins!";
-          // Hide single player score display
-          if (singlePlayerScoreElement) {
-            singlePlayerScoreElement.style.display = "none";
-          }
-          // Reset hit count when switching modes
-          hitCount = 0;
-          updateHitCountDisplay();
-        }
-
-        // Reset velocities when switching modes
-        player1Paddle.velocity = 0;
-        player2Paddle.velocity = 0;
-      }
-
-      // Initialize game
-      gameInitialized = true;
-      draw();
 
       // Pulley System Drawing
       let currentMass = 1; // Default mass in kg
@@ -4072,6 +3573,772 @@
           );
         }
       }
+
+      // ========== PONG GAME CODE ==========
+      // Canvas setup
+      let pongCanvas = null;
+      let pongCtx = null;
+
+      // Game state
+      let pongGameState = "start"; // 'start', 'playing', 'paused', 'gameOver'
+      let pongPlayer1Score = 0;
+      let pongPlayer2Score = 0;
+      let pongBallSpeed = 5;
+      let pongPaddleSpeed = 6;
+      let pongTwoPlayerMode = false;
+      let pongHardMode = false;
+      let pongHitCount = 0; // Track hits against computer in single player mode (resets each round)
+      let pongPlayerHighScore = 0; // Player's personal high score
+
+      // Paddle properties
+      const pongPaddleWidth = 15;
+      const pongPaddleHeight = 80;
+
+      // Player 1 paddle (left side)
+      let pongPlayer1Paddle = {
+        x: 20,
+        y: 200,
+        width: pongPaddleWidth,
+        height: pongPaddleHeight,
+        velocity: 0,
+        acceleration: 0.6,
+        friction: 0.995,
+      };
+
+      // Player 2 paddle (right side - AI controlled)
+      let pongPlayer2Paddle = {
+        x: 765,
+        y: 200,
+        width: pongPaddleWidth,
+        height: pongPaddleHeight,
+        velocity: 0,
+        acceleration: 0.6,
+        friction: 0.995,
+      };
+
+      // Ball properties
+      let pongBall = {
+        x: 400,
+        y: 200,
+        radius: 8,
+        dx: 5,
+        dy: 5,
+      };
+
+      // Input handling for pong
+      const pongKeys = {};
+
+      function initPongGame() {
+        pongCanvas = document.getElementById("gameCanvas");
+        if (!pongCanvas) return;
+        pongCtx = pongCanvas.getContext("2d");
+        
+        // Reset paddle positions
+        pongPlayer1Paddle.y = pongCanvas.height / 2 - pongPaddleHeight / 2;
+        pongPlayer2Paddle.y = pongCanvas.height / 2 - pongPaddleHeight / 2;
+        pongPlayer2Paddle.x = pongCanvas.width - 35;
+        
+        // Reset ball
+        pongBall.x = pongCanvas.width / 2;
+        pongBall.y = pongCanvas.height / 2;
+        
+        // Load player's high score
+        loadPlayerHighScore();
+        
+        // Initial draw
+        drawPong();
+      }
+
+      document.addEventListener("keydown", (e) => {
+        pongKeys[e.key.toLowerCase()] = true;
+        
+        // Handle arrow keys
+        if (e.key === "ArrowUp") {
+          pongKeys["arrowup"] = true;
+        }
+        if (e.key === "ArrowDown") {
+          pongKeys["arrowdown"] = true;
+        }
+
+        // Start game with spacebar
+        if (e.key === " " && pongGameState === "start" && document.getElementById("pong-page")?.classList.contains("active")) {
+          startPongGame();
+        }
+
+        // Pause game with spacebar
+        if (e.key === " " && pongGameState === "playing" && document.getElementById("pong-page")?.classList.contains("active")) {
+          togglePongPause();
+        }
+      });
+
+      document.addEventListener("keyup", (e) => {
+        pongKeys[e.key.toLowerCase()] = false;
+        
+        // Handle arrow keys
+        if (e.key === "ArrowUp") {
+          pongKeys["arrowup"] = false;
+        }
+        if (e.key === "ArrowDown") {
+          pongKeys["arrowdown"] = false;
+        }
+      });
+
+      // Game functions
+      async function startPongGame() {
+        pongGameState = "playing";
+        const startScreen = document.getElementById("startScreen");
+        const gameOver = document.getElementById("gameOver");
+        if (startScreen) startScreen.style.display = "none";
+        if (gameOver) gameOver.style.display = "none";
+        pongHitCount = 0; // Reset hit count for new game
+        updateCurrentHitsDisplay();
+        await resetPongBall();
+        pongGameLoop();
+      }
+
+      function resetPongGame() {
+        pongPlayer1Score = 0;
+        pongPlayer2Score = 0;
+        pongHitCount = 0; // Reset hit count
+        updatePongScore();
+        updateCurrentHitsDisplay();
+        startPongGame();
+      }
+
+      function togglePongPause() {
+        if (pongGameState === "playing") {
+          pongGameState = "paused";
+        } else if (pongGameState === "paused") {
+          pongGameState = "playing";
+          pongGameLoop();
+        }
+      }
+
+      async function resetPongBall() {
+        if (!pongCanvas) return;
+        // Check if this round's hits beat the high score (before resetting)
+        if (!pongTwoPlayerMode && pongHitCount > 0) {
+          if (pongHitCount > pongPlayerHighScore) {
+            pongPlayerHighScore = pongHitCount;
+            updatePlayerHighScoreDisplay();
+            // Save to Firebase and wait for it to complete, then update leaderboard
+            await savePongHighScore(pongHitCount);
+          }
+        }
+        // Reset hit count for new round
+        pongHitCount = 0;
+        updateCurrentHitsDisplay();
+        pongBall.x = pongCanvas.width / 2;
+        pongBall.y = pongCanvas.height / 2;
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        const angle = (Math.random() - 0.5) * Math.PI / 3;
+        pongBall.dx = Math.cos(angle) * pongBallSpeed * direction;
+        pongBall.dy = Math.sin(angle) * pongBallSpeed;
+      }
+
+      function updatePongScore() {
+        const player1ScoreEl = document.getElementById("player1Score");
+        const player2ScoreEl = document.getElementById("player2Score");
+        if (player1ScoreEl) player1ScoreEl.textContent = pongPlayer1Score;
+        if (player2ScoreEl) player2ScoreEl.textContent = pongPlayer2Score;
+      }
+
+      function updatePlayerHighScoreDisplay() {
+        const highScoreEl = document.getElementById("playerHighScore");
+        if (highScoreEl) {
+          highScoreEl.textContent = pongPlayerHighScore;
+        }
+      }
+
+      function updateCurrentHitsDisplay() {
+        const currentHitsEl = document.getElementById("currentHits");
+        if (currentHitsEl) {
+          currentHitsEl.textContent = pongHitCount;
+        }
+      }
+
+      async function checkPongGameOver() {
+        if (pongPlayer1Score >= 5 || pongPlayer2Score >= 5) {
+          pongGameState = "gameOver";
+          const gameOver = document.getElementById("gameOver");
+          const gameOverText = document.getElementById("gameOverText");
+          const winnerText = document.getElementById("winnerText");
+          if (gameOver) gameOver.style.display = "block";
+          if (gameOverText) gameOverText.textContent = "Game Over!";
+          if (winnerText) {
+            winnerText.textContent = pongPlayer1Score >= 5 ? "You Win!" : "Computer Wins!";
+          }
+          // Check final round's hits before game ends
+          if (!pongTwoPlayerMode && pongHitCount > 0) {
+            if (pongHitCount > pongPlayerHighScore) {
+              pongPlayerHighScore = pongHitCount;
+              updatePlayerHighScoreDisplay();
+              // Save to Firebase and wait for it to complete, then update leaderboard
+              await savePongHighScore(pongHitCount);
+            }
+          }
+        }
+      }
+
+      function updatePongPlayer1Paddle() {
+        if (!pongCanvas || !document.getElementById("pong-page")?.classList.contains("active")) return;
+        if (pongHardMode) {
+          const acceleration = pongPlayer1Paddle.acceleration * (pongPaddleSpeed / 6);
+          if (pongKeys["w"]) {
+            pongPlayer1Paddle.velocity -= acceleration;
+          }
+          if (pongKeys["s"]) {
+            pongPlayer1Paddle.velocity += acceleration;
+          }
+          pongPlayer1Paddle.velocity *= pongPlayer1Paddle.friction;
+          pongPlayer1Paddle.y += pongPlayer1Paddle.velocity;
+          if (pongPlayer1Paddle.y < 0) {
+            pongPlayer1Paddle.y = 0;
+            pongPlayer1Paddle.velocity *= -0.5;
+          }
+          if (pongPlayer1Paddle.y + pongPlayer1Paddle.height > pongCanvas.height) {
+            pongPlayer1Paddle.y = pongCanvas.height - pongPlayer1Paddle.height;
+            pongPlayer1Paddle.velocity *= -0.5;
+          }
+        } else {
+          if (pongKeys["w"]) {
+            pongPlayer1Paddle.y -= pongPaddleSpeed;
+          }
+          if (pongKeys["s"]) {
+            pongPlayer1Paddle.y += pongPaddleSpeed;
+          }
+          if (pongPlayer1Paddle.y < 0) {
+            pongPlayer1Paddle.y = 0;
+          }
+          if (pongPlayer1Paddle.y + pongPlayer1Paddle.height > pongCanvas.height) {
+            pongPlayer1Paddle.y = pongCanvas.height - pongPlayer1Paddle.height;
+          }
+        }
+      }
+
+      function updatePongPlayer2Paddle() {
+        if (!pongCanvas || !document.getElementById("pong-page")?.classList.contains("active")) return;
+        if (pongTwoPlayerMode) {
+          if (pongHardMode) {
+            const acceleration = pongPlayer2Paddle.acceleration * (pongPaddleSpeed / 6);
+            if (pongKeys["arrowup"]) {
+              pongPlayer2Paddle.velocity -= acceleration;
+            }
+            if (pongKeys["arrowdown"]) {
+              pongPlayer2Paddle.velocity += acceleration;
+            }
+            pongPlayer2Paddle.velocity *= pongPlayer2Paddle.friction;
+            pongPlayer2Paddle.y += pongPlayer2Paddle.velocity;
+            if (pongPlayer2Paddle.y < 0) {
+              pongPlayer2Paddle.y = 0;
+              pongPlayer2Paddle.velocity *= -0.5;
+            }
+            if (pongPlayer2Paddle.y + pongPlayer2Paddle.height > pongCanvas.height) {
+              pongPlayer2Paddle.y = pongCanvas.height - pongPlayer2Paddle.height;
+              pongPlayer2Paddle.velocity *= -0.5;
+            }
+          } else {
+            if (pongKeys["arrowup"]) {
+              pongPlayer2Paddle.y -= pongPaddleSpeed;
+            }
+            if (pongKeys["arrowdown"]) {
+              pongPlayer2Paddle.y += pongPaddleSpeed;
+            }
+            if (pongPlayer2Paddle.y < 0) {
+              pongPlayer2Paddle.y = 0;
+            }
+            if (pongPlayer2Paddle.y + pongPlayer2Paddle.height > pongCanvas.height) {
+              pongPlayer2Paddle.y = pongCanvas.height - pongPlayer2Paddle.height;
+            }
+          }
+        } else {
+          if (pongHardMode) {
+            const acceleration = pongPlayer2Paddle.acceleration * (pongPaddleSpeed / 6) * 0.8;
+            const paddleCenter = pongPlayer2Paddle.y + pongPlayer2Paddle.height / 2;
+            const ballY = pongBall.y;
+            if (ballY < paddleCenter - 10) {
+              pongPlayer2Paddle.velocity -= acceleration;
+            } else if (ballY > paddleCenter + 10) {
+              pongPlayer2Paddle.velocity += acceleration;
+            }
+            pongPlayer2Paddle.velocity *= pongPlayer2Paddle.friction;
+            pongPlayer2Paddle.y += pongPlayer2Paddle.velocity;
+            if (pongPlayer2Paddle.y < 0) {
+              pongPlayer2Paddle.y = 0;
+              pongPlayer2Paddle.velocity *= -0.5;
+            }
+            if (pongPlayer2Paddle.y + pongPlayer2Paddle.height > pongCanvas.height) {
+              pongPlayer2Paddle.y = pongCanvas.height - pongPlayer2Paddle.height;
+              pongPlayer2Paddle.velocity *= -0.5;
+            }
+          } else {
+            const paddleCenter = pongPlayer2Paddle.y + pongPlayer2Paddle.height / 2;
+            const ballY = pongBall.y;
+            if (ballY < paddleCenter - 10) {
+              pongPlayer2Paddle.y -= pongPaddleSpeed * 0.85;
+            } else if (ballY > paddleCenter + 10) {
+              pongPlayer2Paddle.y += pongPaddleSpeed * 0.85;
+            }
+            if (pongPlayer2Paddle.y < 0) {
+              pongPlayer2Paddle.y = 0;
+            }
+            if (pongPlayer2Paddle.y + pongPlayer2Paddle.height > pongCanvas.height) {
+              pongPlayer2Paddle.y = pongCanvas.height - pongPlayer2Paddle.height;
+            }
+          }
+        }
+      }
+
+      function togglePlayerMode() {
+        pongTwoPlayerMode = !pongTwoPlayerMode;
+        const button = document.getElementById("modeToggle");
+        const controlsText = document.querySelector(".pong-controls");
+        pongPlayer1Paddle.velocity = 0;
+        pongPlayer2Paddle.velocity = 0;
+        if (pongTwoPlayerMode) {
+          if (button) button.textContent = "Mode: Two Player";
+          button?.classList.add("two-player");
+          if (controlsText) controlsText.textContent = "Player 1: W/S keys | Player 2: ↑/↓ arrows";
+        } else {
+          if (button) button.textContent = "Mode: Single Player";
+          button?.classList.remove("two-player");
+          if (controlsText) controlsText.textContent = "Use W/S keys to move your paddle";
+        }
+      }
+
+      function toggleHardMode() {
+        pongHardMode = !pongHardMode;
+        const button = document.getElementById("hardModeToggle");
+        if (pongHardMode) {
+          if (button) button.textContent = "Hard Mode: ON";
+          button?.classList.add("active");
+        } else {
+          if (button) button.textContent = "Hard Mode: OFF";
+          button?.classList.remove("active");
+          pongPlayer1Paddle.velocity = 0;
+          pongPlayer2Paddle.velocity = 0;
+        }
+      }
+
+      async function updatePongBall() {
+        if (!pongCanvas) return;
+        pongBall.x += pongBall.dx;
+        pongBall.y += pongBall.dy;
+        
+        // Top wall collision - ensure ball bounces away
+        if (pongBall.y - pongBall.radius <= 0) {
+          pongBall.y = pongBall.radius; // Move ball back to boundary
+          pongBall.dy = Math.abs(pongBall.dy); // Ensure it moves down (away from wall)
+        }
+        
+        // Bottom wall collision - ensure ball bounces away
+        if (pongBall.y + pongBall.radius >= pongCanvas.height) {
+          pongBall.y = pongCanvas.height - pongBall.radius; // Move ball back to boundary
+          pongBall.dy = -Math.abs(pongBall.dy); // Ensure it moves up (away from wall)
+        }
+        if (
+          pongBall.x - pongBall.radius <= pongPlayer1Paddle.x + pongPlayer1Paddle.width &&
+          pongBall.y >= pongPlayer1Paddle.y &&
+          pongBall.y <= pongPlayer1Paddle.y + pongPlayer1Paddle.height &&
+          pongBall.dx < 0
+        ) {
+          const hitPos = (pongBall.y - pongPlayer1Paddle.y) / pongPlayer1Paddle.height;
+          const angle = ((hitPos - 0.5) * Math.PI) / 3;
+          pongBall.dx = Math.cos(angle) * pongBallSpeed;
+          pongBall.dy = Math.sin(angle) * pongBallSpeed;
+          pongBall.x = pongPlayer1Paddle.x + pongPlayer1Paddle.width + pongBall.radius;
+          // Track hits in single player mode
+          if (!pongTwoPlayerMode) {
+            pongHitCount++;
+            updateCurrentHitsDisplay();
+          }
+        }
+        if (
+          pongBall.x + pongBall.radius >= pongPlayer2Paddle.x &&
+          pongBall.y >= pongPlayer2Paddle.y &&
+          pongBall.y <= pongPlayer2Paddle.y + pongPlayer2Paddle.height &&
+          pongBall.dx > 0
+        ) {
+          const hitPos = (pongBall.y - pongPlayer2Paddle.y) / pongPlayer2Paddle.height;
+          const angle = ((hitPos - 0.5) * Math.PI) / 3;
+          pongBall.dx = -Math.cos(angle) * pongBallSpeed;
+          pongBall.dy = Math.sin(angle) * pongBallSpeed;
+          pongBall.x = pongPlayer2Paddle.x - pongBall.radius;
+        }
+        if (pongBall.x < 0) {
+          pongPlayer2Score++;
+          updatePongScore();
+          await checkPongGameOver();
+          if (pongGameState === "playing") {
+            await resetPongBall();
+          }
+        } else if (pongBall.x > pongCanvas.width) {
+          pongPlayer1Score++;
+          updatePongScore();
+          await checkPongGameOver();
+          if (pongGameState === "playing") {
+            await resetPongBall();
+          }
+        }
+      }
+
+      function drawPong() {
+        if (!pongCanvas || !pongCtx) return;
+        pongCtx.fillStyle = "#000";
+        pongCtx.fillRect(0, 0, pongCanvas.width, pongCanvas.height);
+        pongCtx.setLineDash([10, 10]);
+        pongCtx.strokeStyle = "#fff";
+        pongCtx.lineWidth = 2;
+        pongCtx.beginPath();
+        pongCtx.moveTo(pongCanvas.width / 2, 0);
+        pongCtx.lineTo(pongCanvas.width / 2, pongCanvas.height);
+        pongCtx.stroke();
+        pongCtx.setLineDash([]);
+        pongCtx.fillStyle = "#fff";
+        pongCtx.fillRect(
+          pongPlayer1Paddle.x,
+          pongPlayer1Paddle.y,
+          pongPlayer1Paddle.width,
+          pongPlayer1Paddle.height
+        );
+        pongCtx.fillRect(
+          pongPlayer2Paddle.x,
+          pongPlayer2Paddle.y,
+          pongPlayer2Paddle.width,
+          pongPlayer2Paddle.height
+        );
+        pongCtx.beginPath();
+        pongCtx.arc(pongBall.x, pongBall.y, pongBall.radius, 0, Math.PI * 2);
+        pongCtx.fillStyle = "#fff";
+        pongCtx.fill();
+        if (pongGameState === "paused") {
+          pongCtx.fillStyle = "rgba(0, 0, 0, 0.7)";
+          pongCtx.fillRect(0, 0, pongCanvas.width, pongCanvas.height);
+          pongCtx.fillStyle = "#fff";
+          pongCtx.font = "48px Arial";
+          pongCtx.textAlign = "center";
+          pongCtx.fillText("PAUSED", pongCanvas.width / 2, pongCanvas.height / 2);
+          pongCtx.font = "16px Arial";
+          pongCtx.fillText(
+            "Press SPACE to resume",
+            pongCanvas.width / 2,
+            pongCanvas.height / 2 + 40
+          );
+        }
+      }
+
+      function pongGameLoop() {
+        if (pongGameState === "playing") {
+          updatePongPlayer1Paddle();
+          updatePongPlayer2Paddle();
+          updatePongBall();
+          drawPong();
+          requestAnimationFrame(pongGameLoop);
+        } else if (pongGameState === "paused") {
+          drawPong();
+        }
+      }
+
+      // Speed slider functionality
+      const speedSlider = document.getElementById("speedSlider");
+      const speedValue = document.getElementById("speedValue");
+      if (speedSlider && speedValue) {
+        speedSlider.addEventListener("input", function () {
+          pongBallSpeed = parseFloat(this.value);
+          speedValue.textContent = pongBallSpeed;
+          if (pongGameState === "playing") {
+            const currentSpeed = Math.sqrt(pongBall.dx * pongBall.dx + pongBall.dy * pongBall.dy);
+            if (currentSpeed > 0) {
+              const angle = Math.atan2(pongBall.dy, pongBall.dx);
+              pongBall.dx = Math.cos(angle) * pongBallSpeed;
+              pongBall.dy = Math.sin(angle) * pongBallSpeed;
+            }
+          }
+        });
+      }
+
+      // Paddle speed slider functionality
+      const paddleSpeedSlider = document.getElementById("paddleSpeedSlider");
+      const paddleSpeedValue = document.getElementById("paddleSpeedValue");
+      if (paddleSpeedSlider && paddleSpeedValue) {
+        paddleSpeedSlider.addEventListener("input", function () {
+          pongPaddleSpeed = parseFloat(this.value);
+          paddleSpeedValue.textContent = pongPaddleSpeed;
+        });
+      }
+
+      // Firebase high score functions
+      async function loadPlayerHighScore() {
+        const username = getUsername();
+        if (!username) {
+          // Try to load from localStorage as fallback
+          const savedHighScore = localStorage.getItem('pongHighScore');
+          if (savedHighScore) {
+            pongPlayerHighScore = parseInt(savedHighScore) || 0;
+            updatePlayerHighScoreDisplay();
+          }
+          return;
+        }
+
+        // Try to load from localStorage first (faster)
+        const savedHighScore = localStorage.getItem(`pongHighScore_${username}`);
+        if (savedHighScore) {
+          pongPlayerHighScore = parseInt(savedHighScore) || 0;
+          updatePlayerHighScoreDisplay();
+        }
+
+        // Then load from Firebase to get the latest
+        if (!window.firestoreDb) {
+          return;
+        }
+
+        try {
+          const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+          const leaderboardRef = doc(window.firestoreDb, 'Leaderboard', username);
+          const currentDoc = await getDoc(leaderboardRef);
+          
+          if (currentDoc.exists()) {
+            const score = currentDoc.data().score || 0;
+            pongPlayerHighScore = score;
+            updatePlayerHighScoreDisplay();
+            // Save to localStorage for persistence
+            localStorage.setItem(`pongHighScore_${username}`, score.toString());
+          }
+        } catch (error) {
+          console.error('Error loading player high score:', error);
+        }
+      }
+
+      async function savePongHighScore(hits) {
+        if (!window.firestoreDb) {
+          console.error('❌ Firestore not initialized');
+          return false;
+        }
+
+        const username = getUsername();
+        if (!username) {
+          console.error('❌ No username found');
+          return false;
+        }
+
+        try {
+          const { setDoc, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+          
+          // Get current high score for this user
+          const leaderboardRef = doc(window.firestoreDb, 'Leaderboard', username);
+          
+          // Check if user already has a high score
+          const currentDoc = await getDoc(leaderboardRef);
+          
+          let shouldUpdate = false;
+          let currentScore = 0;
+          
+          if (!currentDoc.exists()) {
+            // No existing score, save this one
+            shouldUpdate = true;
+            console.log(`📝 No existing score for ${username}, saving ${hits} hits`);
+          } else {
+            currentScore = currentDoc.data().score || 0;
+            if (hits > currentScore) {
+              // New high score!
+              shouldUpdate = true;
+              console.log(`🎉 New high score! ${hits} > ${currentScore} for ${username}`);
+            } else {
+              console.log(`⏭️ Score ${hits} not higher than current Firebase score ${currentScore}, skipping save`);
+            }
+          }
+
+          if (shouldUpdate) {
+            // Always save/update the score field in Firebase when it's a new high score
+            // Using setDoc with merge: true ensures the score field gets updated
+            await setDoc(leaderboardRef, {
+              score: hits
+            }, { merge: true });
+            console.log(`✅ Successfully saved/updated score field in Firebase: ${hits} hits for ${username}`);
+            
+            // Verify the score was saved correctly by reading it back
+            const verifyDoc = await getDoc(leaderboardRef);
+            if (verifyDoc.exists()) {
+              const savedScore = verifyDoc.data().score;
+              console.log(`✅ Verified: Score field in Firebase is now ${savedScore} for ${username}`);
+              if (savedScore !== hits) {
+                console.warn(`⚠️ Warning: Saved score ${savedScore} doesn't match expected ${hits}`);
+              }
+            }
+            
+            // Save to localStorage for persistence
+            localStorage.setItem(`pongHighScore_${username}`, hits.toString());
+            
+            // Small delay to ensure Firebase has propagated the change
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
+            // Always reload leaderboard after saving to update the table
+            console.log('🔄 Reloading leaderboard table after save...');
+            try {
+              await loadPongLeaderboard();
+              console.log('✅ Leaderboard table updated after save!');
+            } catch (reloadError) {
+              console.error('❌ Error reloading leaderboard after save:', reloadError);
+              // Try again after a delay
+              setTimeout(async () => {
+                console.log('🔄 Retrying leaderboard reload...');
+                await loadPongLeaderboard();
+              }, 500);
+            }
+            return true;
+          }
+          return false;
+        } catch (error) {
+          console.error('❌ Error saving high score:', error);
+          // Try to reload leaderboard even if save failed
+          try {
+            await loadPongLeaderboard();
+          } catch (reloadError) {
+            console.error('❌ Error reloading leaderboard:', reloadError);
+          }
+          return false;
+        }
+      }
+
+      // Make loadPongLeaderboard globally accessible
+      window.loadPongLeaderboard = async function loadPongLeaderboard() {
+        console.log('🔄 loadPongLeaderboard() called');
+        
+        if (!window.firestoreDb) {
+          console.error('❌ Firestore not initialized for leaderboard');
+          // Retry after a delay if Firestore isn't ready
+          setTimeout(() => {
+            if (window.firestoreDb) {
+              loadPongLeaderboard();
+            }
+          }, 500);
+          return;
+        }
+
+        const loadingEl = document.getElementById("leaderboard-loading");
+        const tableEl = document.getElementById("leaderboard-table");
+        const tbodyEl = document.getElementById("leaderboard-body");
+
+        if (!loadingEl) {
+          console.error('❌ leaderboard-loading element not found');
+          return;
+        }
+        if (!tableEl) {
+          console.error('❌ leaderboard-table element not found');
+          return;
+        }
+        if (!tbodyEl) {
+          console.error('❌ leaderboard-body element not found');
+          return;
+        }
+
+        try {
+          console.log('📊 Starting to load leaderboard...');
+          loadingEl.style.display = "block";
+          loadingEl.textContent = "Loading leaderboard...";
+          tableEl.style.display = "none";
+
+          const { getDocs, collection, query, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+          const leaderboardRef = collection(window.firestoreDb, 'Leaderboard');
+          
+          console.log('📊 Querying Leaderboard collection...');
+          // Query top 5 scores ordered by score descending
+          const q = query(leaderboardRef, orderBy('score', 'desc'), limit(5));
+          const querySnapshot = await getDocs(q);
+
+          console.log(`📊 Loaded ${querySnapshot.size} scores from leaderboard`);
+
+          // Clear existing rows
+          tbodyEl.innerHTML = "";
+
+          if (querySnapshot.empty) {
+            console.log('📊 Leaderboard is empty - no scores found');
+            tbodyEl.innerHTML = "<tr><td colspan='3' style='text-align: center; color: rgba(255,255,255,0.7);'>No high scores yet!</td></tr>";
+            loadingEl.style.display = "none";
+            tableEl.style.display = "table";
+          } else {
+            let rank = 1;
+            const scores = [];
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              const score = data.score || 0;
+              scores.push({ name: doc.id, score: score });
+              console.log(`📊 Rank ${rank}: ${doc.id} - ${score} hits`);
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td class="rank">${rank}</td>
+                <td class="name">${doc.id}</td>
+                <td class="hits">${score}</td>
+              `;
+              tbodyEl.appendChild(row);
+              rank++;
+            });
+            
+            console.log(`✅ Added ${scores.length} rows to leaderboard table`);
+            
+            // Hide loading and show table
+            loadingEl.style.display = "none";
+            tableEl.style.display = "table";
+            console.log('✅ Leaderboard table displayed with', scores.length, 'scores');
+          }
+        } catch (error) {
+          console.error('❌ Error loading leaderboard:', error);
+          console.error('Error details:', error.message, error.stack);
+          
+          if (loadingEl) {
+            loadingEl.textContent = `Error loading leaderboard: ${error.message}`;
+            loadingEl.style.display = "block";
+          }
+          if (tableEl) {
+            tableEl.style.display = "none";
+          }
+          
+          // Try to reload after a delay
+          setTimeout(() => {
+            console.log('🔄 Retrying leaderboard load...');
+            loadPongLeaderboard();
+          }, 2000);
+        }
+      }
+
+      // Initialize user's leaderboard entry with score 0 if they don't exist
+      async function initializeUserLeaderboardEntry() {
+        if (!window.firestoreDb) {
+          console.error('❌ Firestore not initialized');
+          return;
+        }
+
+        const username = getUsername();
+        if (!username) {
+          console.error('❌ No username found');
+          return;
+        }
+
+        try {
+          const { setDoc, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+          const leaderboardRef = doc(window.firestoreDb, 'Leaderboard', username);
+          
+          // Check if user already has an entry
+          const currentDoc = await getDoc(leaderboardRef);
+          
+          if (!currentDoc.exists()) {
+            // User doesn't exist in leaderboard, create entry with score 0
+            await setDoc(leaderboardRef, {
+              score: 0
+            });
+            console.log(`✅ Initialized leaderboard entry for ${username} with score 0`);
+            // Reload leaderboard to show the new entry
+            await loadPongLeaderboard();
+          } else {
+            console.log(`✅ User ${username} already exists in leaderboard with score ${currentDoc.data().score || 0}`);
+          }
+        } catch (error) {
+          console.error('❌ Error initializing user leaderboard entry:', error);
+        }
+      }
+
+      // ========== END PONG GAME CODE ==========
     </script>
   </body>
 </html>
+

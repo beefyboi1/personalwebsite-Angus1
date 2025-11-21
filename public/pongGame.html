@@ -274,9 +274,21 @@
     </div>
 
     <script>
-        // Canvas setup
+        // Canvas setup - optimize context creation
         const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { 
+            alpha: false, // Disable alpha for better performance
+            desynchronized: true // Allow async rendering
+        });
+
+        // Cache canvas dimensions
+        const CANVAS_WIDTH = canvas.width;
+        const CANVAS_HEIGHT = canvas.height;
+        const CANVAS_HALF_WIDTH = CANVAS_WIDTH / 2;
+        const CANVAS_HALF_HEIGHT = CANVAS_HEIGHT / 2;
+
+        // Performance optimization: cache context properties
+        ctx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
 
         // Game state
         let gameState = "start"; // 'start', 'playing', 'paused', 'gameOver'
@@ -287,14 +299,21 @@
         let twoPlayerMode = false;
         let hardMode = false;
 
+        // Frame timing for delta time calculation
+        let lastFrameTime = performance.now();
+        let deltaTime = 1.0; // Start at 1.0 (normalized to 60fps)
+
         // Paddle properties
         const paddleWidth = 15;
         const paddleHeight = 80;
 
+        // Cache paddle half height
+        const PADDLE_HALF_HEIGHT = paddleHeight / 2;
+
         // Player 1 paddle (left side)
         let player1Paddle = {
             x: 20,
-            y: canvas.height / 2 - paddleHeight / 2,
+            y: CANVAS_HALF_HEIGHT - PADDLE_HALF_HEIGHT,
             width: paddleWidth,
             height: paddleHeight,
             velocity: 0,
@@ -304,8 +323,8 @@
 
         // Player 2 paddle (right side - AI controlled)
         let player2Paddle = {
-            x: canvas.width - 35,
-            y: canvas.height / 2 - paddleHeight / 2,
+            x: CANVAS_WIDTH - 35,
+            y: CANVAS_HALF_HEIGHT - PADDLE_HALF_HEIGHT,
             width: paddleWidth,
             height: paddleHeight,
             velocity: 0,
@@ -315,12 +334,24 @@
 
         // Ball properties
         let ball = {
-            x: canvas.width / 2,
-            y: canvas.height / 2,
+            x: CANVAS_HALF_WIDTH,
+            y: CANVAS_HALF_HEIGHT,
             radius: 8,
             dx: 5,
             dy: 5,
         };
+
+        // Cache DOM elements to avoid repeated queries
+        const player1ScoreEl = document.getElementById("player1Score");
+        const player2ScoreEl = document.getElementById("player2Score");
+        const startScreenEl = document.getElementById("startScreen");
+        const gameOverEl = document.getElementById("gameOver");
+        const gameOverTextEl = document.getElementById("gameOverText");
+        const winnerTextEl = document.getElementById("winnerText");
+        
+        // Throttle DOM updates (only update score every N frames)
+        let scoreUpdateCounter = 0;
+        const SCORE_UPDATE_INTERVAL = 1; // Update every frame is fine, but we'll batch if needed
 
         // Input handling
         const keys = {};
@@ -362,9 +393,10 @@
         // Game functions
         function startGame() {
             gameState = "playing";
-            document.getElementById("startScreen").style.display = "none";
-            document.getElementById("gameOver").style.display = "none";
+            startScreenEl.style.display = "none";
+            gameOverEl.style.display = "none";
             resetBall();
+            lastFrameTime = performance.now(); // Reset frame timing
             gameLoop();
         }
 
@@ -385,8 +417,8 @@
         }
 
         function resetBall() {
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height / 2;
+            ball.x = CANVAS_HALF_WIDTH;
+            ball.y = CANVAS_HALF_HEIGHT;
             // Start ball immediately at full speed with random direction
             const direction = Math.random() > 0.5 ? 1 : -1;
             const angle = (Math.random() - 0.5) * Math.PI / 3; // Random angle between -60 and 60 degrees
@@ -395,25 +427,28 @@
         }
 
         function updateScore() {
-            document.getElementById("player1Score").textContent = player1Score;
-            document.getElementById("player2Score").textContent = player2Score;
+            // Use cached DOM elements and batch updates
+            player1ScoreEl.textContent = player1Score;
+            player2ScoreEl.textContent = player2Score;
         }
 
         function checkGameOver() {
             if (player1Score >= 5 || player2Score >= 5) {
                 gameState = "gameOver";
-                document.getElementById("gameOver").style.display = "block";
-                document.getElementById("gameOverText").textContent = "Game Over!";
-                document.getElementById("winnerText").textContent =
-                    player1Score >= 5 ? "You Win!" : "Computer Wins!";
+                gameOverEl.style.display = "block";
+                gameOverTextEl.textContent = "Game Over!";
+                winnerTextEl.textContent = player1Score >= 5 ? "You Win!" : "Computer Wins!";
             }
         }
 
         function updatePlayer1Paddle() {
+            // Cache paddle bottom for collision detection
+            const paddleBottom = player1Paddle.y + paddleHeight;
+            
             if (hardMode) {
                 // Ice physics - control acceleration, not direct movement
                 // Acceleration scales with paddle speed setting
-                const acceleration = player1Paddle.acceleration * (paddleSpeed / 6);
+                const acceleration = player1Paddle.acceleration * (paddleSpeed / 6) * deltaTime;
                 if (keys["w"]) {
                     player1Paddle.velocity -= acceleration;
                 }
@@ -422,46 +457,51 @@
                 }
 
                 // Apply friction (ice sliding effect) - this happens regardless of key presses
-                player1Paddle.velocity *= player1Paddle.friction;
+                player1Paddle.velocity *= Math.pow(player1Paddle.friction, deltaTime);
 
                 // Update position based on velocity - this happens regardless of key presses
-                player1Paddle.y += player1Paddle.velocity;
+                player1Paddle.y += player1Paddle.velocity * deltaTime;
 
                 // Keep paddle on screen with bounce effect
                 if (player1Paddle.y < 0) {
                     player1Paddle.y = 0;
                     player1Paddle.velocity *= -0.5; // Bounce with energy loss
                 }
-                if (player1Paddle.y + player1Paddle.height > canvas.height) {
-                    player1Paddle.y = canvas.height - player1Paddle.height;
+                if (paddleBottom > CANVAS_HEIGHT) {
+                    player1Paddle.y = CANVAS_HEIGHT - paddleHeight;
                     player1Paddle.velocity *= -0.5; // Bounce with energy loss
                 }
             } else {
-                // Normal mode - direct movement
+                // Normal mode - direct movement with delta time
+                const moveSpeed = paddleSpeed * deltaTime;
                 if (keys["w"]) {
-                    player1Paddle.y -= paddleSpeed;
+                    player1Paddle.y -= moveSpeed;
                 }
                 if (keys["s"]) {
-                    player1Paddle.y += paddleSpeed;
+                    player1Paddle.y += moveSpeed;
                 }
 
                 // Keep paddle on screen
                 if (player1Paddle.y < 0) {
                     player1Paddle.y = 0;
                 }
-                if (player1Paddle.y + player1Paddle.height > canvas.height) {
-                    player1Paddle.y = canvas.height - player1Paddle.height;
+                if (paddleBottom > CANVAS_HEIGHT) {
+                    player1Paddle.y = CANVAS_HEIGHT - paddleHeight;
                 }
             }
         }
 
         function updatePlayer2Paddle() {
+            // Cache paddle bottom and center for collision detection
+            const paddleBottom = player2Paddle.y + paddleHeight;
+            const paddleCenter = player2Paddle.y + PADDLE_HALF_HEIGHT;
+            
             if (twoPlayerMode) {
                 // Two player mode - human controls Player 2 with arrow keys
                 if (hardMode) {
                     // Ice physics for two-player mode
                     // Acceleration scales with paddle speed setting
-                    const acceleration = player2Paddle.acceleration * (paddleSpeed / 6);
+                    const acceleration = player2Paddle.acceleration * (paddleSpeed / 6) * deltaTime;
                     if (keys["arrowup"]) {
                         player2Paddle.velocity -= acceleration;
                     }
@@ -470,120 +510,123 @@
                     }
 
                     // Apply friction (ice sliding effect)
-                    player2Paddle.velocity *= player2Paddle.friction;
+                    player2Paddle.velocity *= Math.pow(player2Paddle.friction, deltaTime);
 
                     // Update position based on velocity
-                    player2Paddle.y += player2Paddle.velocity;
+                    player2Paddle.y += player2Paddle.velocity * deltaTime;
 
                     // Keep paddle on screen with bounce effect
                     if (player2Paddle.y < 0) {
                         player2Paddle.y = 0;
                         player2Paddle.velocity *= -0.5;
                     }
-                    if (player2Paddle.y + player2Paddle.height > canvas.height) {
-                        player2Paddle.y = canvas.height - player2Paddle.height;
+                    if (paddleBottom > CANVAS_HEIGHT) {
+                        player2Paddle.y = CANVAS_HEIGHT - paddleHeight;
                         player2Paddle.velocity *= -0.5;
                     }
                 } else {
-                    // Normal two-player mode
+                    // Normal two-player mode with delta time
+                    const moveSpeed = paddleSpeed * deltaTime;
                     if (keys["arrowup"]) {
-                        player2Paddle.y -= paddleSpeed;
+                        player2Paddle.y -= moveSpeed;
                     }
                     if (keys["arrowdown"]) {
-                        player2Paddle.y += paddleSpeed;
+                        player2Paddle.y += moveSpeed;
                     }
 
                     // Keep paddle on screen
                     if (player2Paddle.y < 0) {
                         player2Paddle.y = 0;
                     }
-                    if (player2Paddle.y + player2Paddle.height > canvas.height) {
-                        player2Paddle.y = canvas.height - player2Paddle.height;
+                    if (paddleBottom > CANVAS_HEIGHT) {
+                        player2Paddle.y = CANVAS_HEIGHT - paddleHeight;
                     }
                 }
             } else {
                 // AI mode - computer controls Player 2
+                const ballY = ball.y;
+                const threshold = 10;
+
                 if (hardMode) {
                     // AI with ice physics
                     // Acceleration scales with paddle speed setting
-                    const acceleration = player2Paddle.acceleration * (paddleSpeed / 6) * 0.8;
-                    const paddleCenter = player2Paddle.y + player2Paddle.height / 2;
-                    const ballY = ball.y;
+                    const acceleration = player2Paddle.acceleration * (paddleSpeed / 6) * 0.8 * deltaTime;
 
-                    if (ballY < paddleCenter - 10) {
+                    if (ballY < paddleCenter - threshold) {
                         player2Paddle.velocity -= acceleration;
-                    } else if (ballY > paddleCenter + 10) {
+                    } else if (ballY > paddleCenter + threshold) {
                         player2Paddle.velocity += acceleration;
                     }
 
                     // Apply friction (ice sliding effect)
-                    player2Paddle.velocity *= player2Paddle.friction;
+                    player2Paddle.velocity *= Math.pow(player2Paddle.friction, deltaTime);
 
                     // Update position based on velocity
-                    player2Paddle.y += player2Paddle.velocity;
+                    player2Paddle.y += player2Paddle.velocity * deltaTime;
 
                     // Keep paddle on screen with bounce effect
                     if (player2Paddle.y < 0) {
                         player2Paddle.y = 0;
                         player2Paddle.velocity *= -0.5;
                     }
-                    if (player2Paddle.y + player2Paddle.height > canvas.height) {
-                        player2Paddle.y = canvas.height - player2Paddle.height;
+                    if (paddleBottom > CANVAS_HEIGHT) {
+                        player2Paddle.y = CANVAS_HEIGHT - paddleHeight;
                         player2Paddle.velocity *= -0.5;
                     }
                 } else {
-                    // Normal AI mode
-                    const paddleCenter = player2Paddle.y + player2Paddle.height / 2;
-                    const ballY = ball.y;
+                    // Normal AI mode with delta time
+                    const moveSpeed = paddleSpeed * 0.85 * deltaTime;
 
                     // AI follows the ball (slightly slower than player for fairness)
-                    if (ballY < paddleCenter - 10) {
-                        player2Paddle.y -= paddleSpeed * 0.85;
-                    } else if (ballY > paddleCenter + 10) {
-                        player2Paddle.y += paddleSpeed * 0.85;
+                    if (ballY < paddleCenter - threshold) {
+                        player2Paddle.y -= moveSpeed;
+                    } else if (ballY > paddleCenter + threshold) {
+                        player2Paddle.y += moveSpeed;
                     }
 
                     // Keep paddle on screen
                     if (player2Paddle.y < 0) {
                         player2Paddle.y = 0;
                     }
-                    if (player2Paddle.y + player2Paddle.height > canvas.height) {
-                        player2Paddle.y = canvas.height - player2Paddle.height;
+                    if (paddleBottom > CANVAS_HEIGHT) {
+                        player2Paddle.y = CANVAS_HEIGHT - paddleHeight;
                     }
                 }
             }
         }
 
+        // Cache toggle button elements
+        const modeToggleButton = document.getElementById("modeToggle");
+        const controlsTextEl = document.querySelector(".controls");
+        const hardModeToggleButton = document.getElementById("hardModeToggle");
+
         function togglePlayerMode() {
             twoPlayerMode = !twoPlayerMode;
-            const button = document.getElementById("modeToggle");
-            const controlsText = document.querySelector(".controls");
 
             // Reset velocities when switching modes
             player1Paddle.velocity = 0;
             player2Paddle.velocity = 0;
 
             if (twoPlayerMode) {
-                button.textContent = "Mode: Two Player";
-                button.classList.add("two-player");
-                controlsText.textContent = "Player 1: W/S keys | Player 2: ↑/↓ arrows";
+                modeToggleButton.textContent = "Mode: Two Player";
+                modeToggleButton.classList.add("two-player");
+                controlsTextEl.textContent = "Player 1: W/S keys | Player 2: ↑/↓ arrows";
             } else {
-                button.textContent = "Mode: Single Player";
-                button.classList.remove("two-player");
-                controlsText.textContent = "Use W/S keys to move your paddle";
+                modeToggleButton.textContent = "Mode: Single Player";
+                modeToggleButton.classList.remove("two-player");
+                controlsTextEl.textContent = "Use W/S keys to move your paddle";
             }
         }
 
         function toggleHardMode() {
             hardMode = !hardMode;
-            const button = document.getElementById("hardModeToggle");
 
             if (hardMode) {
-                button.textContent = "Hard Mode: ON";
-                button.classList.add("active");
+                hardModeToggleButton.textContent = "Hard Mode: ON";
+                hardModeToggleButton.classList.add("active");
             } else {
-                button.textContent = "Hard Mode: OFF";
-                button.classList.remove("active");
+                hardModeToggleButton.textContent = "Hard Mode: OFF";
+                hardModeToggleButton.classList.remove("active");
                 // Reset velocities when turning off hard mode
                 player1Paddle.velocity = 0;
                 player2Paddle.velocity = 0;
@@ -591,50 +634,64 @@
         }
 
         function updateBall() {
-            ball.x += ball.dx;
-            ball.y += ball.dy;
+            // Use delta time for frame-independent movement
+            ball.x += ball.dx * deltaTime;
+            ball.y += ball.dy * deltaTime;
+
+            // Cache ball boundaries for collision detection
+            const ballTop = ball.y - ball.radius;
+            const ballBottom = ball.y + ball.radius;
+            const ballLeft = ball.x - ball.radius;
+            const ballRight = ball.x + ball.radius;
 
             // Ball collision with top and bottom walls
-            if (
-                ball.y - ball.radius <= 0 ||
-                ball.y + ball.radius >= canvas.height
-            ) {
+            if (ballTop <= 0) {
+                ball.y = ball.radius;
+                ball.dy = -ball.dy;
+            } else if (ballBottom >= CANVAS_HEIGHT) {
+                ball.y = CANVAS_HEIGHT - ball.radius;
                 ball.dy = -ball.dy;
             }
 
-            // Ball collision with paddles
+            // Cache paddle boundaries for collision detection
+            const p1Right = player1Paddle.x + paddleWidth;
+            const p1Top = player1Paddle.y;
+            const p1Bottom = player1Paddle.y + paddleHeight;
+            const p2Left = player2Paddle.x;
+            const p2Top = player2Paddle.y;
+            const p2Bottom = player2Paddle.y + paddleHeight;
+
+            // Ball collision with paddles (optimized collision detection)
             // Player 1 paddle collision
-            if (
-                ball.x - ball.radius <= player1Paddle.x + player1Paddle.width &&
-                ball.y >= player1Paddle.y &&
-                ball.y <= player1Paddle.y + player1Paddle.height &&
-                ball.dx < 0
-            ) {
+            if (ballLeft <= p1Right && ball.y >= p1Top && ball.y <= p1Bottom && ball.dx < 0) {
                 // Calculate hit position for angle adjustment
-                const hitPos = (ball.y - player1Paddle.y) / player1Paddle.height;
+                const hitPos = (ball.y - p1Top) / paddleHeight;
                 const angle = ((hitPos - 0.5) * Math.PI) / 3; // Max 60 degrees
 
+                // Cache cos/sin calculations
+                const cosAngle = Math.cos(angle);
+                const sinAngle = Math.sin(angle);
+
                 // Set ball velocity based on hit position and current ball speed
-                ball.dx = Math.cos(angle) * ballSpeed;
-                ball.dy = Math.sin(angle) * ballSpeed;
-                ball.x = player1Paddle.x + player1Paddle.width + ball.radius;
+                ball.dx = cosAngle * ballSpeed;
+                ball.dy = sinAngle * ballSpeed;
+                ball.x = p1Right + ball.radius;
             }
 
             // Player 2 (AI) paddle collision
-            if (
-                ball.x + ball.radius >= player2Paddle.x &&
-                ball.y >= player2Paddle.y &&
-                ball.y <= player2Paddle.y + player2Paddle.height &&
-                ball.dx > 0
-            ) {
+            if (ballRight >= p2Left && ball.y >= p2Top && ball.y <= p2Bottom && ball.dx > 0) {
                 // Calculate hit position for angle adjustment
-                const hitPos = (ball.y - player2Paddle.y) / player2Paddle.height;
+                const hitPos = (ball.y - p2Top) / paddleHeight;
                 const angle = ((hitPos - 0.5) * Math.PI) / 3; // Max 60 degrees
 
+                // Cache cos/sin calculations
+                const cosAngle = Math.cos(angle);
+                const sinAngle = Math.sin(angle);
+
                 // Set ball velocity based on hit position and current ball speed
-                ball.dx = -Math.cos(angle) * ballSpeed;
-                ball.dy = Math.sin(angle) * ballSpeed;
-                ball.x = player2Paddle.x - ball.radius;
+                ball.dx = -cosAngle * ballSpeed;
+                ball.dy = sinAngle * ballSpeed;
+                ball.x = p2Left - ball.radius;
             }
 
             // Ball out of bounds - scoring
@@ -645,7 +702,7 @@
                 if (gameState === "playing") {
                     resetBall();
                 }
-            } else if (ball.x > canvas.width) {
+            } else if (ball.x > CANVAS_WIDTH) {
                 player1Score++;
                 updateScore();
                 checkGameOver();
@@ -655,61 +712,69 @@
             }
         }
 
-        function draw() {
-            // Clear canvas
-            ctx.fillStyle = "#000";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Cache drawing properties
+        const CENTER_LINE_DASH = [10, 10];
+        const TWO_PI = Math.PI * 2;
 
-            // Draw center line
-            ctx.setLineDash([10, 10]);
+        function draw() {
+            // Clear canvas - use clearRect for better performance
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            // Draw center line (only if needed - could be optimized further)
+            ctx.setLineDash(CENTER_LINE_DASH);
             ctx.strokeStyle = "#fff";
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2, 0);
-            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.moveTo(CANVAS_HALF_WIDTH, 0);
+            ctx.lineTo(CANVAS_HALF_WIDTH, CANVAS_HEIGHT);
             ctx.stroke();
-            ctx.setLineDash([]);
+            ctx.setLineDash([]); // Reset dash
 
-            // Draw paddles
+            // Draw paddles - batch fill operations
             ctx.fillStyle = "#fff";
             ctx.fillRect(
                 player1Paddle.x,
                 player1Paddle.y,
-                player1Paddle.width,
-                player1Paddle.height
+                paddleWidth,
+                paddleHeight
             );
             ctx.fillRect(
                 player2Paddle.x,
                 player2Paddle.y,
-                player2Paddle.width,
-                player2Paddle.height
+                paddleWidth,
+                paddleHeight
             );
 
             // Draw ball
             ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-            ctx.fillStyle = "#fff";
+            ctx.arc(ball.x, ball.y, ball.radius, 0, TWO_PI);
             ctx.fill();
 
             // Draw pause overlay
             if (gameState === "paused") {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
                 ctx.fillStyle = "#fff";
                 ctx.font = "48px Arial";
                 ctx.textAlign = "center";
-                ctx.fillText("PAUSED", canvas.width / 2, canvas.height / 2);
+                ctx.fillText("PAUSED", CANVAS_HALF_WIDTH, CANVAS_HALF_HEIGHT);
                 ctx.font = "16px Arial";
                 ctx.fillText(
                     "Press SPACE to resume",
-                    canvas.width / 2,
-                    canvas.height / 2 + 40
+                    CANVAS_HALF_WIDTH,
+                    CANVAS_HALF_HEIGHT + 40
                 );
             }
         }
 
-        function gameLoop() {
+        function gameLoop(currentTime) {
+            // Calculate delta time (normalized to 60fps for consistent movement)
+            // At 60fps, each frame takes ~16.67ms, so normalize to that
+            const frameTime = currentTime - lastFrameTime;
+            deltaTime = Math.min(Math.max(frameTime / 16.67, 0), 2.0); // Cap between 0 and 2x normal speed
+            lastFrameTime = currentTime;
+
             if (gameState === "playing") {
                 updatePlayer1Paddle();
                 updatePlayer2Paddle();
@@ -718,6 +783,8 @@
                 requestAnimationFrame(gameLoop);
             } else if (gameState === "paused") {
                 draw();
+                // Still update frame time even when paused to avoid jumps
+                lastFrameTime = currentTime;
             }
         }
 
@@ -730,13 +797,15 @@
                 ballSpeed = parseFloat(this.value);
                 speedValue.textContent = ballSpeed;
 
-                // Update ball speed if game is running
+                // Update ball speed if game is running (optimized calculation)
                 if (gameState === "playing") {
                     const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
-                    if (currentSpeed > 0) {
+                    if (currentSpeed > 0.001) { // Avoid division by zero
                         const angle = Math.atan2(ball.dy, ball.dx);
-                        ball.dx = Math.cos(angle) * ballSpeed;
-                        ball.dy = Math.sin(angle) * ballSpeed;
+                        const cosAngle = Math.cos(angle);
+                        const sinAngle = Math.sin(angle);
+                        ball.dx = cosAngle * ballSpeed;
+                        ball.dy = sinAngle * ballSpeed;
                     }
                 }
             });

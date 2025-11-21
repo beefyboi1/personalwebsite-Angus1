@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Epic Plane - 3D Flight</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background: #000;
+      }
+
+      #gameContainer {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+      }
+
+      #ui {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: white;
+        z-index: 100;
+        font-size: 24px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        font-weight: bold;
+      }
+
+      #ui div {
+        margin-bottom: 10px;
+      }
+
+      .start-screen,
+      .game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.95);
+        padding: 40px;
+        border-radius: 15px;
+        text-align: center;
+        color: white;
+        z-index: 200;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        min-width: 400px;
+      }
+
+      .game-over {
+        display: none;
+      }
+
+      button {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .instructions {
+        margin-top: 15px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gameContainer"></div>
+
+    <div id="ui">
+      <div>Distance: <span id="distance">0</span>m</div>
+      <div>High Score: <span id="highScore">0</span>m</div>
+      <div>Speed: <span id="speed">0</span> km/h</div>
+    </div>
+
+    <div class="start-screen" id="startScreen">
+      <h2>Epic Plane</h2>
+      <div class="instructions">
+        <p>Fly through the 3D world!</p>
+        <p><strong>Controls:</strong></p>
+        <p>W/S: Pitch (nose up/down)</p>
+        <p>A/D: Yaw (turn left/right)</p>
+        <p>Avoid obstacles and walls!</p>
+      </div>
+      <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <div class="game-over" id="gameOver">
+      <h2>Game Over!</h2>
+      <p>Distance: <span id="finalDistance">0</span>m</p>
+      <p
+        id="newRecord"
+        style="display: none; color: #ffd700; font-weight: bold"
+      >
+        New High Score! 🎉
+      </p>
+      <button onclick="restartGame()">Play Again</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      // Cookie functions (define first)
+      function setCookie(name, value, days) {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+      }
+
+      function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(";");
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) === " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) === 0)
+            return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+
+      function getHighScore() {
+        const score = getCookie("planeGameHighScore");
+        return score ? parseInt(score) : 0;
+      }
+
+      // Game state
+      let gameState = "start";
+      let keys = {};
+      let distance = 0;
+      let highScore = getHighScore();
+
+      // Three.js setup
+      let scene, camera, renderer;
+      let plane, planeGroup;
+      let obstacles = [];
+      let particles = [];
+      let world;
+
+      // Plane physics
+      let planeVelocity = new THREE.Vector3(0, 0, -8);
+      let planeRotation = { pitch: 0, yaw: 0 };
+      const maxSpeed = 12;
+      const controlSensitivity = 0.02;
+      const gravity = 0.15;
+      const airResistance = 0.98;
+
+      function setHighScore(score) {
+        if (score > highScore) {
+          highScore = score;
+          setCookie("planeGameHighScore", score, 365);
+          document.getElementById("highScore").textContent = score;
+          return true;
+        }
+        return false;
+      }
+
+      // Initialize UI after DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+          document.getElementById("highScore").textContent = highScore;
+        });
+      } else {
+        document.getElementById("highScore").textContent = highScore;
+      }
+
+      // Initialize Three.js scene
+      function initScene() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87ceeb);
+        scene.fog = new THREE.Fog(0x87ceeb, 100, 1000);
+
+        // Camera (third-person view)
+        camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          2000
+        );
+        camera.position.set(0, 5, 15);
+
+        // Renderer
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document
+          .getElementById("gameContainer")
+          .appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(50, 100, 50);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+
+        // Create plane
+        createPlane();
+
+        // Create world
+        createWorld();
+
+        // Handle window resize
+        window.addEventListener("resize", onWindowResize);
+      }
+
+      function createPlane() {
+        planeGroup = new THREE.Group();
+
+        // Plane body
+        const bodyGeometry = new THREE.ConeGeometry(0.5, 3, 8);
+        const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0xc0c0c0 });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        body.rotation.x = Math.PI / 2;
+        body.position.z = -1.5;
+        planeGroup.add(body);
+
+        // Wings
+        const wingGeometry = new THREE.BoxGeometry(4, 0.2, 1);
+        const wingMaterial = new THREE.MeshPhongMaterial({ color: 0x808080 });
+        const wings = new THREE.Mesh(wingGeometry, wingMaterial);
+        wings.position.y = 0;
+        planeGroup.add(wings);
+
+        // Tail
+        const tailGeometry = new THREE.BoxGeometry(0.3, 1.5, 0.8);
+        const tailMaterial = new THREE.MeshPhongMaterial({ color: 0x606060 });
+        const tail = new THREE.Mesh(tailGeometry, tailMaterial);
+        tail.position.set(0, 0, 1.5);
+        planeGroup.add(tail);
+
+        // Propeller
+        const propGeometry = new THREE.BoxGeometry(0.1, 2, 0.1);
+        const propMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+        const propeller = new THREE.Mesh(propGeometry, propMaterial);
+        propeller.position.set(0, 0, -2);
+        planeGroup.add(propeller);
+
+        planeGroup.position.set(0, 20, 0);
+        scene.add(planeGroup);
+        plane = planeGroup;
+      }
+
+      function createWorld() {
+        // Ground
+        const groundGeometry = new THREE.PlaneGeometry(2000, 2000);
+        const groundMaterial = new THREE.MeshStandardMaterial({
+          color: 0x90ee90,
+          roughness: 0.8,
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = 0;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Sky gradient (using multiple planes)
+        for (let i = 0; i < 5; i++) {
+          const skyGeometry = new THREE.PlaneGeometry(2000, 2000);
+          const skyMaterial = new THREE.MeshBasicMaterial({
+            color: new THREE.Color().lerpColors(
+              new THREE.Color(0x87ceeb),
+              new THREE.Color(0x4682b4),
+              i / 4
+            ),
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.3,
+          });
+          const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+          sky.rotation.x = Math.PI / 2;
+          sky.position.y = 200 + i * 100;
+          scene.add(sky);
+        }
+
+        // Initial obstacles
+        generateObstacles();
+      }
+
+      function generateObstacles() {
+        // Create continuous solid walls with gaps
+        const wallWidth = 5;
+        const wallDepth = 2000;
+        const gapSize = 20;
+        const gapY = 10 + Math.random() * 10; // Gap center position
+
+        const wallMaterial = new THREE.MeshPhongMaterial({ color: 0x8b4513 });
+
+        // Left wall - bottom section (solid rectangular prism)
+        const bottomHeight = gapY - gapSize / 2;
+        if (bottomHeight > 0) {
+          const leftWallBottomGeometry = new THREE.BoxGeometry(
+            wallWidth,
+            bottomHeight,
+            wallDepth
+          );
+          const leftWallBottom = new THREE.Mesh(
+            leftWallBottomGeometry,
+            wallMaterial
+          );
+          leftWallBottom.position.set(-20, bottomHeight / 2, -1000);
+          leftWallBottom.castShadow = true;
+          scene.add(leftWallBottom);
+          obstacles.push(leftWallBottom);
+        }
+
+        // Left wall - top section (solid rectangular prism)
+        const topHeight = 50 - (gapY + gapSize / 2);
+        if (topHeight > 0) {
+          const leftWallTopGeometry = new THREE.BoxGeometry(
+            wallWidth,
+            topHeight,
+            wallDepth
+          );
+          const leftWallTop = new THREE.Mesh(leftWallTopGeometry, wallMaterial);
+          leftWallTop.position.set(
+            -20,
+            gapY + gapSize / 2 + topHeight / 2,
+            -1000
+          );
+          leftWallTop.castShadow = true;
+          scene.add(leftWallTop);
+          obstacles.push(leftWallTop);
+        }
+
+        // Right wall - bottom section (solid rectangular prism)
+        if (bottomHeight > 0) {
+          const rightWallBottomGeometry = new THREE.BoxGeometry(
+            wallWidth,
+            bottomHeight,
+            wallDepth
+          );
+          const rightWallBottom = new THREE.Mesh(
+            rightWallBottomGeometry,
+            wallMaterial
+          );
+          rightWallBottom.position.set(20, bottomHeight / 2, -1000);
+          rightWallBottom.castShadow = true;
+          scene.add(rightWallBottom);
+          obstacles.push(rightWallBottom);
+        }
+
+        // Right wall - top section (solid rectangular prism)
+        if (topHeight > 0) {
+          const rightWallTopGeometry = new THREE.BoxGeometry(
+            wallWidth,
+            topHeight,
+            wallDepth
+          );
+          const rightWallTop = new THREE.Mesh(
+            rightWallTopGeometry,
+            wallMaterial
+          );
+          rightWallTop.position.set(
+            20,
+            gapY + gapSize / 2 + topHeight / 2,
+            -1000
+          );
+          rightWallTop.castShadow = true;
+          scene.add(rightWallTop);
+          obstacles.push(rightWallTop);
+        }
+
+        // Create obstacle segments with gaps
+        for (let z = -100; z > -2000; z -= 50) {
+          createObstacleSegment(z, gapY, gapSize, wallMaterial);
+        }
+      }
+
+      function createObstacleSegment(z, gapY, gapSize, wallMaterial) {
+        const wallWidth = 5;
+        const wallDepth = 10;
+        const segmentHeight = 5;
+
+        // Top obstacle segment
+        if (Math.random() > 0.4) {
+          const topObstacleGeometry = new THREE.BoxGeometry(
+            40 - wallWidth * 2,
+            segmentHeight,
+            wallDepth
+          );
+          const topObstacle = new THREE.Mesh(topObstacleGeometry, wallMaterial);
+          topObstacle.position.set(0, gapY + gapSize + segmentHeight / 2, z);
+          topObstacle.castShadow = true;
+          scene.add(topObstacle);
+          obstacles.push(topObstacle);
+        }
+
+        // Bottom obstacle segment
+        if (Math.random() > 0.4) {
+          const bottomObstacleGeometry = new THREE.BoxGeometry(
+            40 - wallWidth * 2,
+            segmentHeight,
+            wallDepth
+          );
+          const bottomObstacle = new THREE.Mesh(
+            bottomObstacleGeometry,
+            wallMaterial
+          );
+          bottomObstacle.position.set(0, gapY - gapSize - segmentHeight / 2, z);
+          bottomObstacle.castShadow = true;
+          scene.add(bottomObstacle);
+          obstacles.push(bottomObstacle);
+        }
+      }
+
+      function updatePlane() {
+        // Handle controls
+        if (keys["w"]) {
+          planeRotation.pitch -= controlSensitivity;
+        }
+        if (keys["s"]) {
+          planeRotation.pitch += controlSensitivity;
+        }
+        if (keys["a"]) {
+          planeRotation.yaw += controlSensitivity;
+        }
+        if (keys["d"]) {
+          planeRotation.yaw -= controlSensitivity;
+        }
+
+        // Limit pitch
+        planeRotation.pitch = Math.max(
+          -Math.PI / 3,
+          Math.min(Math.PI / 3, planeRotation.pitch)
+        );
+
+        // Real physics: gravity only affects vertical velocity
+        // When pitching up, forward velocity naturally decreases due to energy conversion
+        // (kinetic energy converts to potential energy)
+
+        const currentSpeed = planeVelocity.length();
+
+        // Calculate forward direction vector
+        const forward = new THREE.Vector3(
+          Math.sin(planeRotation.yaw) * Math.cos(planeRotation.pitch),
+          Math.sin(planeRotation.pitch),
+          -Math.cos(planeRotation.yaw) * Math.cos(planeRotation.pitch)
+        );
+
+        // When pitching up, energy is converted from forward motion to upward motion
+        // This naturally reduces forward speed without gravity directly affecting it
+        // The cosine of pitch represents how much forward velocity is maintained
+        const forwardEfficiency = Math.cos(planeRotation.pitch);
+
+        // Apply forward velocity based on pitch (energy conservation)
+        const forwardSpeed = currentSpeed * forwardEfficiency;
+
+        // Update velocity components based on rotation
+        planeVelocity.x = forward.x * forwardSpeed;
+        planeVelocity.y = forward.y * forwardSpeed;
+        planeVelocity.z = forward.z * forwardSpeed;
+
+        // Apply gravity ONLY to vertical velocity (real physics)
+        planeVelocity.y -= gravity;
+
+        // Apply air resistance (affects all components equally)
+        planeVelocity.multiplyScalar(airResistance);
+
+        // Limit speed
+        const newSpeed = planeVelocity.length();
+        if (newSpeed > maxSpeed) {
+          planeVelocity.normalize().multiplyScalar(maxSpeed);
+        }
+
+        // Update plane position
+        plane.position.add(planeVelocity.clone().multiplyScalar(0.1));
+
+        // Update plane rotation
+        plane.rotation.x = planeRotation.pitch;
+        plane.rotation.z = planeRotation.yaw * 0.5;
+        plane.rotation.y = planeRotation.yaw;
+
+        // Update camera (third-person follow - behind and above)
+        // Reuse forward vector for camera calculations
+        const forwardDir = forward.clone().normalize();
+
+        // Camera offset: behind and above the plane
+        const cameraDistance = 20;
+        const cameraHeight = 8;
+        const cameraOffset = new THREE.Vector3(
+          -forwardDir.x * cameraDistance,
+          cameraHeight,
+          -forwardDir.z * cameraDistance
+        );
+
+        const targetCameraPos = plane.position.clone().add(cameraOffset);
+        camera.position.lerp(targetCameraPos, 0.15);
+
+        // Look at a point slightly ahead of the plane
+        const lookAhead = forwardDir.clone().multiplyScalar(5);
+        const lookAtPoint = plane.position.clone().add(lookAhead);
+        camera.lookAt(lookAtPoint);
+
+        // Update distance
+        distance += Math.abs(planeVelocity.z) * 0.1;
+        document.getElementById("distance").textContent = Math.floor(distance);
+
+        // Update speed display
+        const speedKmh = Math.abs(planeVelocity.length()) * 3.6;
+        document.getElementById("speed").textContent = Math.floor(speedKmh);
+
+        // Check collisions
+        checkCollisions();
+
+        // Remove old obstacles and create new ones
+        updateObstacles();
+      }
+
+      function checkCollisions() {
+        const planeBox = new THREE.Box3().setFromObject(plane);
+
+        // Check side walls (solid walls at x = -20 and x = 20)
+        if (plane.position.x < -18 || plane.position.x > 18) {
+          crash();
+          return;
+        }
+
+        // Check ground/ceiling
+        if (plane.position.y < 1 || plane.position.y > 40) {
+          crash();
+          return;
+        }
+
+        // Check obstacles
+        for (let obstacle of obstacles) {
+          const obstacleBox = new THREE.Box3().setFromObject(obstacle);
+          if (planeBox.intersectsBox(obstacleBox)) {
+            crash();
+            return;
+          }
+        }
+      }
+
+      function updateObstacles() {
+        // Solid walls don't move - they're fixed in the world
+        // Only move obstacle segments toward camera
+        const wallMaterial =
+          obstacles.length > 0 ? obstacles[0].material : null;
+        const gapY = 10 + Math.random() * 10;
+        const gapSize = 20;
+
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+          const obstacle = obstacles[i];
+
+          // Skip solid walls (they have depth > 100, meaning they're the long walls)
+          const params = obstacle.geometry.parameters;
+          if (params.depth > 100) {
+            continue; // Don't move solid walls
+          }
+
+          // Move obstacle segments toward camera
+          obstacle.position.z += Math.abs(planeVelocity.z) * 0.1;
+
+          // Remove obstacles that are behind
+          if (obstacle.position.z > plane.position.z + 50) {
+            scene.remove(obstacle);
+            obstacles.splice(i, 1);
+          }
+        }
+
+        // Create new obstacle segments ahead
+        const segmentObstacles = obstacles.filter((obs) => {
+          const params = obs.geometry.parameters;
+          return params.depth <= 100; // Only segments, not solid walls
+        });
+
+        const farthestZ =
+          segmentObstacles.length > 0
+            ? Math.min(...segmentObstacles.map((o) => o.position.z))
+            : plane.position.z - 100;
+
+        if (farthestZ > plane.position.z - 200 && wallMaterial) {
+          createObstacleSegment(
+            plane.position.z - 200,
+            gapY,
+            gapSize,
+            wallMaterial
+          );
+        }
+      }
+
+      function createExplosion() {
+        const particleCount = 50;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const velocities = [];
+
+        for (let i = 0; i < particleCount; i++) {
+          const i3 = i * 3;
+          positions[i3] = plane.position.x;
+          positions[i3 + 1] = plane.position.y;
+          positions[i3 + 2] = plane.position.z;
+
+          velocities.push({
+            x: (Math.random() - 0.5) * 2,
+            y: (Math.random() - 0.5) * 2,
+            z: (Math.random() - 0.5) * 2,
+          });
+        }
+
+        geometry.setAttribute(
+          "position",
+          new THREE.BufferAttribute(positions, 3)
+        );
+
+        const material = new THREE.PointsMaterial({
+          color: 0xff6600,
+          size: 0.5,
+        });
+
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
+
+        // Animate particles
+        let frame = 0;
+        const animateParticles = () => {
+          if (frame++ > 60) {
+            scene.remove(particleSystem);
+            return;
+          }
+
+          const positions = particleSystem.geometry.attributes.position.array;
+          for (let i = 0; i < particleCount; i++) {
+            const i3 = i * 3;
+            positions[i3] += velocities[i].x;
+            positions[i3 + 1] += velocities[i].y;
+            positions[i3 + 2] += velocities[i].z;
+            velocities[i].y -= 0.1; // gravity
+          }
+          particleSystem.geometry.attributes.position.needsUpdate = true;
+          requestAnimationFrame(animateParticles);
+        };
+        animateParticles();
+      }
+
+      function crash() {
+        if (gameState !== "flying") return;
+
+        gameState = "crashed";
+        createExplosion();
+        plane.visible = false;
+
+        setTimeout(() => {
+          const newRecord = setHighScore(Math.floor(distance));
+          document.getElementById("finalDistance").textContent =
+            Math.floor(distance);
+          document.getElementById("newRecord").style.display = newRecord
+            ? "block"
+            : "none";
+          document.getElementById("gameOver").style.display = "block";
+        }, 1000);
+      }
+
+      function startGame() {
+        document.getElementById("startScreen").style.display = "none";
+        resetGame();
+        gameState = "flying";
+      }
+
+      function resetGame() {
+        // Reset plane
+        plane.position.set(0, 20, 0);
+        plane.rotation.set(0, 0, 0);
+        plane.visible = true;
+        planeVelocity.set(0, 0, -8);
+        planeRotation = { pitch: 0, yaw: 0 };
+
+        // Clear obstacles
+        obstacles.forEach((obs) => scene.remove(obs));
+        obstacles = [];
+
+        // Reset camera (behind and above)
+        camera.position.set(0, 15, 20);
+
+        // Reset distance
+        distance = 0;
+
+        // Generate new obstacles
+        generateObstacles();
+      }
+
+      function restartGame() {
+        document.getElementById("gameOver").style.display = "none";
+        document.getElementById("startScreen").style.display = "block";
+        resetGame();
+      }
+
+      // Input handling
+      document.addEventListener("keydown", (e) => {
+        keys[e.key.toLowerCase()] = true;
+      });
+
+      document.addEventListener("keyup", (e) => {
+        keys[e.key.toLowerCase()] = false;
+      });
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        if (gameState === "flying") {
+          updatePlane();
+        }
+
+        // Always render the scene
+        if (scene && camera && renderer) {
+          renderer.render(scene, camera);
+        }
+      }
+
+      // Initialize after page loads
+      window.addEventListener("load", () => {
+        try {
+          initScene();
+          animate();
+        } catch (error) {
+          console.error("Error initializing game:", error);
+          alert("Error loading game. Please refresh the page.");
+        }
+      });
+    </script>
+  </body>
+</html>

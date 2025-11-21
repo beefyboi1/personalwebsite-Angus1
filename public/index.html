@@ -287,7 +287,7 @@
         padding: 20px;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        max-width: 900px;
+        max-width: 1200px;
         margin: 0 auto;
       }
 
@@ -306,28 +306,54 @@
         color: #ffd93d;
       }
 
+      .pulley-interactive-container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 30px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+
       #pulleyCanvas {
         border: 3px solid #fff;
         border-radius: 10px;
         background: #fff;
         box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        margin: 20px 0;
+        flex-shrink: 0;
+      }
+
+      .pulley-controls-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 30px;
+        min-width: 250px;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
       }
 
       .pulley-control {
-        margin: 20px 0;
+        margin: 0;
         font-size: 18px;
         color: white;
-        text-align: center;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
       }
 
       .pulley-control label {
-        margin-right: 10px;
+        margin-right: 0;
+        margin-bottom: 5px;
+        font-weight: bold;
       }
 
       .pulley-control input[type="range"] {
-        width: 200px;
-        margin: 0 10px;
+        width: 100%;
+        margin: 0;
         accent-color: #ff6b6b;
       }
 
@@ -563,6 +589,41 @@
         box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
       }
 
+      .save-leaderboard-control {
+        margin-top: 15px;
+      }
+
+      .save-leaderboard-control button {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        border: 2px solid #3498db;
+        color: white;
+        padding: 12px 25px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        font-weight: 500;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .save-leaderboard-control button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+        background: linear-gradient(45deg, #2980b9, #3498db);
+      }
+
+      .save-leaderboard-control button:active {
+        transform: translateY(0);
+      }
+
+      .save-leaderboard-control button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
       /* Leaderboard Styles */
       .leaderboard {
         margin-top: 30px;
@@ -741,7 +802,7 @@
       }
 
       .neighborhood-marker::before {
-        content: '';
+        content: "";
         position: absolute;
         width: 0;
         height: 0;
@@ -752,7 +813,7 @@
       }
 
       .neighborhood-marker::after {
-        content: '';
+        content: "";
         position: absolute;
         top: -20px;
         left: 50%;
@@ -1206,9 +1267,7 @@
           </p>
 
           <h2>Projects</h2>
-          <p>
-            This website showcases some of my work and interests.
-          </p>
+          <p>This website showcases some of my work and interests.</p>
 
           <h2>Get in Touch</h2>
           <p>
@@ -1235,7 +1294,8 @@
           <div class="widget-item">
             <h2>Pong Game</h2>
             <p>
-              Classic Pong game with customizable speed, paddle controls, and multiple game modes.
+              Classic Pong game with customizable speed, paddle controls, and
+              multiple game modes.
             </p>
             <button onclick="showPage('pong')">Play Pong</button>
           </div>
@@ -1247,18 +1307,29 @@
     <div id="neighborhoods-page" class="page">
       <div class="neighborhoods-page">
         <h1>Neighborhoods</h1>
-        <button class="add-neighborhood-btn" onclick="openAddNeighborhoodModal()">
+        <button
+          class="add-neighborhood-btn"
+          onclick="openAddNeighborhoodModal()"
+        >
           + Add New Neighborhood
         </button>
         <div class="neighborhoods-map-container">
-          <img id="neighborhoods-map-image" src="LAMap.png" alt="Los Angeles County Map" />
+          <img
+            id="neighborhoods-map-image"
+            src="LAMap.png"
+            alt="Los Angeles County Map"
+          />
           <div id="neighborhoods-markers"></div>
         </div>
         <div class="neighborhoods-content">
           <div id="neighborhoods-loading" class="loading">
             Loading neighborhoods...
           </div>
-          <div id="neighborhoods-error" class="error" style="display: none;"></div>
+          <div
+            id="neighborhoods-error"
+            class="error"
+            style="display: none"
+          ></div>
           <div id="neighborhoods-grid" class="neighborhoods-grid"></div>
         </div>
       </div>
@@ -1269,21 +1340,41 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2>Add New Neighborhood</h2>
-          <button class="modal-close" onclick="closeAddNeighborhoodModal()">&times;</button>
+          <button class="modal-close" onclick="closeAddNeighborhoodModal()">
+            &times;
+          </button>
         </div>
         <form id="add-neighborhood-form">
           <div class="form-group">
             <label for="neighborhood-name">Neighborhood Name *</label>
-            <input type="text" id="neighborhood-name" required placeholder="e.g., Downtown LA" />
+            <input
+              type="text"
+              id="neighborhood-name"
+              required
+              placeholder="e.g., Downtown LA"
+            />
           </div>
           <div class="form-group">
             <label for="neighborhood-population">Population</label>
-            <input type="number" id="neighborhood-population" placeholder="e.g., 50000" />
+            <input
+              type="number"
+              id="neighborhood-population"
+              placeholder="e.g., 50000"
+            />
           </div>
           <div class="form-group">
             <label for="neighborhood-location">Location (Coordinates)</label>
-            <input type="text" id="neighborhood-location-lat" placeholder="Latitude (e.g., 34.0522)" />
-            <input type="text" id="neighborhood-location-lng" placeholder="Longitude (e.g., -118.2437)" style="margin-top: 10px;" />
+            <input
+              type="text"
+              id="neighborhood-location-lat"
+              placeholder="Latitude (e.g., 34.0522)"
+            />
+            <input
+              type="text"
+              id="neighborhood-location-lng"
+              placeholder="Longitude (e.g., -118.2437)"
+              style="margin-top: 10px"
+            />
             <small>Enter coordinates as numbers, or leave blank</small>
           </div>
           <div class="form-group">
@@ -1294,11 +1385,20 @@
           </div>
           <div class="form-group">
             <label for="neighborhood-whoLivesThere">Who Lives There</label>
-            <textarea id="neighborhood-whoLivesThere" placeholder="Describe who lives in this neighborhood"></textarea>
+            <textarea
+              id="neighborhood-whoLivesThere"
+              placeholder="Describe who lives in this neighborhood"
+            ></textarea>
           </div>
           <div class="form-error" id="form-error"></div>
           <div class="form-actions">
-            <button type="button" class="btn-cancel" onclick="closeAddNeighborhoodModal()">Cancel</button>
+            <button
+              type="button"
+              class="btn-cancel"
+              onclick="closeAddNeighborhoodModal()"
+            >
+              Cancel
+            </button>
             <button type="submit" class="btn-submit">Add Neighborhood</button>
           </div>
         </form>
@@ -1313,7 +1413,7 @@
           <div id="accessed-loading" class="loading">
             Loading accessed users...
           </div>
-          <div id="accessed-error" class="error" style="display: none;"></div>
+          <div id="accessed-error" class="error" style="display: none"></div>
           <div id="accessed-list" class="accessed-list"></div>
         </div>
       </div>
@@ -1326,17 +1426,23 @@
         <p>Please enter your name/username to continue:</p>
         <form id="username-form">
           <div class="username-input-group">
-            <input 
-              type="text" 
-              id="username-input" 
-              placeholder="Enter your name/username" 
-              required 
+            <input
+              type="text"
+              id="username-input"
+              placeholder="Enter your name/username"
+              required
               autofocus
               minlength="1"
             />
-            <div class="username-error" id="username-error">Please enter a valid name/username</div>
+            <div class="username-error" id="username-error">
+              Please enter a valid name/username
+            </div>
           </div>
-          <button type="submit" class="username-submit-btn" id="username-submit-btn">
+          <button
+            type="submit"
+            class="username-submit-btn"
+            id="username-submit-btn"
+          >
             Continue
           </button>
         </form>
@@ -1347,44 +1453,59 @@
     <div id="pulley-page" class="page">
       <div class="pulley-container">
         <h1>PulleySim (rope dreams come to life)</h1>
+        <div class="pulley-info" style="margin-bottom: 20px; line-height: 1.6">
+          <p style="font-size: 16px; max-width: 800px; margin: 0 auto">
+            Ropes and pulleys can be used to create a mechanical advantage that
+            makes it so it only requires a half, a third, or a quarter the
+            weight of an object to lift it depending on the amount of pulleys
+            used. This mechanical advantage does not come for free though
+            because if the mechanical advantage is 2:1 then it requires half the
+            force but you have to pull the rope twice as much for a 2:1
+            advantage, 3 times as much for a 3:1 advantage and so on.
+            <strong
+              >Play around with the mass of the weight below and also try to
+              drag the loose end of the rope to see what happens at different
+              mechanical advantages.</strong
+            >
+          </p>
+        </div>
         <div class="pulley-info">
           <strong>Mechanical Advantage:</strong>
           <span id="displayMA">1:1</span> | <strong>Mass:</strong>
           <span id="displayMass">1</span> kg | <strong>Force Required:</strong>
           <span id="displayForce">9.8</span> N
         </div>
-        <canvas id="pulleyCanvas" width="800" height="500"></canvas>
-        <div class="pulley-control">
-          <label for="massSlider">Mass:</label>
-          <input
-            type="range"
-            id="massSlider"
-            min="0.5"
-            max="5"
-            value="1"
-            step="0.1"
-          />
-          <span id="massValue">1</span> kg
-        </div>
-        <div class="pulley-control">
-          <label for="maSlider">Mechanical Advantage:</label>
-          <input
-            type="range"
-            id="maSlider"
-            min="1"
-            max="4"
-            value="1"
-            step="1"
-          />
-          <span id="maValue">1:1</span>
+        <div class="pulley-interactive-container">
+          <canvas id="pulleyCanvas" width="800" height="500"></canvas>
+          <div class="pulley-controls-panel">
+            <div class="pulley-control">
+              <label for="massSlider">Mass:</label>
+              <input
+                type="range"
+                id="massSlider"
+                min="0.5"
+                max="5"
+                value="1"
+                step="0.1"
+              />
+              <span id="massValue">1</span> kg
+            </div>
+            <div class="pulley-control">
+              <label for="maSlider">Mechanical Advantage:</label>
+              <input
+                type="range"
+                id="maSlider"
+                min="1"
+                max="4"
+                value="1"
+                step="1"
+              />
+              <span id="maValue">1:1</span>
+            </div>
+          </div>
         </div>
         <div class="pulley-info">
-          <p>
-            This pulley system changes the direction of force but doesn't reduce
-            the effort needed.
-          </p>
           <p id="forceCalculation">Force = Weight = 1 kg × 9.8 m/s² = 9.8 N</p>
-          <p>You pull down to lift the box up!</p>
         </div>
       </div>
     </div>
@@ -1394,10 +1515,12 @@
       <div class="pong-container">
         <h1>PONG</h1>
         <div class="score">
-          You: <span id="player1Score">0</span> - Computer: <span id="player2Score">0</span>
+          You: <span id="player1Score">0</span> - Computer:
+          <span id="player2Score">0</span>
         </div>
-        <div class="score" style="margin-top: 10px; font-size: 1.2em;">
-          Your High Score: <span id="playerHighScore">0</span> hits | Current Round: <span id="currentHits">0</span> hits
+        <div class="score" style="margin-top: 10px; font-size: 1.2em">
+          Your High Score: <span id="playerHighScore">0</span> hits | Current
+          Round: <span id="currentHits">0</span> hits
         </div>
         <div class="canvas-wrapper">
           <canvas id="gameCanvas" width="800" height="400"></canvas>
@@ -1412,16 +1535,14 @@
             <button onclick="resetPongGame()">Play Again</button>
           </div>
         </div>
-        <div class="pong-controls">
-          Use W/S keys to move your paddle
-        </div>
+        <div class="pong-controls">Use W/S keys to move your paddle</div>
         <div class="speed-control">
           <label for="speedSlider">Ball Speed:</label>
           <input
             type="range"
             id="speedSlider"
             min="2"
-            max="20"
+            max="30"
             value="5"
             step="0.5"
           />
@@ -1433,7 +1554,7 @@
             type="range"
             id="paddleSpeedSlider"
             min="2"
-            max="10"
+            max="20"
             value="6"
             step="0.5"
           />
@@ -1451,8 +1572,14 @@
         </div>
         <div class="leaderboard">
           <h2>Top 5 High Scores</h2>
-          <div id="leaderboard-loading" class="leaderboard-loading">Loading leaderboard...</div>
-          <table class="leaderboard-table" id="leaderboard-table" style="display: none;">
+          <div id="leaderboard-loading" class="leaderboard-loading">
+            Loading leaderboard...
+          </div>
+          <table
+            class="leaderboard-table"
+            id="leaderboard-table"
+            style="display: none"
+          >
             <thead>
               <tr>
                 <th class="rank">Rank</th>
@@ -1460,8 +1587,7 @@
                 <th class="hits">Score</th>
               </tr>
             </thead>
-            <tbody id="leaderboard-body">
-            </tbody>
+            <tbody id="leaderboard-body"></tbody>
           </table>
         </div>
       </div>
@@ -1470,8 +1596,15 @@
     <!-- Firebase SDK -->
     <script type="module">
       // Import Firebase functions
-      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-      import { getFirestore, collection, getDocs, addDoc, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        addDoc,
+        doc,
+        setDoc,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
       // Firebase configuration
       // TODO: Replace with your Firebase project configuration
@@ -1482,13 +1615,13 @@
         projectId: "personalwebsite-angus",
         storageBucket: "personalwebsite-angus.appspot.com",
         messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        appId: "YOUR_APP_ID",
       };
 
       // Initialize Firebase
       let app;
       let db;
-      
+
       try {
         app = initializeApp(firebaseConfig);
         db = getFirestore(app);
@@ -1499,35 +1632,36 @@
       }
 
       // Cookie helper functions (make globally accessible)
-      window.setCookie = function(name, value, days) {
+      window.setCookie = function (name, value, days) {
         const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
         const expires = "expires=" + date.toUTCString();
         document.cookie = name + "=" + value + ";" + expires + ";path=/";
       };
 
-      window.getCookie = function(name) {
+      window.getCookie = function (name) {
         const nameEQ = name + "=";
-        const ca = document.cookie.split(';');
+        const ca = document.cookie.split(";");
         for (let i = 0; i < ca.length; i++) {
           let c = ca[i];
-          while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-          if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+          while (c.charAt(0) === " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) === 0)
+            return c.substring(nameEQ.length, c.length);
         }
         return null;
       };
 
-      // Function to get username from cookie
-      function getUsername() {
-        return window.getCookie('userUsername') || null;
-      }
+      // Function to get username from cookie (exposed on window so other scripts can use it)
+      window.getUsername = function getUsername() {
+        return window.getCookie("userUsername") || null;
+      };
 
       // Function to set username in cookie
       function setUsername(username) {
         // Store in cookie (expires in 365 days)
-        window.setCookie('userUsername', username, 365);
+        window.setCookie("userUsername", username, 365);
         // Also store in localStorage as backup
-        localStorage.setItem('userUsername', username);
+        localStorage.setItem("userUsername", username);
       }
 
       // Flag to track if form handler is already attached
@@ -1535,42 +1669,42 @@
 
       // Function to show username modal (mandatory)
       function showUsernameModal() {
-        const modal = document.getElementById('username-modal');
-        const input = document.getElementById('username-input');
-        const form = document.getElementById('username-form');
-        const errorEl = document.getElementById('username-error');
-        
+        const modal = document.getElementById("username-modal");
+        const input = document.getElementById("username-input");
+        const form = document.getElementById("username-form");
+        const errorEl = document.getElementById("username-error");
+
         if (!modal || !form) return;
-        
+
         // Show modal
-        modal.classList.add('active');
-        
+        modal.classList.add("active");
+
         // Clear any previous input
-        input.value = '';
-        errorEl.classList.remove('active');
-        
+        input.value = "";
+        errorEl.classList.remove("active");
+
         // Focus input
         setTimeout(() => {
           input.focus();
         }, 100);
-        
+
         // Handle form submission (only attach once)
         if (!usernameFormHandlerAttached) {
-          form.addEventListener('submit', (e) => {
+          form.addEventListener("submit", (e) => {
             e.preventDefault();
             const username = input.value.trim();
-            
+
             if (!username || username.length === 0) {
-              errorEl.classList.add('active');
+              errorEl.classList.add("active");
               return;
             }
-            
+
             // Save username
             setUsername(username);
-            
+
             // Hide modal
-            modal.classList.remove('active');
-            
+            modal.classList.remove("active");
+
             // Store IP after getting username
             setTimeout(() => {
               storeUserIP();
@@ -1578,7 +1712,7 @@
           });
           usernameFormHandlerAttached = true;
         }
-        
+
         // Prevent closing modal by clicking outside
         const preventClose = (e) => {
           if (e.target === modal) {
@@ -1586,23 +1720,23 @@
             e.stopPropagation();
           }
         };
-        modal.addEventListener('click', preventClose);
-        
+        modal.addEventListener("click", preventClose);
+
         // Prevent ESC key from closing
         const preventEsc = (e) => {
-          if (e.key === 'Escape' && modal.classList.contains('active')) {
+          if (e.key === "Escape" && modal.classList.contains("active")) {
             e.preventDefault();
             e.stopPropagation();
           }
         };
-        document.addEventListener('keydown', preventEsc);
+        document.addEventListener("keydown", preventEsc);
       }
 
       // Function to get device name from user agent
       function getDeviceName() {
         const ua = navigator.userAgent;
         let deviceName = "Unknown Device";
-        
+
         // Try to extract device/browser info
         if (ua.includes("Windows")) {
           deviceName = "Windows Device";
@@ -1615,7 +1749,7 @@
         } else if (ua.includes("iPhone") || ua.includes("iPad")) {
           deviceName = "iOS Device";
         }
-        
+
         // Add browser info
         if (ua.includes("Chrome") && !ua.includes("Edg")) {
           deviceName += " - Chrome";
@@ -1626,12 +1760,12 @@
         } else if (ua.includes("Edg")) {
           deviceName += " - Edge";
         }
-        
+
         // Add a unique identifier based on screen resolution and timezone
         const screenInfo = `${screen.width}x${screen.height}`;
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const uniqueId = btoa(screenInfo + timezone).substring(0, 8);
-        
+
         return `${deviceName} - ${uniqueId}`;
       }
 
@@ -1640,26 +1774,26 @@
         try {
           // Try multiple IP services for reliability
           const services = [
-            'https://api.ipify.org?format=json',
-            'https://api64.ipify.org?format=json',
-            'https://ipapi.co/json/'
+            "https://api.ipify.org?format=json",
+            "https://api64.ipify.org?format=json",
+            "https://ipapi.co/json/",
           ];
-          
+
           for (const service of services) {
             try {
               // Create a timeout promise
-              const timeoutPromise = new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Timeout')), 5000)
+              const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("Timeout")), 5000)
               );
-              
+
               // Race between fetch and timeout
               const response = await Promise.race([
                 fetch(service),
-                timeoutPromise
+                timeoutPromise,
               ]);
-              
+
               const data = await response.json();
-              
+
               // Different services return IP in different formats
               if (data.ip) {
                 return data.ip;
@@ -1670,7 +1804,7 @@
               continue; // Try next service
             }
           }
-          
+
           return "Unknown";
         } catch (error) {
           console.error("Error fetching IP:", error);
@@ -1681,17 +1815,19 @@
       // Function to reset all cookies
       function resetAllCookies() {
         // Delete all cookies by setting them to expire in the past
-        const cookies = document.cookie.split(';');
-        cookies.forEach(cookie => {
-          const eqPos = cookie.indexOf('=');
-          const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+        const cookies = document.cookie.split(";");
+        cookies.forEach((cookie) => {
+          const eqPos = cookie.indexOf("=");
+          const name =
+            eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
           if (name) {
-            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+            document.cookie =
+              name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
           }
         });
         // Also clear localStorage
         localStorage.clear();
-        console.log('All cookies and localStorage cleared');
+        console.log("All cookies and localStorage cleared");
       }
 
       // Function to store IP in Firestore
@@ -1699,43 +1835,49 @@
         // Check if username exists in cookie - if not, don't store
         const username = getUsername();
         if (!username) {
-          console.log('No username found, cannot store IP');
+          console.log("No username found, cannot store IP");
           return;
         }
 
         if (!window.firestoreDb) {
-          console.error('Firestore not initialized');
+          console.error("Firestore not initialized");
           return;
         }
 
         try {
           const deviceName = getDeviceName();
           const userIP = await getUserIP();
-          
+
           // Import setDoc for setting document with custom ID
-          const { setDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-          
+          const { setDoc, doc } = await import(
+            "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+          );
+
           // Use device name as document ID (for uniqueness), but store username in the document
-          const ipRef = doc(window.firestoreDb, 'IPs', deviceName);
-          await setDoc(ipRef, {
-            IP: userIP,
-            username: username,
-            timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
-            screenResolution: `${screen.width}x${screen.height}`,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-          }, { merge: true }); // Use merge to update if document exists
-          
+          const ipRef = doc(window.firestoreDb, "IPs", deviceName);
+          await setDoc(
+            ipRef,
+            {
+              IP: userIP,
+              username: username,
+              timestamp: new Date().toISOString(),
+              userAgent: navigator.userAgent,
+              screenResolution: `${screen.width}x${screen.height}`,
+              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            },
+            { merge: true }
+          ); // Use merge to update if document exists
+
           console.log(`Stored IP ${userIP} for user ${username}`);
         } catch (error) {
-          console.error('Error storing user IP:', error);
+          console.error("Error storing user IP:", error);
         }
       }
 
       // Check for username and show modal or store IP when page loads
-      window.addEventListener('load', () => {
+      window.addEventListener("load", () => {
         const username = getUsername();
-        
+
         if (!username) {
           // No username found - show mandatory modal
           setTimeout(() => {
@@ -1753,48 +1895,50 @@
       window.resetAllCookies = resetAllCookies;
 
       // Function to load accessed users from Firestore
-      window.loadAccessedUsers = async function() {
-        const loadingEl = document.getElementById('accessed-loading');
-        const errorEl = document.getElementById('accessed-error');
-        const listEl = document.getElementById('accessed-list');
+      window.loadAccessedUsers = async function () {
+        const loadingEl = document.getElementById("accessed-loading");
+        const errorEl = document.getElementById("accessed-error");
+        const listEl = document.getElementById("accessed-list");
 
         if (!window.firestoreDb) {
-          loadingEl.style.display = 'none';
-          errorEl.style.display = 'block';
-          errorEl.textContent = 'Firebase is not initialized. Please configure your Firebase credentials.';
+          loadingEl.style.display = "none";
+          errorEl.style.display = "block";
+          errorEl.textContent =
+            "Firebase is not initialized. Please configure your Firebase credentials.";
           return;
         }
 
         try {
-          loadingEl.style.display = 'block';
-          errorEl.style.display = 'none';
-          listEl.innerHTML = '';
+          loadingEl.style.display = "block";
+          errorEl.style.display = "none";
+          listEl.innerHTML = "";
 
-          const ipsRef = collection(window.firestoreDb, 'IPs');
+          const ipsRef = collection(window.firestoreDb, "IPs");
           const snapshot = await getDocs(ipsRef);
 
-          loadingEl.style.display = 'none';
+          loadingEl.style.display = "none";
 
           if (snapshot.empty) {
-            listEl.innerHTML = '<div class="empty-state">No users have accessed the website yet.</div>';
+            listEl.innerHTML =
+              '<div class="empty-state">No users have accessed the website yet.</div>';
             return;
           }
 
           // Use a Map to deduplicate by username, keeping the most recent IP
           const uniqueUsers = new Map();
-          
+
           snapshot.forEach((doc) => {
             const data = doc.data();
-            const username = data.username || 'Anonymous';
-            const ip = data.IP || 'Unknown';
-            const timestamp = data.timestamp || '';
-            
+            const username = data.username || "Anonymous";
+            const ip = data.IP || "Unknown";
+            const timestamp = data.timestamp || "";
+
             // Use username as the key - if we've seen this username before, update with newer IP
             if (!uniqueUsers.has(username)) {
               uniqueUsers.set(username, {
                 username: username,
                 ip: ip,
-                timestamp: timestamp
+                timestamp: timestamp,
               });
             } else {
               // Compare timestamps to keep the most recent IP
@@ -1803,7 +1947,7 @@
                 uniqueUsers.set(username, {
                   username: username,
                   ip: ip,
-                  timestamp: timestamp
+                  timestamp: timestamp,
                 });
               }
             }
@@ -1811,18 +1955,19 @@
 
           // Convert map to array and sort by username
           const usersArray = Array.from(uniqueUsers.values())
-            .map(user => ({ username: user.username, ip: user.ip })) // Remove timestamp from display
+            .map((user) => ({ username: user.username, ip: user.ip })) // Remove timestamp from display
             .sort((a, b) => a.username.localeCompare(b.username));
 
           if (usersArray.length === 0) {
-            listEl.innerHTML = '<div class="empty-state">No users have accessed the website yet.</div>';
+            listEl.innerHTML =
+              '<div class="empty-state">No users have accessed the website yet.</div>';
             return;
           }
 
           // Display each unique user
-          usersArray.forEach(user => {
-            const item = document.createElement('div');
-            item.className = 'accessed-item';
+          usersArray.forEach((user) => {
+            const item = document.createElement("div");
+            item.className = "accessed-item";
             item.innerHTML = `
               <div class="device-name">${user.username}</div>
               <div class="ip-address">
@@ -1832,38 +1977,43 @@
             listEl.appendChild(item);
           });
         } catch (error) {
-          console.error('Error loading accessed users:', error);
-          loadingEl.style.display = 'none';
-          errorEl.style.display = 'block';
+          console.error("Error loading accessed users:", error);
+          loadingEl.style.display = "none";
+          errorEl.style.display = "block";
           errorEl.textContent = `Error loading accessed users: ${error.message}`;
         }
       };
 
       // Function to load neighborhoods from Firestore
-      window.loadNeighborhoods = async function() {
-        const loadingEl = document.getElementById('neighborhoods-loading');
-        const errorEl = document.getElementById('neighborhoods-error');
-        const gridEl = document.getElementById('neighborhoods-grid');
+      window.loadNeighborhoods = async function () {
+        const loadingEl = document.getElementById("neighborhoods-loading");
+        const errorEl = document.getElementById("neighborhoods-error");
+        const gridEl = document.getElementById("neighborhoods-grid");
 
         if (!window.firestoreDb) {
-          loadingEl.style.display = 'none';
-          errorEl.style.display = 'block';
-          errorEl.textContent = 'Firebase is not initialized. Please configure your Firebase credentials.';
+          loadingEl.style.display = "none";
+          errorEl.style.display = "block";
+          errorEl.textContent =
+            "Firebase is not initialized. Please configure your Firebase credentials.";
           return;
         }
 
         try {
-          loadingEl.style.display = 'block';
-          errorEl.style.display = 'none';
-          gridEl.innerHTML = '';
+          loadingEl.style.display = "block";
+          errorEl.style.display = "none";
+          gridEl.innerHTML = "";
 
-          const neighborhoodsRef = collection(window.firestoreDb, 'neighborhoods');
+          const neighborhoodsRef = collection(
+            window.firestoreDb,
+            "neighborhoods"
+          );
           const snapshot = await getDocs(neighborhoodsRef);
 
-          loadingEl.style.display = 'none';
+          loadingEl.style.display = "none";
 
           if (snapshot.empty) {
-            gridEl.innerHTML = '<div class="empty-state">No neighborhoods found in the database.</div>';
+            gridEl.innerHTML =
+              '<div class="empty-state">No neighborhoods found in the database.</div>';
             return;
           }
 
@@ -1873,124 +2023,148 @@
           snapshot.forEach((doc) => {
             const data = doc.data();
             neighborhoodsData.push({ id: doc.id, data: data });
-            const card = document.createElement('div');
-            card.className = 'neighborhood-card';
-            
+            const card = document.createElement("div");
+            card.className = "neighborhood-card";
+
             let cardContent = `<h2>${doc.id}</h2>`;
-            
+
             // Define the order of fields to display - always show in this exact order
-            const fieldOrder = ['population', 'location', 'isCool', 'whoLivesThere'];
-            
+            const fieldOrder = [
+              "population",
+              "location",
+              "isCool",
+              "whoLivesThere",
+            ];
+
             // Helper function to format and display a field
             const displayField = (key) => {
               const value = data[key];
               let displayValue = value;
-              
+
               // Format the value based on its type
               if (value === null || value === undefined || !(key in data)) {
-                displayValue = 'N/A';
-              } else if (typeof value === 'object') {
+                displayValue = "N/A";
+              } else if (typeof value === "object") {
                 displayValue = JSON.stringify(value, null, 2);
-              } else if (typeof value === 'boolean') {
-                displayValue = value ? 'Yes' : 'No';
+              } else if (typeof value === "boolean") {
+                displayValue = value ? "Yes" : "No";
               }
-              
+
               cardContent += `<p><span class="field-label">${key}:</span> <span class="field-value">${displayValue}</span></p>`;
             };
-            
+
             // Always display fields in the specified order (even if missing, show N/A)
-            fieldOrder.forEach(key => {
+            fieldOrder.forEach((key) => {
               displayField(key);
             });
-            
+
             // Display any remaining fields that weren't in the ordered list
-            Object.keys(data).forEach(key => {
+            Object.keys(data).forEach((key) => {
               if (!fieldOrder.includes(key)) {
                 displayField(key);
               }
             });
-            
+
             card.innerHTML = cardContent;
             gridEl.appendChild(card);
           });
-          
+
           // Initialize map with markers
           initializeNeighborhoodsMap(neighborhoodsData);
         } catch (error) {
-          console.error('Error loading neighborhoods:', error);
-          loadingEl.style.display = 'none';
-          errorEl.style.display = 'block';
+          console.error("Error loading neighborhoods:", error);
+          loadingEl.style.display = "none";
+          errorEl.style.display = "block";
           errorEl.textContent = `Error loading neighborhoods: ${error.message}`;
         }
       };
 
       // Initialize custom map with LA.png image
-      window.initializeNeighborhoodsMap = function(neighborhoodsData) {
-        const mapImage = document.getElementById('neighborhoods-map-image');
-        const markersContainer = document.getElementById('neighborhoods-markers');
-        
+      window.initializeNeighborhoodsMap = function (neighborhoodsData) {
+        const mapImage = document.getElementById("neighborhoods-map-image");
+        const markersContainer = document.getElementById(
+          "neighborhoods-markers"
+        );
+
         if (!mapImage || !markersContainer) {
-          console.error('Map elements not found');
+          console.error("Map elements not found");
           return;
         }
 
         // Map bounds (from user specification)
         const topLeft = { lat: 34.282587, lng: -118.735801 };
         const bottomRight = { lat: 33.746624, lng: -118.119682 };
-        
+
         // Function to convert lat/lng to pixel coordinates
         const latLngToPixel = (lat, lng, imageWidth, imageHeight) => {
           // Calculate percentage from bounds
-          const lngPercent = (lng - topLeft.lng) / (bottomRight.lng - topLeft.lng);
-          const latPercent = (topLeft.lat - lat) / (topLeft.lat - bottomRight.lat);
-          
+          const lngPercent =
+            (lng - topLeft.lng) / (bottomRight.lng - topLeft.lng);
+          const latPercent =
+            (topLeft.lat - lat) / (topLeft.lat - bottomRight.lat);
+
           // Convert to pixel coordinates
           const x = lngPercent * imageWidth;
           const y = latPercent * imageHeight;
-          
+
           return { x, y };
         };
 
         // Function to extract coordinates from location data
         const getCoordinates = (location) => {
-          if (!location || location === 'N/A') return null;
-          
+          if (!location || location === "N/A") return null;
+
           // Check if location is coordinates object
-          if (typeof location === 'object' && location !== null) {
+          if (typeof location === "object" && location !== null) {
             if (location.lat !== undefined && location.lng !== undefined) {
               return { lat: location.lat, lng: location.lng };
-            } else if (location.latitude !== undefined && location.longitude !== undefined) {
+            } else if (
+              location.latitude !== undefined &&
+              location.longitude !== undefined
+            ) {
               return { lat: location.latitude, lng: location.longitude };
             }
           }
-          
+
           return null;
         };
 
         // Function to create marker on image
         const createMarker = (pixelX, pixelY, neighborhood) => {
-          const marker = document.createElement('div');
-          marker.className = 'neighborhood-marker';
-          marker.style.left = pixelX + 'px';
-          marker.style.top = pixelY + 'px';
-          
+          const marker = document.createElement("div");
+          marker.className = "neighborhood-marker";
+          marker.style.left = pixelX + "px";
+          marker.style.top = pixelY + "px";
+
           // Create tooltip
-          const tooltip = document.createElement('div');
-          tooltip.className = 'marker-tooltip';
+          const tooltip = document.createElement("div");
+          tooltip.className = "marker-tooltip";
           tooltip.textContent = neighborhood.id;
           marker.appendChild(tooltip);
-          
+
           // Add click handler to show info
-          marker.addEventListener('click', () => {
+          marker.addEventListener("click", () => {
             const info = `
               Neighborhood: ${neighborhood.id}
-              ${neighborhood.data.population ? `Population: ${neighborhood.data.population}` : ''}
-              ${neighborhood.data.location ? `Location: ${JSON.stringify(neighborhood.data.location)}` : ''}
-              ${neighborhood.data.isCool !== undefined ? `Is Cool: ${neighborhood.data.isCool ? 'Yes' : 'No'}` : ''}
+              ${
+                neighborhood.data.population
+                  ? `Population: ${neighborhood.data.population}`
+                  : ""
+              }
+              ${
+                neighborhood.data.location
+                  ? `Location: ${JSON.stringify(neighborhood.data.location)}`
+                  : ""
+              }
+              ${
+                neighborhood.data.isCool !== undefined
+                  ? `Is Cool: ${neighborhood.data.isCool ? "Yes" : "No"}`
+                  : ""
+              }
             `;
             alert(info);
           });
-          
+
           markersContainer.appendChild(marker);
         };
 
@@ -1998,23 +2172,34 @@
         const placeMarkers = () => {
           const imageWidth = mapImage.offsetWidth;
           const imageHeight = mapImage.offsetHeight;
-          
+
           // Clear existing markers
-          markersContainer.innerHTML = '';
-          
+          markersContainer.innerHTML = "";
+
           // Add markers for each neighborhood
-          neighborhoodsData.forEach(neighborhood => {
+          neighborhoodsData.forEach((neighborhood) => {
             const location = neighborhood.data.location;
             const coords = getCoordinates(location);
-            
+
             if (coords) {
               // Check if coordinates are within bounds
-              if (coords.lat >= bottomRight.lat && coords.lat <= topLeft.lat &&
-                  coords.lng >= topLeft.lng && coords.lng <= bottomRight.lng) {
-                const pixelPos = latLngToPixel(coords.lat, coords.lng, imageWidth, imageHeight);
+              if (
+                coords.lat >= bottomRight.lat &&
+                coords.lat <= topLeft.lat &&
+                coords.lng >= topLeft.lng &&
+                coords.lng <= bottomRight.lng
+              ) {
+                const pixelPos = latLngToPixel(
+                  coords.lat,
+                  coords.lng,
+                  imageWidth,
+                  imageHeight
+                );
                 createMarker(pixelPos.x, pixelPos.y, neighborhood);
               } else {
-                console.warn(`Coordinates for ${neighborhood.id} are outside map bounds`);
+                console.warn(
+                  `Coordinates for ${neighborhood.id} are outside map bounds`
+                );
               }
             }
           });
@@ -2024,40 +2209,40 @@
         if (mapImage.complete) {
           placeMarkers();
         } else {
-          mapImage.addEventListener('load', placeMarkers);
+          mapImage.addEventListener("load", placeMarkers);
         }
-        
+
         // Also place markers on window resize to adjust for image size changes
         let resizeTimeout;
-        window.addEventListener('resize', () => {
+        window.addEventListener("resize", () => {
           clearTimeout(resizeTimeout);
           resizeTimeout = setTimeout(placeMarkers, 250);
         });
       };
 
       // Modal functions for adding neighborhoods
-      window.openAddNeighborhoodModal = function() {
-        const modal = document.getElementById('add-neighborhood-modal');
+      window.openAddNeighborhoodModal = function () {
+        const modal = document.getElementById("add-neighborhood-modal");
         if (modal) {
-          modal.classList.add('active');
+          modal.classList.add("active");
           // Reset form
-          document.getElementById('add-neighborhood-form').reset();
-          document.getElementById('form-error').classList.remove('active');
+          document.getElementById("add-neighborhood-form").reset();
+          document.getElementById("form-error").classList.remove("active");
         }
       };
 
-      window.closeAddNeighborhoodModal = function() {
-        const modal = document.getElementById('add-neighborhood-modal');
+      window.closeAddNeighborhoodModal = function () {
+        const modal = document.getElementById("add-neighborhood-modal");
         if (modal) {
-          modal.classList.remove('active');
+          modal.classList.remove("active");
         }
       };
 
       // Close modal when clicking outside
-      document.addEventListener('DOMContentLoaded', () => {
-        const modal = document.getElementById('add-neighborhood-modal');
+      document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("add-neighborhood-modal");
         if (modal) {
-          modal.addEventListener('click', (e) => {
+          modal.addEventListener("click", (e) => {
             if (e.target === modal) {
               closeAddNeighborhoodModal();
             }
@@ -2065,9 +2250,9 @@
         }
 
         // Handle form submission
-        const form = document.getElementById('add-neighborhood-form');
+        const form = document.getElementById("add-neighborhood-form");
         if (form) {
-          form.addEventListener('submit', async (e) => {
+          form.addEventListener("submit", async (e) => {
             e.preventDefault();
             await handleAddNeighborhood();
           });
@@ -2075,28 +2260,39 @@
       });
 
       // Function to add neighborhood to Firestore
-      window.handleAddNeighborhood = async function() {
-        const errorEl = document.getElementById('form-error');
-        const submitBtn = document.querySelector('#add-neighborhood-form .btn-submit');
-        
+      window.handleAddNeighborhood = async function () {
+        const errorEl = document.getElementById("form-error");
+        const submitBtn = document.querySelector(
+          "#add-neighborhood-form .btn-submit"
+        );
+
         if (!window.firestoreDb) {
-          errorEl.textContent = 'Firebase is not initialized. Please configure your Firebase credentials.';
-          errorEl.classList.add('active');
+          errorEl.textContent =
+            "Firebase is not initialized. Please configure your Firebase credentials.";
+          errorEl.classList.add("active");
           return;
         }
 
         // Get form values
-        const name = document.getElementById('neighborhood-name').value.trim();
-        const population = document.getElementById('neighborhood-population').value.trim();
-        const locationLat = document.getElementById('neighborhood-location-lat').value.trim();
-        const locationLng = document.getElementById('neighborhood-location-lng').value.trim();
-        const isCool = document.getElementById('neighborhood-isCool').checked;
-        const whoLivesThere = document.getElementById('neighborhood-whoLivesThere').value.trim();
+        const name = document.getElementById("neighborhood-name").value.trim();
+        const population = document
+          .getElementById("neighborhood-population")
+          .value.trim();
+        const locationLat = document
+          .getElementById("neighborhood-location-lat")
+          .value.trim();
+        const locationLng = document
+          .getElementById("neighborhood-location-lng")
+          .value.trim();
+        const isCool = document.getElementById("neighborhood-isCool").checked;
+        const whoLivesThere = document
+          .getElementById("neighborhood-whoLivesThere")
+          .value.trim();
 
         // Validate name
         if (!name) {
-          errorEl.textContent = 'Neighborhood name is required.';
-          errorEl.classList.add('active');
+          errorEl.textContent = "Neighborhood name is required.";
+          errorEl.classList.add("active");
           return;
         }
 
@@ -2125,17 +2321,23 @@
         try {
           // Disable submit button
           submitBtn.disabled = true;
-          submitBtn.textContent = 'Adding...';
-          errorEl.classList.remove('active');
+          submitBtn.textContent = "Adding...";
+          errorEl.classList.remove("active");
 
           // Add document with custom ID (neighborhood name)
-          const { setDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-          const neighborhoodRef = doc(window.firestoreDb, 'neighborhoods', name);
+          const { setDoc, doc } = await import(
+            "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+          );
+          const neighborhoodRef = doc(
+            window.firestoreDb,
+            "neighborhoods",
+            name
+          );
           await setDoc(neighborhoodRef, neighborhoodData);
 
           // Success - close modal and reload neighborhoods
           closeAddNeighborhoodModal();
-          
+
           // Reload neighborhoods
           if (window.loadNeighborhoods) {
             await window.loadNeighborhoods();
@@ -2144,13 +2346,13 @@
           // Show success message (optional)
           alert(`Neighborhood "${name}" added successfully!`);
         } catch (error) {
-          console.error('Error adding neighborhood:', error);
+          console.error("Error adding neighborhood:", error);
           errorEl.textContent = `Error adding neighborhood: ${error.message}`;
-          errorEl.classList.add('active');
+          errorEl.classList.add("active");
         } finally {
           // Re-enable submit button
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Add Neighborhood';
+          submitBtn.textContent = "Add Neighborhood";
         }
       };
     </script>
@@ -2190,8 +2392,18 @@
         // Initialize pulley canvas if showing pulley page
         if (pageId === "pulley") {
           setTimeout(() => {
+            if (window.setupInteractiveRope) {
+              window.setupInteractiveRope();
+            }
             drawPulleySystem();
           }, 100);
+        }
+
+        // Stop pong game loop if switching away from pong page
+        if (pageId !== "pong") {
+          if (window.stopPongGameLoop) {
+            window.stopPongGameLoop();
+          }
         }
 
         // Initialize pong game if showing pong page
@@ -2224,6 +2436,20 @@
           }, 100);
         }
       }
+
+      // Pulley System Variables
+      let currentMass = 1; // Default mass in kg
+      let mechanicalAdvantage = 1; // 1:1 or 2:1
+
+      // Interactive rope pulling variables
+      let isDragging = false;
+      let pullEndY = 320; // Default pull end Y position (will be updated per MA)
+      let pullRopeX = 0; // Will be set based on MA
+      let canvas = null;
+      let lastMA = 0; // Track last MA to reset pullEndY when MA changes
+      let startingPullEndY = 320; // Starting position to calculate distance dragged
+      let startingMassY = 350; // Starting mass Y position for MA 1:1
+      let startingMovablePulleyY = 280; // Starting movable pulley Y position for MA 2:1, 3:1, 4:1
 
       // Mass slider functionality for pulley system
       const massSlider = document.getElementById("massSlider");
@@ -2353,7 +2579,7 @@
         }
 
         // Helper function to update direction based on mouse position
-        const updateDirectionFromMouse = function(e) {
+        const updateDirectionFromMouse = function (e) {
           const rect = starCanvas.getBoundingClientRect();
           const mouseX = e.clientX - rect.left;
           const mouseY = e.clientY - rect.top;
@@ -2365,7 +2591,7 @@
           const dx = mouseX - centerX;
           const dy = mouseY - centerY;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           // Store distance from center for angle scaling
           mouseDistanceFromCenter = distance;
 
@@ -2491,16 +2717,24 @@
 
             // Calculate angle scaling factor based on distance from center
             // Max distance is approximately half the diagonal of the canvas
-            const maxDistance = Math.sqrt(starCanvas.width * starCanvas.width + starCanvas.height * starCanvas.height) / 2;
-            const normalizedDistance = Math.min(mouseDistanceFromCenter / maxDistance, 1);
-            
+            const maxDistance =
+              Math.sqrt(
+                starCanvas.width * starCanvas.width +
+                  starCanvas.height * starCanvas.height
+              ) / 2;
+            const normalizedDistance = Math.min(
+              mouseDistanceFromCenter / maxDistance,
+              1
+            );
+
             // Apply non-linear scaling: square the normalized distance to make extreme positions more extreme
             // Then scale from 0.4 (center) to 1.2 (far edges) for more dramatic angles
-            const angleMultiplier = 0.4 + (normalizedDistance * normalizedDistance * 0.8);
-            
+            const angleMultiplier =
+              0.4 + normalizedDistance * normalizedDistance * 0.8;
+
             // Increase vertical sensitivity slightly for more noticeable up/down movement
             const verticalMultiplier = angleMultiplier * 1.1; // 10% more sensitive vertically
-            
+
             // Update velocity based on current speed and target direction with angle scaling
             velocity.z = currentSpeed;
             velocity.x = targetDirection.x * currentSpeed * angleMultiplier;
@@ -2519,17 +2753,26 @@
               isClickAndHold = false;
             } else {
               // Calculate angle scaling factor based on last known distance from center
-              const maxDistance = Math.sqrt(starCanvas.width * starCanvas.width + starCanvas.height * starCanvas.height) / 2;
-              const normalizedDistance = Math.min(mouseDistanceFromCenter / maxDistance, 1);
-              const angleMultiplier = 0.4 + (normalizedDistance * normalizedDistance * 0.8);
-              
+              const maxDistance =
+                Math.sqrt(
+                  starCanvas.width * starCanvas.width +
+                    starCanvas.height * starCanvas.height
+                ) / 2;
+              const normalizedDistance = Math.min(
+                mouseDistanceFromCenter / maxDistance,
+                1
+              );
+              const angleMultiplier =
+                0.4 + normalizedDistance * normalizedDistance * 0.8;
+
               // Increase vertical sensitivity slightly for more noticeable up/down movement
               const verticalMultiplier = angleMultiplier * 1.1; // 10% more sensitive vertically
-              
+
               // Maintain direction while slowing
               velocity.z = currentSpeed;
               velocity.x = targetDirection.x * currentSpeed * angleMultiplier;
-              velocity.y = targetDirection.y * currentSpeed * verticalMultiplier;
+              velocity.y =
+                targetDirection.y * currentSpeed * verticalMultiplier;
             }
           }
         }
@@ -2706,9 +2949,6 @@
       });
 
       // Pulley System Drawing
-      let currentMass = 1; // Default mass in kg
-      let mechanicalAdvantage = 1; // 1:1 or 2:1
-
       function drawPulleySystem(mass = currentMass, ma = mechanicalAdvantage) {
         const canvas = document.getElementById("pulleyCanvas");
         if (!canvas) return;
@@ -2754,11 +2994,22 @@
           // 1:1 Mechanical Advantage (Direction Changer)
           // Left side - where mass hangs (rope goes straight down from pulley)
           const leftRopeX = fixedPulleyX - fixedPulleyRadius;
-          const massY = 350;
 
-          // Right side - where you pull (rope goes straight down from pulley) - shorter
+          // Right side - where you pull (rope goes straight down from pulley)
           const rightRopeX = fixedPulleyX + fixedPulleyRadius;
-          const pullEndY = 320;
+          pullRopeX = rightRopeX;
+          // Initialize pullEndY if MA changed
+          if (lastMA !== ma) {
+            pullEndY = 320;
+            startingPullEndY = 320;
+            startingMassY = 350;
+            lastMA = ma;
+          }
+
+          // Calculate how far the rope has moved from starting position
+          const ropeMovement = pullEndY - startingPullEndY;
+          // Move mass in opposite direction by the same distance
+          const massY = startingMassY - ropeMovement;
 
           // Draw left rope first (brown)
           ctx.strokeStyle = "#8B4513";
@@ -2789,6 +3040,48 @@
           ctx.lineTo(rightRopeX, pullEndY);
           ctx.stroke();
 
+          // Draw handle at end of rope (visual indicator for dragging)
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(pullRopeX, pullEndY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#654321";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw starting point marker (red, slightly to the right of rope)
+          const markerOffsetX = 20; // Offset to the right
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(
+            pullRopeX + markerOffsetX,
+            startingPullEndY,
+            6,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting point to current point (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX + markerOffsetX, startingPullEndY);
+          ctx.lineTo(pullRopeX + markerOffsetX, pullEndY);
+          ctx.stroke();
+
+          // Draw current position marker (red, slightly to the right of rope, below the red line)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, pullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
           // Draw mass/box hanging from left side
           ctx.fillStyle = "#444";
           ctx.strokeStyle = "#222";
@@ -2811,6 +3104,52 @@
             massY + massHeight / 2 + 7
           );
 
+          // Draw starting position marker for weight (red, slightly to the left of rope)
+          const leftMarkerOffsetX = -50; // Offset to the left
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(
+            leftRopeX + leftMarkerOffsetX,
+            startingMassY,
+            6,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw current position marker for weight (red, slightly to the left of rope)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(leftRopeX + leftMarkerOffsetX, massY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting position to current position (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(leftRopeX + leftMarkerOffsetX, startingMassY);
+          ctx.lineTo(leftRopeX + leftMarkerOffsetX, massY);
+          ctx.stroke();
+
+          // Calculate distance the weight has moved
+          const weightDistanceMoved = Math.abs(massY - startingMassY);
+
+          // Draw distance counter to the left of the weight (blue)
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Distance: " + weightDistanceMoved.toFixed(0) + " px",
+            leftRopeX + leftMarkerOffsetX - 10,
+            massY + 5
+          );
+
           // Draw arrow showing downward pull (on right side rope) - BROWN
           ctx.fillStyle = "#8B4513";
           ctx.beginPath();
@@ -2820,15 +3159,28 @@
           ctx.closePath();
           ctx.fill();
 
-          // Draw force labels (dynamic based on mass)
+          // Calculate distance dragged
+          const distanceDragged = Math.abs(pullEndY - startingPullEndY);
+
+          // Draw force label on the right side of the rope
           const force = mass * 9.8; // Force = mass × gravity
           ctx.fillStyle = "#000";
           ctx.font = "16px Arial";
-          ctx.textAlign = "center";
+          ctx.textAlign = "left";
           ctx.fillText(
             "Force = " + force.toFixed(1) + " N",
-            rightRopeX,
-            pullEndY + 60
+            pullRopeX + 35,
+            pullEndY + 5
+          );
+
+          // Draw distance measurement
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Distance: " + distanceDragged.toFixed(0) + " px",
+            pullRopeX + 35,
+            pullEndY + 25
           );
 
           // Draw labels
@@ -2843,7 +3195,7 @@
           ctx.textAlign = "left";
           ctx.fillText(
             "Mechanical Advantage: 1:1 (Direction Changer)",
-            20,
+            10,
             height - 30
           );
 
@@ -2860,8 +3212,26 @@
           // 2:1 Mechanical Advantage
           // Movable pulley at bottom
           const movablePulleyX = fixedPulleyX;
-          const movablePulleyY = 280;
           const movablePulleyRadius = 35;
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          // Rope connects to right side of top circle and goes straight down
+          pullRopeX = fixedPulleyX + fixedPulleyRadius;
+          // Initialize pullEndY if MA changed
+          if (lastMA !== ma) {
+            pullEndY = 340;
+            startingPullEndY = 340;
+            startingMovablePulleyY = 280;
+            lastMA = ma;
+          }
+
+          // Calculate how far the rope has moved from starting position
+          const ropeMovement = pullEndY - startingPullEndY;
+          // Move movable pulley by half the distance in opposite direction
+          const movablePulleyY = startingMovablePulleyY - ropeMovement / 2;
 
           // Draw all grey circles FIRST (in background)
           ctx.fillStyle = "#888";
@@ -2875,13 +3245,6 @@
             Math.PI * 2
           );
           ctx.fill();
-
-          // Attachment point on mount (center, where rope attaches at top)
-          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
-
-          // Pulling point (where the free end of rope hangs, right side)
-          const pullRopeX = fixedPulleyX + fixedPulleyRadius + 80;
-          const pullEndY = 340;
 
           // Draw rope path for 2:1 mechanical advantage
           ctx.strokeStyle = "#8B4513";
@@ -2941,14 +3304,58 @@
           );
           ctx.stroke();
 
-          // Free end: diagonally down from right side of top pulley to pulling point
+          // Free end: straight down from right side of top pulley to pulling point
           ctx.beginPath();
           ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
           ctx.lineTo(pullRopeX, pullEndY);
           ctx.stroke();
 
+          // Draw handle at end of rope (visual indicator for dragging)
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(pullRopeX, pullEndY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#654321";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw starting point marker (red, slightly to the right of rope)
+          const markerOffsetX = 20; // Offset to the right
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(
+            pullRopeX + markerOffsetX,
+            startingPullEndY,
+            6,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting point to current point (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX + markerOffsetX, startingPullEndY);
+          ctx.lineTo(pullRopeX + markerOffsetX, pullEndY);
+          ctx.stroke();
+
+          // Draw current position marker (red, slightly to the right of rope, below the red line)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, pullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
           // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
           const massY = movablePulleyY + movablePulleyRadius + 20;
+          const startingMassY =
+            startingMovablePulleyY + movablePulleyRadius + 20;
           ctx.strokeStyle = "#8B4513";
           ctx.lineWidth = 5;
           ctx.beginPath();
@@ -2983,6 +3390,52 @@
             massY + massHeight / 2 + 7
           );
 
+          // Draw starting position marker for weight (red, slightly to the left)
+          const leftMarkerOffsetX = -50; // Offset to the left
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX + leftMarkerOffsetX,
+            startingMassY,
+            6,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw current position marker for weight (red, slightly to the left)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, massY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting position to current position (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX + leftMarkerOffsetX, startingMassY);
+          ctx.lineTo(movablePulleyX + leftMarkerOffsetX, massY);
+          ctx.stroke();
+
+          // Calculate distance the weight has moved
+          const weightDistanceMoved = Math.abs(massY - startingMassY);
+
+          // Draw distance counter to the left of the weight (blue)
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Distance: " + weightDistanceMoved.toFixed(0) + " px",
+            movablePulleyX + leftMarkerOffsetX - 10,
+            massY + 5
+          );
+
           // Draw arrow showing downward pull (on free end of rope) - BROWN
           ctx.fillStyle = "#8B4513";
           ctx.beginPath();
@@ -2992,15 +3445,28 @@
           ctx.closePath();
           ctx.fill();
 
-          // Draw force labels (dynamic based on mass - Force = Weight / MA)
+          // Calculate distance dragged
+          const distanceDragged = Math.abs(pullEndY - startingPullEndY);
+
+          // Draw force label on the right side of the rope
           const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
           ctx.fillStyle = "#000";
           ctx.font = "16px Arial";
-          ctx.textAlign = "center";
+          ctx.textAlign = "left";
           ctx.fillText(
             "Force = " + force.toFixed(1) + " N",
-            pullRopeX,
-            pullEndY + 60
+            pullRopeX + 50,
+            pullEndY + 5
+          );
+
+          // Draw distance measurement
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Distance: " + distanceDragged.toFixed(0) + " px",
+            pullRopeX + 50,
+            pullEndY + 25
           );
 
           // Draw labels
@@ -3013,7 +3479,7 @@
           ctx.textAlign = "right";
           ctx.fillText(
             "Movable Pulley",
-            movablePulleyX - movablePulleyRadius - 10,
+            movablePulleyX - movablePulleyRadius - 30,
             movablePulleyY
           );
 
@@ -3021,7 +3487,7 @@
           ctx.fillStyle = "#0066cc";
           ctx.font = "bold 16px Arial";
           ctx.textAlign = "left";
-          ctx.fillText("Mechanical Advantage: " + ma + ":1", 20, height - 30);
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 10, height - 30);
 
           // Draw pulley mount LAST - rectangle centered on the pulley circle - BLACK
           // This ensures it appears on top of everything
@@ -3036,7 +3502,6 @@
           // 3:1 Mechanical Advantage
           // Movable pulley at bottom
           const movablePulleyX = fixedPulleyX;
-          const movablePulleyY = 320; // Lowered from 280
           const movablePulleyRadius = 35;
 
           // Define smaller pulley position (needed for rope path)
@@ -3049,6 +3514,25 @@
           // Top pulley bottom edge + gap + smaller pulley radius = smaller pulley center
           const smallerPulleyY =
             fixedPulleyY + fixedPulleyRadius + gapSize + smallerPulleyRadius;
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          // Rope connects to right side of top circle and goes straight down
+          pullRopeX = fixedPulleyX + fixedPulleyRadius;
+          // Initialize pullEndY if MA changed
+          if (lastMA !== ma) {
+            pullEndY = 340;
+            startingPullEndY = 340;
+            startingMovablePulleyY = 320;
+            lastMA = ma;
+          }
+
+          // Calculate how far the rope has moved from starting position
+          const ropeMovement = pullEndY - startingPullEndY;
+          // Move movable pulley by one third the distance in opposite direction
+          const movablePulleyY = startingMovablePulleyY - ropeMovement / 3;
 
           // Draw all grey circles FIRST (in background)
           ctx.fillStyle = "#888";
@@ -3072,13 +3556,6 @@
             Math.PI * 2
           );
           ctx.fill();
-
-          // Attachment point on mount (center, where rope attaches at top)
-          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
-
-          // Pulling point (where the free end of rope hangs, right side)
-          const pullRopeX = fixedPulleyX + fixedPulleyRadius + 80;
-          const pullEndY = 340;
 
           // Draw rope path for 3:1 mechanical advantage
           ctx.strokeStyle = "#8B4513";
@@ -3138,14 +3615,58 @@
           );
           ctx.stroke();
 
-          // Free end: from right side of top grey circle (fixed pulley) to pulling point
+          // Free end: straight down from right side of top grey circle (fixed pulley) to pulling point
           ctx.beginPath();
           ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
           ctx.lineTo(pullRopeX, pullEndY);
           ctx.stroke();
 
+          // Draw handle at end of rope (visual indicator for dragging)
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(pullRopeX, pullEndY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#654321";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw starting point marker (red, slightly to the right of rope)
+          const markerOffsetX = 20; // Offset to the right
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(
+            pullRopeX + markerOffsetX,
+            startingPullEndY,
+            6,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting point to current point (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX + markerOffsetX, startingPullEndY);
+          ctx.lineTo(pullRopeX + markerOffsetX, pullEndY);
+          ctx.stroke();
+
+          // Draw current position marker (red, slightly to the right of rope, below the red line)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, pullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
           // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
           const massY = movablePulleyY + movablePulleyRadius + 20;
+          const startingMassY =
+            startingMovablePulleyY + movablePulleyRadius + 20;
           ctx.strokeStyle = "#8B4513";
           ctx.lineWidth = 5;
           ctx.beginPath();
@@ -3180,6 +3701,52 @@
             massY + massHeight / 2 + 7
           );
 
+          // Draw starting position marker for weight (red, slightly to the left)
+          const leftMarkerOffsetX = -50; // Offset to the left
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX + leftMarkerOffsetX,
+            startingMassY,
+            6,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw current position marker for weight (red, slightly to the left)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, massY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting position to current position (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX + leftMarkerOffsetX, startingMassY);
+          ctx.lineTo(movablePulleyX + leftMarkerOffsetX, massY);
+          ctx.stroke();
+
+          // Calculate distance the weight has moved
+          const weightDistanceMoved = Math.abs(massY - startingMassY);
+
+          // Draw distance counter to the left of the weight (blue)
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Distance: " + weightDistanceMoved.toFixed(0) + " px",
+            movablePulleyX + leftMarkerOffsetX - 10,
+            massY + 5
+          );
+
           // Draw arrow showing downward pull (on free end of rope) - BROWN
           ctx.fillStyle = "#8B4513";
           ctx.beginPath();
@@ -3189,15 +3756,28 @@
           ctx.closePath();
           ctx.fill();
 
-          // Draw force labels (dynamic based on mass - Force = Weight / MA)
+          // Calculate distance dragged
+          const distanceDragged = Math.abs(pullEndY - startingPullEndY);
+
+          // Draw force label on the right side of the rope
           const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
           ctx.fillStyle = "#000";
           ctx.font = "16px Arial";
-          ctx.textAlign = "center";
+          ctx.textAlign = "left";
           ctx.fillText(
             "Force = " + force.toFixed(1) + " N",
-            pullRopeX,
-            pullEndY + 60
+            pullRopeX + 50,
+            pullEndY + 5
+          );
+
+          // Draw distance measurement
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Distance: " + distanceDragged.toFixed(0) + " px",
+            pullRopeX + 50,
+            pullEndY + 25
           );
 
           // Draw labels
@@ -3210,7 +3790,7 @@
           ctx.textAlign = "right";
           ctx.fillText(
             "Movable Pulley",
-            movablePulleyX - movablePulleyRadius - 10,
+            movablePulleyX - movablePulleyRadius - 30,
             movablePulleyY
           );
 
@@ -3218,7 +3798,7 @@
           ctx.fillStyle = "#0066cc";
           ctx.font = "bold 16px Arial";
           ctx.textAlign = "left";
-          ctx.fillText("Mechanical Advantage: " + ma + ":1", 20, height - 30);
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 10, height - 30);
 
           // Rope semicircle around top of smallest grey circle (from right to left)
           ctx.strokeStyle = "#8B4513";
@@ -3279,7 +3859,6 @@
           // 4:1 Mechanical Advantage
           // Movable pulley at bottom
           const movablePulleyX = fixedPulleyX;
-          const movablePulleyY = 360; // Lowered further for 4:1
           const movablePulleyRadius = 35;
 
           // Define smaller pulley position (needed for rope path)
@@ -3292,6 +3871,25 @@
           // Top pulley bottom edge + gap + smaller pulley radius = smaller pulley center
           const smallerPulleyY =
             fixedPulleyY + fixedPulleyRadius + gapSize + smallerPulleyRadius;
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          // Rope connects to right side of top circle and goes straight down
+          pullRopeX = fixedPulleyX + fixedPulleyRadius;
+          // Initialize pullEndY if MA changed
+          if (lastMA !== ma) {
+            pullEndY = 340;
+            startingPullEndY = 340;
+            startingMovablePulleyY = 360;
+            lastMA = ma;
+          }
+
+          // Calculate how far the rope has moved from starting position
+          const ropeMovement = pullEndY - startingPullEndY;
+          // Move movable pulley by one quarter the distance in opposite direction
+          const movablePulleyY = startingMovablePulleyY - ropeMovement / 4;
 
           // Define smaller pulley above bottom movable pulley (only for 4:1)
           const smallerBottomPulleyRadius = 25; // Smaller radius than bottom pulley
@@ -3335,13 +3933,6 @@
             Math.PI * 2
           );
           ctx.fill();
-
-          // Attachment point on mount (center, where rope attaches at top)
-          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
-
-          // Pulling point (where the free end of rope hangs, right side)
-          const pullRopeX = fixedPulleyX + fixedPulleyRadius + 80;
-          const pullEndY = 340;
 
           // Draw rope path for 4:1 mechanical advantage
           ctx.strokeStyle = "#8B4513";
@@ -3401,14 +3992,58 @@
           );
           ctx.stroke();
 
-          // Free end: from right side of top grey circle (fixed pulley) to pulling point
+          // Free end: straight down from right side of top grey circle (fixed pulley) to pulling point
           ctx.beginPath();
           ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
           ctx.lineTo(pullRopeX, pullEndY);
           ctx.stroke();
 
+          // Draw handle at end of rope (visual indicator for dragging)
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(pullRopeX, pullEndY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#654321";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw starting point marker (red, slightly to the right of rope)
+          const markerOffsetX = 20; // Offset to the right
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(
+            pullRopeX + markerOffsetX,
+            startingPullEndY,
+            6,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting point to current point (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX + markerOffsetX, startingPullEndY);
+          ctx.lineTo(pullRopeX + markerOffsetX, pullEndY);
+          ctx.stroke();
+
+          // Draw current position marker (red, slightly to the right of rope, below the red line)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, pullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
           // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
           const massY = movablePulleyY + movablePulleyRadius + 20;
+          const startingMassY =
+            startingMovablePulleyY + movablePulleyRadius + 20;
           ctx.strokeStyle = "#8B4513";
           ctx.lineWidth = 5;
           ctx.beginPath();
@@ -3443,6 +4078,52 @@
             massY + massHeight / 2 + 7
           );
 
+          // Draw starting position marker for weight (red, slightly to the left)
+          const leftMarkerOffsetX = -50; // Offset to the left
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX + leftMarkerOffsetX,
+            startingMassY,
+            6,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw current position marker for weight (red, slightly to the left)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, massY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting position to current position (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX + leftMarkerOffsetX, startingMassY);
+          ctx.lineTo(movablePulleyX + leftMarkerOffsetX, massY);
+          ctx.stroke();
+
+          // Calculate distance the weight has moved
+          const weightDistanceMoved = Math.abs(massY - startingMassY);
+
+          // Draw distance counter to the left of the weight (blue)
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Distance: " + weightDistanceMoved.toFixed(0) + " px",
+            movablePulleyX + leftMarkerOffsetX - 10,
+            massY + 5
+          );
+
           // Draw arrow showing downward pull (on free end of rope) - BROWN
           ctx.fillStyle = "#8B4513";
           ctx.beginPath();
@@ -3452,15 +4133,28 @@
           ctx.closePath();
           ctx.fill();
 
-          // Draw force labels (dynamic based on mass - Force = Weight / MA)
+          // Calculate distance dragged
+          const distanceDragged = Math.abs(pullEndY - startingPullEndY);
+
+          // Draw force label on the right side of the rope
           const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
           ctx.fillStyle = "#000";
           ctx.font = "16px Arial";
-          ctx.textAlign = "center";
+          ctx.textAlign = "left";
           ctx.fillText(
             "Force = " + force.toFixed(1) + " N",
-            pullRopeX,
-            pullEndY + 60
+            pullRopeX + 50,
+            pullEndY + 5
+          );
+
+          // Draw distance measurement
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Distance: " + distanceDragged.toFixed(0) + " px",
+            pullRopeX + 50,
+            pullEndY + 25
           );
 
           // Draw labels
@@ -3473,7 +4167,7 @@
           ctx.textAlign = "right";
           ctx.fillText(
             "Movable Pulley",
-            movablePulleyX - movablePulleyRadius - 10,
+            movablePulleyX - movablePulleyRadius - 30,
             movablePulleyY
           );
 
@@ -3481,7 +4175,7 @@
           ctx.fillStyle = "#0066cc";
           ctx.font = "bold 16px Arial";
           ctx.textAlign = "left";
-          ctx.fillText("Mechanical Advantage: " + ma + ":1", 20, height - 30);
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 10, height - 30);
 
           // Rope semicircle around top of smallest grey circle (from right to left)
           ctx.strokeStyle = "#8B4513";
@@ -3574,6 +4268,108 @@
         }
       }
 
+      // Mouse event handlers for interactive rope pulling
+      function setupInteractiveRope() {
+        canvas = document.getElementById("pulleyCanvas");
+        if (!canvas) return;
+
+        canvas.addEventListener("mousedown", handleMouseDown);
+        canvas.addEventListener("mousemove", handleMouseMove);
+        canvas.addEventListener("mouseup", handleMouseUp);
+        canvas.addEventListener("mouseleave", handleMouseUp);
+
+        // Touch support
+        canvas.addEventListener("touchstart", handleTouchStart);
+        canvas.addEventListener("touchmove", handleTouchMove);
+        canvas.addEventListener("touchend", handleTouchEnd);
+      }
+
+      function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        };
+      }
+
+      function getTouchPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0] || e.changedTouches[0];
+        return {
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top,
+        };
+      }
+
+      function isNearPullEnd(x, y) {
+        const threshold = 30; // Distance threshold for clicking on rope end
+        const distance = Math.sqrt(
+          Math.pow(x - pullRopeX, 2) + Math.pow(y - pullEndY, 2)
+        );
+        return distance < threshold;
+      }
+
+      function handleMouseDown(e) {
+        const pos = getMousePos(e);
+        if (isNearPullEnd(pos.x, pos.y)) {
+          isDragging = true;
+          canvas.style.cursor = "grabbing";
+        }
+      }
+
+      function handleMouseMove(e) {
+        if (isDragging) {
+          const pos = getMousePos(e);
+          // Constrain Y position (allow pulling up and down)
+          // Minimum Y is near the top pulley, maximum Y is near bottom of canvas
+          const minY = 150;
+          const maxY = 450;
+          pullEndY = Math.max(minY, Math.min(maxY, pos.y));
+          drawPulleySystem(currentMass, mechanicalAdvantage);
+        } else {
+          const pos = getMousePos(e);
+          if (isNearPullEnd(pos.x, pos.y)) {
+            canvas.style.cursor = "grab";
+          } else {
+            canvas.style.cursor = "default";
+          }
+        }
+      }
+
+      function handleMouseUp(e) {
+        if (isDragging) {
+          isDragging = false;
+          canvas.style.cursor = "default";
+        }
+      }
+
+      function handleTouchStart(e) {
+        e.preventDefault();
+        const pos = getTouchPos(e);
+        if (isNearPullEnd(pos.x, pos.y)) {
+          isDragging = true;
+        }
+      }
+
+      function handleTouchMove(e) {
+        e.preventDefault();
+        if (isDragging) {
+          const pos = getTouchPos(e);
+          const minY = 150;
+          const maxY = 450;
+          pullEndY = Math.max(minY, Math.min(maxY, pos.y));
+          drawPulleySystem(currentMass, mechanicalAdvantage);
+        }
+      }
+
+      function handleTouchEnd(e) {
+        e.preventDefault();
+        isDragging = false;
+      }
+
+      // Make setupInteractiveRope globally accessible
+      window.setupInteractiveRope = setupInteractiveRope;
+
       // ========== PONG GAME CODE ==========
       // Canvas setup
       let pongCanvas = null;
@@ -3589,6 +4385,12 @@
       let pongHardMode = false;
       let pongHitCount = 0; // Track hits against computer in single player mode (resets each round)
       let pongPlayerHighScore = 0; // Player's personal high score
+      let pongGameLoopRunning = false; // Track if game loop is running to prevent multiple loops
+      let pongAnimationFrameId = null; // Store animation frame ID for cleanup
+      let pongEventListenersAdded = false; // Track if event listeners are already added
+      let pongSliderListenersAdded = false; // Track if slider listeners are already added
+      let pongBallSpeedMultiplier = 1.0; // Current speed multiplier (starts at 0.3, accelerates to 1.0)
+      let pongBallHasBeenHit = false; // Track if ball has been hit by paddle (stops acceleration)
 
       // Paddle properties
       const pongPaddleWidth = 15;
@@ -3632,59 +4434,90 @@
         pongCanvas = document.getElementById("gameCanvas");
         if (!pongCanvas) return;
         pongCtx = pongCanvas.getContext("2d");
-        
+
         // Reset paddle positions
         pongPlayer1Paddle.y = pongCanvas.height / 2 - pongPaddleHeight / 2;
         pongPlayer2Paddle.y = pongCanvas.height / 2 - pongPaddleHeight / 2;
         pongPlayer2Paddle.x = pongCanvas.width - 35;
-        
+
         // Reset ball
         pongBall.x = pongCanvas.width / 2;
         pongBall.y = pongCanvas.height / 2;
-        
+
         // Load player's high score
         loadPlayerHighScore();
-        
+
         // Initial draw
         drawPong();
       }
 
-      document.addEventListener("keydown", (e) => {
-        pongKeys[e.key.toLowerCase()] = true;
-        
-        // Handle arrow keys
-        if (e.key === "ArrowUp") {
-          pongKeys["arrowup"] = true;
-        }
-        if (e.key === "ArrowDown") {
-          pongKeys["arrowdown"] = true;
-        }
+      // Add event listeners only once
+      if (!pongEventListenersAdded) {
+        pongEventListenersAdded = true;
 
-        // Start game with spacebar
-        if (e.key === " " && pongGameState === "start" && document.getElementById("pong-page")?.classList.contains("active")) {
-          startPongGame();
-        }
+        document.addEventListener("keydown", (e) => {
+          // Only handle pong keys when pong page is active
+          if (
+            !document.getElementById("pong-page")?.classList.contains("active")
+          ) {
+            return;
+          }
 
-        // Pause game with spacebar
-        if (e.key === " " && pongGameState === "playing" && document.getElementById("pong-page")?.classList.contains("active")) {
-          togglePongPause();
-        }
-      });
+          pongKeys[e.key.toLowerCase()] = true;
 
-      document.addEventListener("keyup", (e) => {
-        pongKeys[e.key.toLowerCase()] = false;
-        
-        // Handle arrow keys
-        if (e.key === "ArrowUp") {
-          pongKeys["arrowup"] = false;
+          // Handle arrow keys
+          if (e.key === "ArrowUp") {
+            pongKeys["arrowup"] = true;
+          }
+          if (e.key === "ArrowDown") {
+            pongKeys["arrowdown"] = true;
+          }
+
+          // Start game with spacebar
+          if (e.key === " " && pongGameState === "start") {
+            startPongGame();
+          }
+
+          // Pause game with spacebar
+          if (e.key === " " && pongGameState === "playing") {
+            togglePongPause();
+          }
+        });
+
+        document.addEventListener("keyup", (e) => {
+          // Only handle pong keys when pong page is active
+          if (
+            !document.getElementById("pong-page")?.classList.contains("active")
+          ) {
+            return;
+          }
+
+          pongKeys[e.key.toLowerCase()] = false;
+
+          // Handle arrow keys
+          if (e.key === "ArrowUp") {
+            pongKeys["arrowup"] = false;
+          }
+          if (e.key === "ArrowDown") {
+            pongKeys["arrowdown"] = false;
+          }
+        });
+      }
+
+      // Stop game loop - make globally accessible
+      window.stopPongGameLoop = function stopPongGameLoop() {
+        if (pongAnimationFrameId !== null) {
+          cancelAnimationFrame(pongAnimationFrameId);
+          pongAnimationFrameId = null;
         }
-        if (e.key === "ArrowDown") {
-          pongKeys["arrowdown"] = false;
-        }
-      });
+        pongGameLoopRunning = false;
+      };
 
       // Game functions
       async function startPongGame() {
+        // Stop any existing game loop before starting a new one
+        stopPongGameLoop();
+
         pongGameState = "playing";
         const startScreen = document.getElementById("startScreen");
         const gameOver = document.getElementById("gameOver");
@@ -3693,6 +4526,7 @@
         pongHitCount = 0; // Reset hit count for new game
         updateCurrentHitsDisplay();
         await resetPongBall();
+        pongGameLoopRunning = true;
         pongGameLoop();
       }
 
@@ -3708,9 +4542,13 @@
       function togglePongPause() {
         if (pongGameState === "playing") {
           pongGameState = "paused";
+          stopPongGameLoop();
         } else if (pongGameState === "paused") {
           pongGameState = "playing";
-          pongGameLoop();
+          if (!pongGameLoopRunning) {
+            pongGameLoopRunning = true;
+            pongGameLoop();
+          }
         }
       }
 
@@ -3718,11 +4556,21 @@
         if (!pongCanvas) return;
         // Check if this round's hits beat the high score (before resetting)
         if (!pongTwoPlayerMode && pongHitCount > 0) {
+          console.log(
+            `🔍 Round ended - Hits: ${pongHitCount}, Current High Score: ${pongPlayerHighScore}`
+          );
           if (pongHitCount > pongPlayerHighScore) {
+            console.log(
+              `🎉 New high score! ${pongHitCount} > ${pongPlayerHighScore}`
+            );
             pongPlayerHighScore = pongHitCount;
             updatePlayerHighScoreDisplay();
-            // Save to Firebase and wait for it to complete, then update leaderboard
+            // Save high score locally and to Firebase automatically
             await savePongHighScore(pongHitCount);
+          } else {
+            console.log(
+              `⏭️ Not a new high score: ${pongHitCount} <= ${pongPlayerHighScore}`
+            );
           }
         }
         // Reset hit count for new round
@@ -3730,10 +4578,17 @@
         updateCurrentHitsDisplay();
         pongBall.x = pongCanvas.width / 2;
         pongBall.y = pongCanvas.height / 2;
+
+        // Reset acceleration for new round
+        pongBallSpeedMultiplier = 0.3; // Start at 30% speed
+        pongBallHasBeenHit = false; // Reset hit flag
+
         const direction = Math.random() > 0.5 ? 1 : -1;
-        const angle = (Math.random() - 0.5) * Math.PI / 3;
-        pongBall.dx = Math.cos(angle) * pongBallSpeed * direction;
-        pongBall.dy = Math.sin(angle) * pongBallSpeed;
+        const angle = ((Math.random() - 0.5) * Math.PI) / 3;
+        // Start with slower speed (will accelerate)
+        pongBall.dx =
+          Math.cos(angle) * pongBallSpeed * pongBallSpeedMultiplier * direction;
+        pongBall.dy = Math.sin(angle) * pongBallSpeed * pongBallSpeedMultiplier;
       }
 
       function updatePongScore() {
@@ -3766,14 +4621,15 @@
           if (gameOver) gameOver.style.display = "block";
           if (gameOverText) gameOverText.textContent = "Game Over!";
           if (winnerText) {
-            winnerText.textContent = pongPlayer1Score >= 5 ? "You Win!" : "Computer Wins!";
+            winnerText.textContent =
+              pongPlayer1Score >= 5 ? "You Win!" : "Computer Wins!";
           }
           // Check final round's hits before game ends
           if (!pongTwoPlayerMode && pongHitCount > 0) {
             if (pongHitCount > pongPlayerHighScore) {
               pongPlayerHighScore = pongHitCount;
               updatePlayerHighScoreDisplay();
-              // Save to Firebase and wait for it to complete, then update leaderboard
+              // Save to Firebase automatically (saves locally and to Leaderboard collection)
               await savePongHighScore(pongHitCount);
             }
           }
@@ -3781,9 +4637,14 @@
       }
 
       function updatePongPlayer1Paddle() {
-        if (!pongCanvas || !document.getElementById("pong-page")?.classList.contains("active")) return;
+        if (
+          !pongCanvas ||
+          !document.getElementById("pong-page")?.classList.contains("active")
+        )
+          return;
         if (pongHardMode) {
-          const acceleration = pongPlayer1Paddle.acceleration * (pongPaddleSpeed / 6);
+          const acceleration =
+            pongPlayer1Paddle.acceleration * (pongPaddleSpeed / 6);
           if (pongKeys["w"]) {
             pongPlayer1Paddle.velocity -= acceleration;
           }
@@ -3796,7 +4657,10 @@
             pongPlayer1Paddle.y = 0;
             pongPlayer1Paddle.velocity *= -0.5;
           }
-          if (pongPlayer1Paddle.y + pongPlayer1Paddle.height > pongCanvas.height) {
+          if (
+            pongPlayer1Paddle.y + pongPlayer1Paddle.height >
+            pongCanvas.height
+          ) {
             pongPlayer1Paddle.y = pongCanvas.height - pongPlayer1Paddle.height;
             pongPlayer1Paddle.velocity *= -0.5;
           }
@@ -3810,17 +4674,25 @@
           if (pongPlayer1Paddle.y < 0) {
             pongPlayer1Paddle.y = 0;
           }
-          if (pongPlayer1Paddle.y + pongPlayer1Paddle.height > pongCanvas.height) {
+          if (
+            pongPlayer1Paddle.y + pongPlayer1Paddle.height >
+            pongCanvas.height
+          ) {
             pongPlayer1Paddle.y = pongCanvas.height - pongPlayer1Paddle.height;
           }
         }
       }
 
       function updatePongPlayer2Paddle() {
-        if (!pongCanvas || !document.getElementById("pong-page")?.classList.contains("active")) return;
+        if (
+          !pongCanvas ||
+          !document.getElementById("pong-page")?.classList.contains("active")
+        )
+          return;
         if (pongTwoPlayerMode) {
           if (pongHardMode) {
-            const acceleration = pongPlayer2Paddle.acceleration * (pongPaddleSpeed / 6);
+            const acceleration =
+              pongPlayer2Paddle.acceleration * (pongPaddleSpeed / 6);
             if (pongKeys["arrowup"]) {
               pongPlayer2Paddle.velocity -= acceleration;
             }
@@ -3833,8 +4705,12 @@
               pongPlayer2Paddle.y = 0;
               pongPlayer2Paddle.velocity *= -0.5;
             }
-            if (pongPlayer2Paddle.y + pongPlayer2Paddle.height > pongCanvas.height) {
-              pongPlayer2Paddle.y = pongCanvas.height - pongPlayer2Paddle.height;
+            if (
+              pongPlayer2Paddle.y + pongPlayer2Paddle.height >
+              pongCanvas.height
+            ) {
+              pongPlayer2Paddle.y =
+                pongCanvas.height - pongPlayer2Paddle.height;
               pongPlayer2Paddle.velocity *= -0.5;
             }
           } else {
@@ -3847,14 +4723,20 @@
             if (pongPlayer2Paddle.y < 0) {
               pongPlayer2Paddle.y = 0;
             }
-            if (pongPlayer2Paddle.y + pongPlayer2Paddle.height > pongCanvas.height) {
-              pongPlayer2Paddle.y = pongCanvas.height - pongPlayer2Paddle.height;
+            if (
+              pongPlayer2Paddle.y + pongPlayer2Paddle.height >
+              pongCanvas.height
+            ) {
+              pongPlayer2Paddle.y =
+                pongCanvas.height - pongPlayer2Paddle.height;
             }
           }
         } else {
           if (pongHardMode) {
-            const acceleration = pongPlayer2Paddle.acceleration * (pongPaddleSpeed / 6) * 0.8;
-            const paddleCenter = pongPlayer2Paddle.y + pongPlayer2Paddle.height / 2;
+            const acceleration =
+              pongPlayer2Paddle.acceleration * (pongPaddleSpeed / 6) * 0.8;
+            const paddleCenter =
+              pongPlayer2Paddle.y + pongPlayer2Paddle.height / 2;
             const ballY = pongBall.y;
             if (ballY < paddleCenter - 10) {
               pongPlayer2Paddle.velocity -= acceleration;
@@ -3867,12 +4749,17 @@
               pongPlayer2Paddle.y = 0;
               pongPlayer2Paddle.velocity *= -0.5;
             }
-            if (pongPlayer2Paddle.y + pongPlayer2Paddle.height > pongCanvas.height) {
-              pongPlayer2Paddle.y = pongCanvas.height - pongPlayer2Paddle.height;
+            if (
+              pongPlayer2Paddle.y + pongPlayer2Paddle.height >
+              pongCanvas.height
+            ) {
+              pongPlayer2Paddle.y =
+                pongCanvas.height - pongPlayer2Paddle.height;
               pongPlayer2Paddle.velocity *= -0.5;
             }
           } else {
-            const paddleCenter = pongPlayer2Paddle.y + pongPlayer2Paddle.height / 2;
+            const paddleCenter =
+              pongPlayer2Paddle.y + pongPlayer2Paddle.height / 2;
             const ballY = pongBall.y;
             if (ballY < paddleCenter - 10) {
               pongPlayer2Paddle.y -= pongPaddleSpeed * 0.85;
@@ -3882,8 +4769,12 @@
             if (pongPlayer2Paddle.y < 0) {
               pongPlayer2Paddle.y = 0;
             }
-            if (pongPlayer2Paddle.y + pongPlayer2Paddle.height > pongCanvas.height) {
-              pongPlayer2Paddle.y = pongCanvas.height - pongPlayer2Paddle.height;
+            if (
+              pongPlayer2Paddle.y + pongPlayer2Paddle.height >
+              pongCanvas.height
+            ) {
+              pongPlayer2Paddle.y =
+                pongCanvas.height - pongPlayer2Paddle.height;
             }
           }
         }
@@ -3898,11 +4789,14 @@
         if (pongTwoPlayerMode) {
           if (button) button.textContent = "Mode: Two Player";
           button?.classList.add("two-player");
-          if (controlsText) controlsText.textContent = "Player 1: W/S keys | Player 2: ↑/↓ arrows";
+          if (controlsText)
+            controlsText.textContent =
+              "Player 1: W/S keys | Player 2: ↑/↓ arrows";
         } else {
           if (button) button.textContent = "Mode: Single Player";
           button?.classList.remove("two-player");
-          if (controlsText) controlsText.textContent = "Use W/S keys to move your paddle";
+          if (controlsText)
+            controlsText.textContent = "Use W/S keys to move your paddle";
         }
       }
 
@@ -3922,31 +4816,58 @@
 
       async function updatePongBall() {
         if (!pongCanvas) return;
+
+        // Accelerate ball speed if it hasn't been hit yet
+        if (!pongBallHasBeenHit && pongBallSpeedMultiplier < 1.0) {
+          // Accelerate by 0.015 per frame (reaches full speed in about 47 frames = ~0.8 seconds at 60fps)
+          pongBallSpeedMultiplier = Math.min(
+            1.0,
+            pongBallSpeedMultiplier + 0.015
+          );
+
+          // Update ball velocity to match current speed multiplier
+          const currentSpeed = Math.sqrt(
+            pongBall.dx * pongBall.dx + pongBall.dy * pongBall.dy
+          );
+          if (currentSpeed > 0) {
+            const angle = Math.atan2(pongBall.dy, pongBall.dx);
+            const targetSpeed = pongBallSpeed * pongBallSpeedMultiplier;
+            pongBall.dx = Math.cos(angle) * targetSpeed;
+            pongBall.dy = Math.sin(angle) * targetSpeed;
+          }
+        }
+
         pongBall.x += pongBall.dx;
         pongBall.y += pongBall.dy;
-        
+
         // Top wall collision - ensure ball bounces away
         if (pongBall.y - pongBall.radius <= 0) {
           pongBall.y = pongBall.radius; // Move ball back to boundary
           pongBall.dy = Math.abs(pongBall.dy); // Ensure it moves down (away from wall)
         }
-        
+
         // Bottom wall collision - ensure ball bounces away
         if (pongBall.y + pongBall.radius >= pongCanvas.height) {
           pongBall.y = pongCanvas.height - pongBall.radius; // Move ball back to boundary
           pongBall.dy = -Math.abs(pongBall.dy); // Ensure it moves up (away from wall)
         }
         if (
-          pongBall.x - pongBall.radius <= pongPlayer1Paddle.x + pongPlayer1Paddle.width &&
+          pongBall.x - pongBall.radius <=
+            pongPlayer1Paddle.x + pongPlayer1Paddle.width &&
           pongBall.y >= pongPlayer1Paddle.y &&
           pongBall.y <= pongPlayer1Paddle.y + pongPlayer1Paddle.height &&
           pongBall.dx < 0
         ) {
-          const hitPos = (pongBall.y - pongPlayer1Paddle.y) / pongPlayer1Paddle.height;
+          const hitPos =
+            (pongBall.y - pongPlayer1Paddle.y) / pongPlayer1Paddle.height;
           const angle = ((hitPos - 0.5) * Math.PI) / 3;
+          // Ball has been hit - use full speed from now on
+          pongBallHasBeenHit = true;
+          pongBallSpeedMultiplier = 1.0;
           pongBall.dx = Math.cos(angle) * pongBallSpeed;
           pongBall.dy = Math.sin(angle) * pongBallSpeed;
-          pongBall.x = pongPlayer1Paddle.x + pongPlayer1Paddle.width + pongBall.radius;
+          pongBall.x =
+            pongPlayer1Paddle.x + pongPlayer1Paddle.width + pongBall.radius;
           // Track hits in single player mode
           if (!pongTwoPlayerMode) {
             pongHitCount++;
@@ -3959,8 +4880,12 @@
           pongBall.y <= pongPlayer2Paddle.y + pongPlayer2Paddle.height &&
           pongBall.dx > 0
         ) {
-          const hitPos = (pongBall.y - pongPlayer2Paddle.y) / pongPlayer2Paddle.height;
+          const hitPos =
+            (pongBall.y - pongPlayer2Paddle.y) / pongPlayer2Paddle.height;
           const angle = ((hitPos - 0.5) * Math.PI) / 3;
+          // Ball has been hit - use full speed from now on
+          pongBallHasBeenHit = true;
+          pongBallSpeedMultiplier = 1.0;
           pongBall.dx = -Math.cos(angle) * pongBallSpeed;
           pongBall.dy = Math.sin(angle) * pongBallSpeed;
           pongBall.x = pongPlayer2Paddle.x - pongBall.radius;
@@ -4017,7 +4942,11 @@
           pongCtx.fillStyle = "#fff";
           pongCtx.font = "48px Arial";
           pongCtx.textAlign = "center";
-          pongCtx.fillText("PAUSED", pongCanvas.width / 2, pongCanvas.height / 2);
+          pongCtx.fillText(
+            "PAUSED",
+            pongCanvas.width / 2,
+            pongCanvas.height / 2
+          );
           pongCtx.font = "16px Arial";
           pongCtx.fillText(
             "Press SPACE to resume",
@@ -4028,184 +4957,162 @@
       }
 
       function pongGameLoop() {
+        // Only run if pong page is active and game is playing
+        const pongPage = document.getElementById("pong-page");
+        if (!pongPage || !pongPage.classList.contains("active")) {
+          stopPongGameLoop();
+          return;
+        }
+
         if (pongGameState === "playing") {
           updatePongPlayer1Paddle();
           updatePongPlayer2Paddle();
           updatePongBall();
           drawPong();
-          requestAnimationFrame(pongGameLoop);
+          pongAnimationFrameId = requestAnimationFrame(pongGameLoop);
         } else if (pongGameState === "paused") {
           drawPong();
+          stopPongGameLoop();
+        } else {
+          stopPongGameLoop();
         }
       }
 
-      // Speed slider functionality
-      const speedSlider = document.getElementById("speedSlider");
-      const speedValue = document.getElementById("speedValue");
-      if (speedSlider && speedValue) {
-        speedSlider.addEventListener("input", function () {
-          pongBallSpeed = parseFloat(this.value);
-          speedValue.textContent = pongBallSpeed;
-          if (pongGameState === "playing") {
-            const currentSpeed = Math.sqrt(pongBall.dx * pongBall.dx + pongBall.dy * pongBall.dy);
-            if (currentSpeed > 0) {
-              const angle = Math.atan2(pongBall.dy, pongBall.dx);
-              pongBall.dx = Math.cos(angle) * pongBallSpeed;
-              pongBall.dy = Math.sin(angle) * pongBallSpeed;
+      // Speed slider functionality - only add listeners once
+      if (!pongSliderListenersAdded) {
+        pongSliderListenersAdded = true;
+
+        const speedSlider = document.getElementById("speedSlider");
+        const speedValue = document.getElementById("speedValue");
+        if (speedSlider && speedValue) {
+          speedSlider.addEventListener("input", function () {
+            pongBallSpeed = parseFloat(this.value);
+            speedValue.textContent = pongBallSpeed;
+            if (pongGameState === "playing") {
+              const currentSpeed = Math.sqrt(
+                pongBall.dx * pongBall.dx + pongBall.dy * pongBall.dy
+              );
+              if (currentSpeed > 0) {
+                const angle = Math.atan2(pongBall.dy, pongBall.dx);
+                pongBall.dx = Math.cos(angle) * pongBallSpeed;
+                pongBall.dy = Math.sin(angle) * pongBallSpeed;
+              }
             }
-          }
-        });
-      }
-
-      // Paddle speed slider functionality
-      const paddleSpeedSlider = document.getElementById("paddleSpeedSlider");
-      const paddleSpeedValue = document.getElementById("paddleSpeedValue");
-      if (paddleSpeedSlider && paddleSpeedValue) {
-        paddleSpeedSlider.addEventListener("input", function () {
-          pongPaddleSpeed = parseFloat(this.value);
-          paddleSpeedValue.textContent = pongPaddleSpeed;
-        });
-      }
-
-      // Firebase high score functions
-      async function loadPlayerHighScore() {
-        const username = getUsername();
-        if (!username) {
-          // Try to load from localStorage as fallback
-          const savedHighScore = localStorage.getItem('pongHighScore');
-          if (savedHighScore) {
-            pongPlayerHighScore = parseInt(savedHighScore) || 0;
-            updatePlayerHighScoreDisplay();
-          }
-          return;
+          });
         }
 
-        // Try to load from localStorage first (faster)
-        const savedHighScore = localStorage.getItem(`pongHighScore_${username}`);
+        // Paddle speed slider functionality
+        const paddleSpeedSlider = document.getElementById("paddleSpeedSlider");
+        const paddleSpeedValue = document.getElementById("paddleSpeedValue");
+        if (paddleSpeedSlider && paddleSpeedValue) {
+          paddleSpeedSlider.addEventListener("input", function () {
+            pongPaddleSpeed = parseFloat(this.value);
+            paddleSpeedValue.textContent = pongPaddleSpeed;
+          });
+        }
+      }
+
+      // Load high score from cookies/localStorage
+      function loadPlayerHighScore() {
+        // Try to load from cookie first (persists across sessions)
+        let savedHighScore = getCookie("pongHighScore");
+
+        // If not in cookie, try localStorage as backup
+        if (!savedHighScore) {
+          const username = getUsername();
+          if (username) {
+            savedHighScore = localStorage.getItem(`pongHighScore_${username}`);
+          }
+          // Try generic localStorage key as fallback
+          if (!savedHighScore) {
+            savedHighScore = localStorage.getItem("pongHighScore");
+          }
+        }
+
         if (savedHighScore) {
           pongPlayerHighScore = parseInt(savedHighScore) || 0;
           updatePlayerHighScoreDisplay();
-        }
-
-        // Then load from Firebase to get the latest
-        if (!window.firestoreDb) {
-          return;
-        }
-
-        try {
-          const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-          const leaderboardRef = doc(window.firestoreDb, 'Leaderboard', username);
-          const currentDoc = await getDoc(leaderboardRef);
-          
-          if (currentDoc.exists()) {
-            const score = currentDoc.data().score || 0;
-            pongPlayerHighScore = score;
-            updatePlayerHighScoreDisplay();
-            // Save to localStorage for persistence
-            localStorage.setItem(`pongHighScore_${username}`, score.toString());
-          }
-        } catch (error) {
-          console.error('Error loading player high score:', error);
+          console.log(
+            `✅ Loaded high score from storage: ${pongPlayerHighScore}`
+          );
+        } else {
+          pongPlayerHighScore = 0;
+          updatePlayerHighScoreDisplay();
+          console.log("📝 No saved high score found, starting at 0");
         }
       }
 
+      // Save high score to cookies and localStorage (persists across sessions)
       async function savePongHighScore(hits) {
-        if (!window.firestoreDb) {
-          console.error('❌ Firestore not initialized');
-          return false;
-        }
+        console.log(`💾 Saving high score: ${hits}`);
 
+        // Save to cookie (persists across sessions, expires in 1 year)
+        setCookie("pongHighScore", hits.toString(), 365);
+
+        // Also save to localStorage as backup
         const username = getUsername();
-        if (!username) {
-          console.error('❌ No username found');
-          return false;
+        if (username) {
+          localStorage.setItem(`pongHighScore_${username}`, hits.toString());
         }
+        localStorage.setItem("pongHighScore", hits.toString());
 
-        try {
-          const { setDoc, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-          
-          // Get current high score for this user
-          const leaderboardRef = doc(window.firestoreDb, 'Leaderboard', username);
-          
-          // Check if user already has a high score
-          const currentDoc = await getDoc(leaderboardRef);
-          
-          let shouldUpdate = false;
-          let currentScore = 0;
-          
-          if (!currentDoc.exists()) {
-            // No existing score, save this one
-            shouldUpdate = true;
-            console.log(`📝 No existing score for ${username}, saving ${hits} hits`);
-          } else {
-            currentScore = currentDoc.data().score || 0;
-            if (hits > currentScore) {
-              // New high score!
-              shouldUpdate = true;
-              console.log(`🎉 New high score! ${hits} > ${currentScore} for ${username}`);
-            } else {
-              console.log(`⏭️ Score ${hits} not higher than current Firebase score ${currentScore}, skipping save`);
-            }
-          }
+        console.log(`✅ Saved high score ${hits} to cookies and localStorage`);
 
-          if (shouldUpdate) {
-            // Always save/update the score field in Firebase when it's a new high score
-            // Using setDoc with merge: true ensures the score field gets updated
-            await setDoc(leaderboardRef, {
-              score: hits
-            }, { merge: true });
-            console.log(`✅ Successfully saved/updated score field in Firebase: ${hits} hits for ${username}`);
-            
-            // Verify the score was saved correctly by reading it back
-            const verifyDoc = await getDoc(leaderboardRef);
-            if (verifyDoc.exists()) {
-              const savedScore = verifyDoc.data().score;
-              console.log(`✅ Verified: Score field in Firebase is now ${savedScore} for ${username}`);
-              if (savedScore !== hits) {
-                console.warn(`⚠️ Warning: Saved score ${savedScore} doesn't match expected ${hits}`);
-              }
-            }
-            
-            // Save to localStorage for persistence
-            localStorage.setItem(`pongHighScore_${username}`, hits.toString());
-            
-            // Small delay to ensure Firebase has propagated the change
-            await new Promise(resolve => setTimeout(resolve, 300));
-            
-            // Always reload leaderboard after saving to update the table
-            console.log('🔄 Reloading leaderboard table after save...');
-            try {
-              await loadPongLeaderboard();
-              console.log('✅ Leaderboard table updated after save!');
-            } catch (reloadError) {
-              console.error('❌ Error reloading leaderboard after save:', reloadError);
-              // Try again after a delay
-              setTimeout(async () => {
-                console.log('🔄 Retrying leaderboard reload...');
-                await loadPongLeaderboard();
-              }, 500);
-            }
-            return true;
-          }
-          return false;
-        } catch (error) {
-          console.error('❌ Error saving high score:', error);
-          // Try to reload leaderboard even if save failed
+        // Verify it was saved locally
+        const cookieValue = getCookie("pongHighScore");
+        const storageValue = localStorage.getItem("pongHighScore");
+        console.log(
+          `🔍 Verification - Cookie: ${cookieValue}, localStorage: ${storageValue}`
+        );
+
+        // Automatically save to Firebase Leaderboard collection
+        if (window.firestoreDb && username) {
           try {
-            await loadPongLeaderboard();
-          } catch (reloadError) {
-            console.error('❌ Error reloading leaderboard:', reloadError);
+            const { setDoc, doc } = await import(
+              "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+            );
+            const leaderboardRef = doc(
+              window.firestoreDb,
+              "Leaderboard",
+              username
+            );
+            console.log(
+              `📝 Auto-saving to Leaderboard collection, document: ${username}`
+            );
+
+            await setDoc(leaderboardRef, {
+              score: hits,
+            });
+            console.log(
+              `✅ Auto-saved score ${hits} to Leaderboard collection for ${username}`
+            );
+
+            // Wait a moment for Firebase to propagate, then reload leaderboard
+            setTimeout(async () => {
+              await loadPongLeaderboard();
+            }, 500);
+          } catch (error) {
+            console.error("❌ Error auto-saving to leaderboard:", error);
+            // Don't show alert for automatic saves, just log the error
           }
-          return false;
+        } else {
+          if (!window.firestoreDb) {
+            console.warn(
+              "⚠️ Firestore not initialized, skipping Firebase save"
+            );
+          }
+          if (!username) {
+            console.warn("⚠️ No username found, skipping Firebase save");
+          }
         }
       }
 
       // Make loadPongLeaderboard globally accessible
       window.loadPongLeaderboard = async function loadPongLeaderboard() {
-        console.log('🔄 loadPongLeaderboard() called');
-        
+        console.log("🔄 loadPongLeaderboard() called");
+
         if (!window.firestoreDb) {
-          console.error('❌ Firestore not initialized for leaderboard');
+          console.error("❌ Firestore not initialized for leaderboard");
           // Retry after a delay if Firestore isn't ready
           setTimeout(() => {
             if (window.firestoreDb) {
@@ -4220,40 +5127,45 @@
         const tbodyEl = document.getElementById("leaderboard-body");
 
         if (!loadingEl) {
-          console.error('❌ leaderboard-loading element not found');
+          console.error("❌ leaderboard-loading element not found");
           return;
         }
         if (!tableEl) {
-          console.error('❌ leaderboard-table element not found');
+          console.error("❌ leaderboard-table element not found");
           return;
         }
         if (!tbodyEl) {
-          console.error('❌ leaderboard-body element not found');
+          console.error("❌ leaderboard-body element not found");
           return;
         }
 
         try {
-          console.log('📊 Starting to load leaderboard...');
+          console.log("📊 Starting to load leaderboard...");
           loadingEl.style.display = "block";
           loadingEl.textContent = "Loading leaderboard...";
           tableEl.style.display = "none";
 
-          const { getDocs, collection, query, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-          const leaderboardRef = collection(window.firestoreDb, 'Leaderboard');
-          
-          console.log('📊 Querying Leaderboard collection...');
+          const { getDocs, collection, query, orderBy, limit } = await import(
+            "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+          );
+          const leaderboardRef = collection(window.firestoreDb, "Leaderboard");
+
+          console.log("📊 Querying Leaderboard collection...");
           // Query top 5 scores ordered by score descending
-          const q = query(leaderboardRef, orderBy('score', 'desc'), limit(5));
+          const q = query(leaderboardRef, orderBy("score", "desc"), limit(5));
           const querySnapshot = await getDocs(q);
 
-          console.log(`📊 Loaded ${querySnapshot.size} scores from leaderboard`);
+          console.log(
+            `📊 Loaded ${querySnapshot.size} scores from leaderboard`
+          );
 
           // Clear existing rows
           tbodyEl.innerHTML = "";
 
           if (querySnapshot.empty) {
-            console.log('📊 Leaderboard is empty - no scores found');
-            tbodyEl.innerHTML = "<tr><td colspan='3' style='text-align: center; color: rgba(255,255,255,0.7);'>No high scores yet!</td></tr>";
+            console.log("📊 Leaderboard is empty - no scores found");
+            tbodyEl.innerHTML =
+              "<tr><td colspan='3' style='text-align: center; color: rgba(255,255,255,0.7);'>No high scores yet!</td></tr>";
             loadingEl.style.display = "none";
             tableEl.style.display = "table";
           } else {
@@ -4273,18 +5185,22 @@
               tbodyEl.appendChild(row);
               rank++;
             });
-            
+
             console.log(`✅ Added ${scores.length} rows to leaderboard table`);
-            
+
             // Hide loading and show table
             loadingEl.style.display = "none";
             tableEl.style.display = "table";
-            console.log('✅ Leaderboard table displayed with', scores.length, 'scores');
+            console.log(
+              "✅ Leaderboard table displayed with",
+              scores.length,
+              "scores"
+            );
           }
         } catch (error) {
-          console.error('❌ Error loading leaderboard:', error);
-          console.error('Error details:', error.message, error.stack);
-          
+          console.error("❌ Error loading leaderboard:", error);
+          console.error("Error details:", error.message, error.stack);
+
           if (loadingEl) {
             loadingEl.textContent = `Error loading leaderboard: ${error.message}`;
             loadingEl.style.display = "block";
@@ -4292,53 +5208,22 @@
           if (tableEl) {
             tableEl.style.display = "none";
           }
-          
+
           // Try to reload after a delay
           setTimeout(() => {
-            console.log('🔄 Retrying leaderboard load...');
+            console.log("🔄 Retrying leaderboard load...");
             loadPongLeaderboard();
           }, 2000);
         }
-      }
+      };
 
-      // Initialize user's leaderboard entry with score 0 if they don't exist
-      async function initializeUserLeaderboardEntry() {
-        if (!window.firestoreDb) {
-          console.error('❌ Firestore not initialized');
-          return;
-        }
-
-        const username = getUsername();
-        if (!username) {
-          console.error('❌ No username found');
-          return;
-        }
-
-        try {
-          const { setDoc, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-          const leaderboardRef = doc(window.firestoreDb, 'Leaderboard', username);
-          
-          // Check if user already has an entry
-          const currentDoc = await getDoc(leaderboardRef);
-          
-          if (!currentDoc.exists()) {
-            // User doesn't exist in leaderboard, create entry with score 0
-            await setDoc(leaderboardRef, {
-              score: 0
-            });
-            console.log(`✅ Initialized leaderboard entry for ${username} with score 0`);
-            // Reload leaderboard to show the new entry
-            await loadPongLeaderboard();
-          } else {
-            console.log(`✅ User ${username} already exists in leaderboard with score ${currentDoc.data().score || 0}`);
-          }
-        } catch (error) {
-          console.error('❌ Error initializing user leaderboard entry:', error);
-        }
+      // Initialize user's high score from local storage
+      function initializeUserLeaderboardEntry() {
+        console.log("🔧 Loading high score from local storage");
+        loadPlayerHighScore();
       }
 
       // ========== END PONG GAME CODE ==========
     </script>
   </body>
 </html>
-

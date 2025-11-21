@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulleySim - Pulley System Simulator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      /* Pulley Simulator Page */
+      .pulley-container {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .pulley-container h1 {
+        margin: 0 0 20px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .pulley-info {
+        font-size: 18px;
+        margin: 15px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .pulley-info strong {
+        color: #ffd93d;
+      }
+
+      #pulleyCanvas {
+        border: 3px solid #fff;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        margin: 20px 0;
+      }
+
+      .pulley-control {
+        margin: 20px 0;
+        font-size: 18px;
+        color: white;
+        text-align: center;
+      }
+
+      .pulley-control label {
+        margin-right: 10px;
+      }
+
+      .pulley-control input[type="range"] {
+        width: 200px;
+        margin: 0 10px;
+        accent-color: #ff6b6b;
+      }
+
+      .pulley-control span {
+        font-weight: bold;
+        color: #ffd93d;
+      }
+
+      .pulley-control button {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        border: 2px solid #3498db;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        font-weight: 500;
+      }
+
+      .pulley-control button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+        background: linear-gradient(45deg, #2980b9, #3498db);
+      }
+
+      .pulley-control button.active {
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        border-color: #27ae60;
+        box-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pulley-container">
+      <h1>PulleySim (rope dreams come to life)</h1>
+      <div class="pulley-info" style="margin-bottom: 20px; line-height: 1.6;">
+        <p style="font-size: 16px; max-width: 800px; margin: 0 auto;">
+          Ropes and pulleys can be used to create a mechanical advantage that makes it so it only requires a half, a third, or a quarter the weight of an object to lift it depending on the amount of pulleys used. This mechanical advantage does not come for free though because if the mechanical advantage is 2:1 then it requires half the force but you have to pull the rope twice as much and 3 times as much for a 2:1 advantage and so on. <strong>Play around with the mass of the weight below and also try to drag the loose end of the rope to see what happens at different mechanical advantages.</strong>
+        </p>
+      </div>
+      <div class="pulley-info">
+        <strong>Mechanical Advantage:</strong>
+        <span id="displayMA">1:1</span> | <strong>Mass:</strong>
+        <span id="displayMass">1</span> kg | <strong>Force Required:</strong>
+        <span id="displayForce">9.8</span> N
+      </div>
+      <canvas id="pulleyCanvas" width="800" height="500"></canvas>
+      <div class="pulley-control">
+        <label for="massSlider">Mass:</label>
+        <input
+          type="range"
+          id="massSlider"
+          min="0.5"
+          max="5"
+          value="1"
+          step="0.1"
+        />
+        <span id="massValue">1</span> kg
+      </div>
+      <div class="pulley-control">
+        <label for="maSlider">Mechanical Advantage:</label>
+        <input
+          type="range"
+          id="maSlider"
+          min="1"
+          max="4"
+          value="1"
+          step="1"
+        />
+        <span id="maValue">1:1</span>
+      </div>
+      <div class="pulley-info">
+        <p id="forceCalculation">Force = Weight = 1 kg × 9.8 m/s² = 9.8 N</p>
+      </div>
+    </div>
+
+    <script>
+      // Pulley System Variables
+      let currentMass = 1; // Default mass in kg
+      let mechanicalAdvantage = 1; // 1:1 or 2:1
+      
+      // Interactive rope pulling variables
+      let isDragging = false;
+      let pullEndY = 320; // Default pull end Y position (will be updated per MA)
+      let pullRopeX = 0; // Will be set based on MA
+      let canvas = null;
+      let lastMA = 0; // Track last MA to reset pullEndY when MA changes
+      let startingPullEndY = 320; // Starting position to calculate distance dragged
+      let startingMassY = 350; // Starting mass Y position for MA 1:1
+      let startingMovablePulleyY = 280; // Starting movable pulley Y position for MA 2:1, 3:1, 4:1
+
+      // Mass slider functionality for pulley system
+      const massSlider = document.getElementById("massSlider");
+      const massValue = document.getElementById("massValue");
+      const displayMass = document.getElementById("displayMass");
+      const displayForce = document.getElementById("displayForce");
+      const forceCalculation = document.getElementById("forceCalculation");
+
+      if (massSlider) {
+        massSlider.addEventListener("input", function () {
+          const mass = parseFloat(this.value);
+          updatePulleyDisplay(mass, mechanicalAdvantage);
+          drawPulleySystem(mass, mechanicalAdvantage);
+        });
+      }
+
+      // Mechanical advantage slider functionality
+      const maSlider = document.getElementById("maSlider");
+      const maValue = document.getElementById("maValue");
+
+      if (maSlider) {
+        maSlider.addEventListener("input", function () {
+          mechanicalAdvantage = parseInt(this.value);
+          if (maValue) maValue.textContent = mechanicalAdvantage + ":1";
+          updatePulleyDisplay(currentMass, mechanicalAdvantage);
+          drawPulleySystem(currentMass, mechanicalAdvantage);
+        });
+      }
+
+      // Update display values
+      function updatePulleyDisplay(mass, ma) {
+        if (massValue) massValue.textContent = mass.toFixed(1);
+        if (displayMass) displayMass.textContent = mass.toFixed(1);
+
+        // Calculate force based on mechanical advantage
+        const weight = mass * 9.8;
+        const force = weight / ma;
+
+        if (displayForce) displayForce.textContent = force.toFixed(1);
+        if (displayMA) displayMA.textContent = ma + ":1";
+
+        // Update force calculation text
+        if (forceCalculation) {
+          if (ma === 1) {
+            forceCalculation.textContent = `Force = Weight = ${mass.toFixed(
+              1
+            )} kg × 9.8 m/s² = ${force.toFixed(1)} N`;
+          } else {
+            forceCalculation.textContent = `Force = Weight ÷ MA = (${mass.toFixed(
+              1
+            )} kg × 9.8 m/s²) ÷ ${ma} = ${force.toFixed(1)} N`;
+          }
+        }
+      }
+
+      // Pulley System Drawing
+      function drawPulleySystem(mass = currentMass, ma = mechanicalAdvantage) {
+        const canvas = document.getElementById("pulleyCanvas");
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        const width = canvas.width;
+        const height = canvas.height;
+
+        currentMass = mass; // Update current mass
+        mechanicalAdvantage = ma; // Update mechanical advantage
+
+        // Clear canvas with white background
+        ctx.fillStyle = "#f0f0f0";
+        ctx.fillRect(0, 0, width, height);
+
+        // Draw ceiling
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(100, 50);
+        ctx.lineTo(700, 50);
+        ctx.stroke();
+
+        // One fixed pulley on top (centered) - bigger diameter
+        const fixedPulleyX = 400;
+        const fixedPulleyY = 100;
+        const fixedPulleyRadius = 50; // Bigger diameter
+
+        // Mount dimensions (will be drawn last)
+        const mountWidth = 15;
+        const mountHeight = 110;
+
+        // Draw fixed pulley (solid grey, no stroke)
+        ctx.fillStyle = "#888";
+        ctx.beginPath();
+        ctx.arc(fixedPulleyX, fixedPulleyY, fixedPulleyRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        const massWidth = 80;
+        const massHeight = 60;
+
+        if (ma === 1) {
+          // 1:1 Mechanical Advantage (Direction Changer)
+          // Left side - where mass hangs (rope goes straight down from pulley)
+          const leftRopeX = fixedPulleyX - fixedPulleyRadius;
+          
+          // Right side - where you pull (rope goes straight down from pulley)
+          const rightRopeX = fixedPulleyX + fixedPulleyRadius;
+          pullRopeX = rightRopeX;
+          // Initialize pullEndY if MA changed
+          if (lastMA !== ma) {
+            pullEndY = 320;
+            startingPullEndY = 320;
+            startingMassY = 350;
+            lastMA = ma;
+          }
+          
+          // Calculate how far the rope has moved from starting position
+          const ropeMovement = pullEndY - startingPullEndY;
+          // Move mass in opposite direction by the same distance
+          const massY = startingMassY - ropeMovement;
+
+          // Draw left rope first (brown)
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(leftRopeX, fixedPulleyY);
+          ctx.lineTo(leftRopeX, massY);
+          ctx.stroke();
+
+          // Draw rope connection point on box
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(leftRopeX, massY, 3, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Draw rope around top of pulley (semicircle from left to right) - brown
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.arc(fixedPulleyX, fixedPulleyY, fixedPulleyRadius, Math.PI, 0);
+          ctx.stroke();
+
+          // Draw right rope LAST - BROWN, goes straight down from pulley edge (shorter)
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(rightRopeX, fixedPulleyY);
+          ctx.lineTo(rightRopeX, pullEndY);
+          ctx.stroke();
+
+          // Draw handle at end of rope (visual indicator for dragging)
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(pullRopeX, pullEndY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#654321";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw starting point marker (red, slightly to the right of rope)
+          const markerOffsetX = 20; // Offset to the right
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, startingPullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting point to current point (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX + markerOffsetX, startingPullEndY);
+          ctx.lineTo(pullRopeX + markerOffsetX, pullEndY);
+          ctx.stroke();
+
+          // Draw current position marker (red, slightly to the right of rope, below the red line)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, pullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw mass/box hanging from left side
+          ctx.fillStyle = "#444";
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 2;
+          ctx.fillRect(leftRopeX - massWidth / 2, massY, massWidth, massHeight);
+          ctx.strokeRect(
+            leftRopeX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+
+          // Draw mass label on box (dynamic)
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 20px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            mass.toFixed(1) + " kg",
+            leftRopeX,
+            massY + massHeight / 2 + 7
+          );
+
+          // Draw starting position marker for weight (red, slightly to the left of rope)
+          const leftMarkerOffsetX = -50; // Offset to the left
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(leftRopeX + leftMarkerOffsetX, startingMassY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw current position marker for weight (red, slightly to the left of rope)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(leftRopeX + leftMarkerOffsetX, massY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting position to current position (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(leftRopeX + leftMarkerOffsetX, startingMassY);
+          ctx.lineTo(leftRopeX + leftMarkerOffsetX, massY);
+          ctx.stroke();
+
+          // Calculate distance the weight has moved
+          const weightDistanceMoved = Math.abs(massY - startingMassY);
+          
+          // Draw distance counter to the left of the weight (blue)
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Distance: " + weightDistanceMoved.toFixed(0) + " px",
+            leftRopeX + leftMarkerOffsetX - 10,
+            massY + 5
+          );
+
+          // Draw arrow showing downward pull (on right side rope) - BROWN
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.moveTo(rightRopeX, pullEndY + 30);
+          ctx.lineTo(rightRopeX - 5, pullEndY + 20);
+          ctx.lineTo(rightRopeX + 5, pullEndY + 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Calculate distance dragged
+          const distanceDragged = Math.abs(pullEndY - startingPullEndY);
+          
+          // Draw force label on the right side of the rope
+          const force = mass * 9.8; // Force = mass × gravity
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Force = " + force.toFixed(1) + " N",
+            pullRopeX + 35,
+            pullEndY + 5
+          );
+          
+          // Draw distance measurement
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Distance: " + distanceDragged.toFixed(0) + " px",
+            pullRopeX + 35,
+            pullEndY + 25
+          );
+
+          // Draw labels
+          ctx.fillStyle = "#000";
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Fixed Pulley", fixedPulleyX, 30);
+
+          // Draw mechanical advantage indicator
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Mechanical Advantage: 1:1 (Direction Changer)",
+            10,
+            height - 30
+          );
+
+          // Draw pulley mount LAST - rectangle centered on the pulley circle - BLACK
+          // This ensures it appears on top of everything
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            fixedPulleyX - mountWidth / 2,
+            fixedPulleyY - mountHeight / 2,
+            mountWidth,
+            mountHeight
+          );
+        } else if (ma === 2) {
+          // 2:1 Mechanical Advantage
+          // Movable pulley at bottom
+          const movablePulleyX = fixedPulleyX;
+          const movablePulleyRadius = 35;
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          // Rope connects to right side of top circle and goes straight down
+          pullRopeX = fixedPulleyX + fixedPulleyRadius;
+          // Initialize pullEndY if MA changed
+          if (lastMA !== ma) {
+            pullEndY = 340;
+            startingPullEndY = 340;
+            startingMovablePulleyY = 280;
+            lastMA = ma;
+          }
+          
+          // Calculate how far the rope has moved from starting position
+          const ropeMovement = pullEndY - startingPullEndY;
+          // Move movable pulley by half the distance in opposite direction
+          const movablePulleyY = startingMovablePulleyY - (ropeMovement / 2);
+
+          // Draw all grey circles FIRST (in background)
+          ctx.fillStyle = "#888";
+          // Draw movable pulley
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+
+          // Draw rope path for 2:1 mechanical advantage
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+
+          // Rope from mount attachment point wrapping around left side of top pulley
+          // Draw line from mount to left side (avoiding the top), then arc along top semicircle
+
+          // Now draw the arc along the top semicircle from left to top
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Arc along top semicircle from left to top (left half of top semicircle)
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            Math.PI, // Left side (180°)
+            (3 * Math.PI) / 2, // Top (270°)
+            false // Counterclockwise - goes from left to top along top semicircle
+          );
+          ctx.stroke();
+
+          // Rope path: from left side of top pulley down, around bottom of bottom pulley, then up
+          ctx.beginPath();
+          // Start from left side of top pulley
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Straight down to left side of bottom pulley
+          ctx.lineTo(movablePulleyX - movablePulleyRadius, movablePulleyY);
+          // Semicircle around bottom of bottom pulley (bottom half only)
+          // Arc from left (180°) through bottom (270°) to right (0°) - this is the bottom semicircle
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            Math.PI, // Left side (180°)
+            0, // Right side (0°)
+            true // Clockwise - goes from left through bottom (270°) to right (bottom semicircle)
+          );
+          // Straight up to mount attachment point
+          ctx.lineTo(fixedPulleyX, mountAttachmentY);
+          ctx.stroke();
+
+          // Rope from mount attachment point wrapping around right side of top pulley
+          // Draw line from mount to top of pulley, then arc along right half of top semicircle
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX, mountAttachmentY);
+          ctx.lineTo(fixedPulleyX, fixedPulleyY - fixedPulleyRadius);
+          // Arc along right half of top semicircle: from top (270°) to right (0°)
+          // This is 90 degrees along the top semicircle
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            0, // Right side (0°)
+            false // Counterclockwise - goes from top to right along top semicircle
+          );
+          ctx.stroke();
+
+          // Free end: straight down from right side of top pulley to pulling point
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
+          ctx.lineTo(pullRopeX, pullEndY);
+          ctx.stroke();
+
+          // Draw handle at end of rope (visual indicator for dragging)
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(pullRopeX, pullEndY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#654321";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw starting point marker (red, slightly to the right of rope)
+          const markerOffsetX = 20; // Offset to the right
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, startingPullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting point to current point (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX + markerOffsetX, startingPullEndY);
+          ctx.lineTo(pullRopeX + markerOffsetX, pullEndY);
+          ctx.stroke();
+
+          // Draw current position marker (red, slightly to the right of rope, below the red line)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, pullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
+          const massY = movablePulleyY + movablePulleyRadius + 20;
+          const startingMassY = startingMovablePulleyY + movablePulleyRadius + 20;
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX, movablePulleyY + movablePulleyRadius);
+          ctx.lineTo(movablePulleyX, massY);
+          ctx.stroke();
+
+          // Draw mass/box hanging from bottom pulley
+          ctx.fillStyle = "#444";
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 2;
+          ctx.fillRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+          ctx.strokeRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+
+          // Draw mass label on box (dynamic)
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 20px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            mass.toFixed(1) + " kg",
+            movablePulleyX,
+            massY + massHeight / 2 + 7
+          );
+
+          // Draw starting position marker for weight (red, slightly to the left)
+          const leftMarkerOffsetX = -50; // Offset to the left
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, startingMassY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw current position marker for weight (red, slightly to the left)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, massY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting position to current position (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX + leftMarkerOffsetX, startingMassY);
+          ctx.lineTo(movablePulleyX + leftMarkerOffsetX, massY);
+          ctx.stroke();
+
+          // Calculate distance the weight has moved
+          const weightDistanceMoved = Math.abs(massY - startingMassY);
+          
+          // Draw distance counter to the left of the weight (blue)
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Distance: " + weightDistanceMoved.toFixed(0) + " px",
+            movablePulleyX + leftMarkerOffsetX - 10,
+            massY + 5
+          );
+
+          // Draw arrow showing downward pull (on free end of rope) - BROWN
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX, pullEndY + 30);
+          ctx.lineTo(pullRopeX - 5, pullEndY + 20);
+          ctx.lineTo(pullRopeX + 5, pullEndY + 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Calculate distance dragged
+          const distanceDragged = Math.abs(pullEndY - startingPullEndY);
+          
+          // Draw force label on the right side of the rope
+          const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Force = " + force.toFixed(1) + " N",
+            pullRopeX + 50,
+            pullEndY + 5
+          );
+          
+          // Draw distance measurement
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Distance: " + distanceDragged.toFixed(0) + " px",
+            pullRopeX + 50,
+            pullEndY + 25
+          );
+
+          // Draw labels
+          ctx.fillStyle = "#000";
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Fixed Pulley", fixedPulleyX, 30);
+
+          // Draw "Movable Pulley" label to the left of the bottom pulley
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Movable Pulley",
+            movablePulleyX - movablePulleyRadius - 30,
+            movablePulleyY
+          );
+
+          // Draw mechanical advantage indicator
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 10, height - 30);
+
+          // Draw pulley mount LAST - rectangle centered on the pulley circle - BLACK
+          // This ensures it appears on top of everything
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            fixedPulleyX - mountWidth / 2,
+            fixedPulleyY - mountHeight / 2,
+            mountWidth,
+            mountHeight
+          );
+        } else if (ma === 3) {
+          // 3:1 Mechanical Advantage
+          // Movable pulley at bottom
+          const movablePulleyX = fixedPulleyX;
+          const movablePulleyRadius = 35;
+
+          // Define smaller pulley position (needed for rope path)
+          const bottomMountWidth = 15;
+          const bottomMountHeight = 70; // Height of the rectangle on the bottom pulley
+          const ropeWidth = 5; // Width of the brown rope
+          const gapSize = ropeWidth * 2; // Gap between the two top pulleys (2 times rope width)
+          const smallerPulleyRadius = 30;
+          // Position smaller pulley so gap is between edges (not centers)
+          // Top pulley bottom edge + gap + smaller pulley radius = smaller pulley center
+          const smallerPulleyY =
+            fixedPulleyY + fixedPulleyRadius + gapSize + smallerPulleyRadius;
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          // Rope connects to right side of top circle and goes straight down
+          pullRopeX = fixedPulleyX + fixedPulleyRadius;
+          // Initialize pullEndY if MA changed
+          if (lastMA !== ma) {
+            pullEndY = 340;
+            startingPullEndY = 340;
+            startingMovablePulleyY = 320;
+            lastMA = ma;
+          }
+          
+          // Calculate how far the rope has moved from starting position
+          const ropeMovement = pullEndY - startingPullEndY;
+          // Move movable pulley by one third the distance in opposite direction
+          const movablePulleyY = startingMovablePulleyY - (ropeMovement / 3);
+
+          // Draw all grey circles FIRST (in background)
+          ctx.fillStyle = "#888";
+          // Draw movable pulley
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          // Draw smaller grey circle below the fixed pulley
+          ctx.beginPath();
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+
+          // Draw rope path for 3:1 mechanical advantage
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+
+          // Rope from mount attachment point wrapping around left side of top pulley
+          // Draw line from mount to left side (avoiding the top), then arc along top semicircle
+
+          // Now draw the arc along the top semicircle from left to top
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Arc along top semicircle from left to top (left half of top semicircle)
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            Math.PI, // Left side (180°)
+            (3 * Math.PI) / 2, // Top (270°)
+            false // Counterclockwise - goes from left to top along top semicircle
+          );
+          ctx.stroke();
+
+          // Rope path: from left side of top pulley down, around bottom of bottom pulley, then up
+          ctx.beginPath();
+          // Start from left side of top pulley
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Straight down to left side of bottom pulley
+          ctx.lineTo(movablePulleyX - movablePulleyRadius, movablePulleyY);
+          // Semicircle around bottom of bottom pulley (bottom half only)
+          // Arc from left (180°) through bottom (270°) to right (0°) - this is the bottom semicircle
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            Math.PI, // Left side (180°)
+            0, // Right side (0°)
+            true // Clockwise - goes from left through bottom (270°) to right (bottom semicircle)
+          );
+          // Straight up to right side of smallest grey circle (below top fixed pulley)
+          ctx.lineTo(fixedPulleyX + smallerPulleyRadius, smallerPulleyY);
+          ctx.stroke();
+
+          // Rope from mount attachment point wrapping around right side of top pulley
+          // Draw line from mount to top of pulley, then arc along right half of top semicircle
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX, mountAttachmentY);
+          ctx.lineTo(fixedPulleyX, fixedPulleyY - fixedPulleyRadius);
+          // Arc along right half of top semicircle: from top (270°) to right (0°)
+          // This is 90 degrees along the top semicircle
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            0, // Right side (0°)
+            false // Counterclockwise - goes from top to right along top semicircle
+          );
+          ctx.stroke();
+
+          // Free end: straight down from right side of top grey circle (fixed pulley) to pulling point
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
+          ctx.lineTo(pullRopeX, pullEndY);
+          ctx.stroke();
+
+          // Draw handle at end of rope (visual indicator for dragging)
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(pullRopeX, pullEndY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#654321";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw starting point marker (red, slightly to the right of rope)
+          const markerOffsetX = 20; // Offset to the right
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, startingPullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting point to current point (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX + markerOffsetX, startingPullEndY);
+          ctx.lineTo(pullRopeX + markerOffsetX, pullEndY);
+          ctx.stroke();
+
+          // Draw current position marker (red, slightly to the right of rope, below the red line)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, pullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
+          const massY = movablePulleyY + movablePulleyRadius + 20;
+          const startingMassY = startingMovablePulleyY + movablePulleyRadius + 20;
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX, movablePulleyY + movablePulleyRadius);
+          ctx.lineTo(movablePulleyX, massY);
+          ctx.stroke();
+
+          // Draw mass/box hanging from bottom pulley
+          ctx.fillStyle = "#444";
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 2;
+          ctx.fillRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+          ctx.strokeRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+
+          // Draw mass label on box (dynamic)
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 20px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            mass.toFixed(1) + " kg",
+            movablePulleyX,
+            massY + massHeight / 2 + 7
+          );
+
+          // Draw starting position marker for weight (red, slightly to the left)
+          const leftMarkerOffsetX = -50; // Offset to the left
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, startingMassY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw current position marker for weight (red, slightly to the left)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, massY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting position to current position (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX + leftMarkerOffsetX, startingMassY);
+          ctx.lineTo(movablePulleyX + leftMarkerOffsetX, massY);
+          ctx.stroke();
+
+          // Calculate distance the weight has moved
+          const weightDistanceMoved = Math.abs(massY - startingMassY);
+          
+          // Draw distance counter to the left of the weight (blue)
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Distance: " + weightDistanceMoved.toFixed(0) + " px",
+            movablePulleyX + leftMarkerOffsetX - 10,
+            massY + 5
+          );
+
+          // Draw arrow showing downward pull (on free end of rope) - BROWN
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX, pullEndY + 30);
+          ctx.lineTo(pullRopeX - 5, pullEndY + 20);
+          ctx.lineTo(pullRopeX + 5, pullEndY + 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Calculate distance dragged
+          const distanceDragged = Math.abs(pullEndY - startingPullEndY);
+          
+          // Draw force label on the right side of the rope
+          const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Force = " + force.toFixed(1) + " N",
+            pullRopeX + 50,
+            pullEndY + 5
+          );
+          
+          // Draw distance measurement
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Distance: " + distanceDragged.toFixed(0) + " px",
+            pullRopeX + 50,
+            pullEndY + 25
+          );
+
+          // Draw labels
+          ctx.fillStyle = "#000";
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Fixed Pulley", fixedPulleyX, 30);
+
+          // Draw "Movable Pulley" label to the left of the bottom pulley
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Movable Pulley",
+            movablePulleyX - movablePulleyRadius - 30,
+            movablePulleyY
+          );
+
+          // Draw mechanical advantage indicator
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 10, height - 30);
+
+          // Rope semicircle around top of smallest grey circle (from right to left)
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + smallerPulleyRadius, smallerPulleyY);
+          // Arc along top semicircle from right (0°) to left (180°)
+          // Split into two arcs: right to top, then top to left
+          // First arc: from right (0°) to top (270°) going counterclockwise
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            0, // Right side (0°)
+            (3 * Math.PI) / 2, // Top (270°)
+            true // Counterclockwise - goes from right through top
+          );
+          // Second arc: from top (270°) to left (180°) going counterclockwise
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            Math.PI, // Left side (180°)
+            true // Counterclockwise - goes from top to left
+          );
+          ctx.stroke();
+
+          // Brown line from left side of middle grey circle to center of bottom grey circle
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - smallerPulleyRadius, smallerPulleyY); // Left side of middle circle
+          ctx.lineTo(movablePulleyX, movablePulleyY); // Center of bottom circle
+          ctx.stroke();
+
+          // Draw extended pulley mount - rectangle that covers both pulleys with gap - BLACK
+          const extendedMountHeight =
+            smallerPulleyY +
+            smallerPulleyRadius -
+            (fixedPulleyY - mountHeight / 2);
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            fixedPulleyX - mountWidth / 2,
+            fixedPulleyY - mountHeight / 2,
+            mountWidth,
+            extendedMountHeight
+          );
+
+          // Draw black rectangle vertically on the bottom movable pulley LAST (only for 3:1)
+          // This ensures it appears on top of everything including the rope
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            movablePulleyX - bottomMountWidth / 2,
+            movablePulleyY - bottomMountHeight / 2,
+            bottomMountWidth,
+            bottomMountHeight
+          );
+        } else if (ma === 4) {
+          // 4:1 Mechanical Advantage
+          // Movable pulley at bottom
+          const movablePulleyX = fixedPulleyX;
+          const movablePulleyRadius = 35;
+
+          // Define smaller pulley position (needed for rope path)
+          const bottomMountWidth = 15;
+          const bottomMountHeight = 70; // Height of the rectangle on the bottom pulley
+          const ropeWidth = 5; // Width of the brown rope
+          const gapSize = ropeWidth * 2; // Gap between the two top pulleys (2 times rope width)
+          const smallerPulleyRadius = 30;
+          // Position smaller pulley so gap is between edges (not centers)
+          // Top pulley bottom edge + gap + smaller pulley radius = smaller pulley center
+          const smallerPulleyY =
+            fixedPulleyY + fixedPulleyRadius + gapSize + smallerPulleyRadius;
+
+          // Attachment point on mount (center, where rope attaches at top)
+          const mountAttachmentY = fixedPulleyY - mountHeight / 2 + 20;
+
+          // Pulling point (where the free end of rope hangs, right side)
+          // Rope connects to right side of top circle and goes straight down
+          pullRopeX = fixedPulleyX + fixedPulleyRadius;
+          // Initialize pullEndY if MA changed
+          if (lastMA !== ma) {
+            pullEndY = 340;
+            startingPullEndY = 340;
+            startingMovablePulleyY = 360;
+            lastMA = ma;
+          }
+          
+          // Calculate how far the rope has moved from starting position
+          const ropeMovement = pullEndY - startingPullEndY;
+          // Move movable pulley by one quarter the distance in opposite direction
+          const movablePulleyY = startingMovablePulleyY - (ropeMovement / 4);
+
+          // Define smaller pulley above bottom movable pulley (only for 4:1)
+          const smallerBottomPulleyRadius = 25; // Smaller radius than bottom pulley
+          // Position smaller bottom pulley so gap is between edges (not centers)
+          // Bottom pulley top edge - gap - smaller pulley radius = smaller pulley center
+          const smallerBottomPulleyY =
+            movablePulleyY -
+            movablePulleyRadius -
+            gapSize -
+            smallerBottomPulleyRadius;
+
+          // Draw all grey circles FIRST (in background)
+          ctx.fillStyle = "#888";
+          // Draw smaller grey circle above bottom movable pulley
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX,
+            smallerBottomPulleyY,
+            smallerBottomPulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          // Draw movable pulley
+          ctx.beginPath();
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          // Draw smaller grey circle below the fixed pulley
+          ctx.beginPath();
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+
+          // Draw rope path for 4:1 mechanical advantage
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+
+          // Rope from mount attachment point wrapping around left side of top pulley
+          // Draw line from mount to left side (avoiding the top), then arc along top semicircle
+
+          // Now draw the arc along the top semicircle from left to top
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Arc along top semicircle from left to top (left half of top semicircle)
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            Math.PI, // Left side (180°)
+            (3 * Math.PI) / 2, // Top (270°)
+            false // Counterclockwise - goes from left to top along top semicircle
+          );
+          ctx.stroke();
+
+          // Rope path: from left side of top pulley down, around bottom of bottom pulley, then up
+          ctx.beginPath();
+          // Start from left side of top pulley
+          ctx.moveTo(fixedPulleyX - fixedPulleyRadius, fixedPulleyY);
+          // Straight down to left side of bottom pulley
+          ctx.lineTo(movablePulleyX - movablePulleyRadius, movablePulleyY);
+          // Semicircle around bottom of bottom pulley (bottom half only)
+          // Arc from left (180°) through bottom (270°) to right (0°) - this is the bottom semicircle
+          ctx.arc(
+            movablePulleyX,
+            movablePulleyY,
+            movablePulleyRadius,
+            Math.PI, // Left side (180°)
+            0, // Right side (0°)
+            true // Clockwise - goes from left through bottom (270°) to right (bottom semicircle)
+          );
+          // Straight up to right side of smallest grey circle (below top fixed pulley)
+          ctx.lineTo(fixedPulleyX + smallerPulleyRadius, smallerPulleyY);
+          ctx.stroke();
+
+          // Rope from mount attachment point wrapping around right side of top pulley
+          // Draw line from mount to top of pulley, then arc along right half of top semicircle
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX, mountAttachmentY);
+          ctx.lineTo(fixedPulleyX, fixedPulleyY - fixedPulleyRadius);
+          // Arc along right half of top semicircle: from top (270°) to right (0°)
+          // This is 90 degrees along the top semicircle
+          ctx.arc(
+            fixedPulleyX,
+            fixedPulleyY,
+            fixedPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            0, // Right side (0°)
+            false // Counterclockwise - goes from top to right along top semicircle
+          );
+          ctx.stroke();
+
+          // Free end: straight down from right side of top grey circle (fixed pulley) to pulling point
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + fixedPulleyRadius, fixedPulleyY);
+          ctx.lineTo(pullRopeX, pullEndY);
+          ctx.stroke();
+
+          // Draw handle at end of rope (visual indicator for dragging)
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(pullRopeX, pullEndY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#654321";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw starting point marker (red, slightly to the right of rope)
+          const markerOffsetX = 20; // Offset to the right
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, startingPullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting point to current point (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX + markerOffsetX, startingPullEndY);
+          ctx.lineTo(pullRopeX + markerOffsetX, pullEndY);
+          ctx.stroke();
+
+          // Draw current position marker (red, slightly to the right of rope, below the red line)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(pullRopeX + markerOffsetX, pullEndY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Rope from movable pulley down to weight (separate rope hanging from bottom pulley)
+          const massY = movablePulleyY + movablePulleyRadius + 20;
+          const startingMassY = startingMovablePulleyY + movablePulleyRadius + 20;
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX, movablePulleyY + movablePulleyRadius);
+          ctx.lineTo(movablePulleyX, massY);
+          ctx.stroke();
+
+          // Draw mass/box hanging from bottom pulley
+          ctx.fillStyle = "#444";
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 2;
+          ctx.fillRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+          ctx.strokeRect(
+            movablePulleyX - massWidth / 2,
+            massY,
+            massWidth,
+            massHeight
+          );
+
+          // Draw mass label on box (dynamic)
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 20px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            mass.toFixed(1) + " kg",
+            movablePulleyX,
+            massY + massHeight / 2 + 7
+          );
+
+          // Draw starting position marker for weight (red, slightly to the left)
+          const leftMarkerOffsetX = -50; // Offset to the left
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, startingMassY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw current position marker for weight (red, slightly to the left)
+          ctx.fillStyle = "#ff0000";
+          ctx.beginPath();
+          ctx.arc(movablePulleyX + leftMarkerOffsetX, massY, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#cc0000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw line connecting starting position to current position (red)
+          ctx.strokeStyle = "#ff0000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(movablePulleyX + leftMarkerOffsetX, startingMassY);
+          ctx.lineTo(movablePulleyX + leftMarkerOffsetX, massY);
+          ctx.stroke();
+
+          // Calculate distance the weight has moved
+          const weightDistanceMoved = Math.abs(massY - startingMassY);
+          
+          // Draw distance counter to the left of the weight (blue)
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Distance: " + weightDistanceMoved.toFixed(0) + " px",
+            movablePulleyX + leftMarkerOffsetX - 10,
+            massY + 5
+          );
+
+          // Draw arrow showing downward pull (on free end of rope) - BROWN
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.moveTo(pullRopeX, pullEndY + 30);
+          ctx.lineTo(pullRopeX - 5, pullEndY + 20);
+          ctx.lineTo(pullRopeX + 5, pullEndY + 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Calculate distance dragged
+          const distanceDragged = Math.abs(pullEndY - startingPullEndY);
+          
+          // Draw force label on the right side of the rope
+          const force = (mass * 9.8) / ma; // Force = (mass × gravity) / mechanical advantage
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Force = " + force.toFixed(1) + " N",
+            pullRopeX + 50,
+            pullEndY + 5
+          );
+          
+          // Draw distance measurement
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            "Distance: " + distanceDragged.toFixed(0) + " px",
+            pullRopeX + 50,
+            pullEndY + 25
+          );
+
+          // Draw labels
+          ctx.fillStyle = "#000";
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Fixed Pulley", fixedPulleyX, 30);
+
+          // Draw "Movable Pulley" label to the left of the bottom pulley
+          ctx.textAlign = "right";
+          ctx.fillText(
+            "Movable Pulley",
+            movablePulleyX - movablePulleyRadius - 30,
+            movablePulleyY
+          );
+
+          // Draw mechanical advantage indicator
+          ctx.fillStyle = "#0066cc";
+          ctx.font = "bold 16px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText("Mechanical Advantage: " + ma + ":1", 10, height - 30);
+
+          // Rope semicircle around top of smallest grey circle (from right to left)
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX + smallerPulleyRadius, smallerPulleyY);
+          // Arc along top semicircle from right (0°) to left (180°)
+          // Split into two arcs: right to top, then top to left
+          // First arc: from right (0°) to top (270°) going counterclockwise
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            0, // Right side (0°)
+            (3 * Math.PI) / 2, // Top (270°)
+            true // Counterclockwise - goes from right through top
+          );
+          // Second arc: from top (270°) to left (180°) going counterclockwise
+          ctx.arc(
+            fixedPulleyX,
+            smallerPulleyY,
+            smallerPulleyRadius,
+            (3 * Math.PI) / 2, // Top (270°)
+            Math.PI, // Left side (180°)
+            true // Counterclockwise - goes from top to left
+          );
+          ctx.stroke();
+
+          // Brown line from left side of middle grey circle (second from top) to left side of second-from-bottom grey circle (only for 4:1)
+          ctx.beginPath();
+          ctx.moveTo(fixedPulleyX - smallerPulleyRadius, smallerPulleyY); // Left side of middle circle (second from top)
+          ctx.lineTo(
+            movablePulleyX - smallerBottomPulleyRadius,
+            smallerBottomPulleyY
+          ); // Left side of second-from-bottom circle
+          ctx.stroke();
+
+          // Semicircle around bottom of second-from-bottom grey circle (from left to right)
+          ctx.beginPath();
+          ctx.moveTo(
+            movablePulleyX - smallerBottomPulleyRadius,
+            smallerBottomPulleyY
+          ); // Start at left side
+          // Arc along bottom semicircle from left (180°) through bottom (270°) to right (0°)
+          ctx.arc(
+            movablePulleyX,
+            smallerBottomPulleyY,
+            smallerBottomPulleyRadius,
+            Math.PI, // Left side (180°)
+            0, // Right side (0°)
+            true // Clockwise - goes from left through bottom (270°) to right (bottom semicircle)
+          );
+          ctx.stroke();
+
+          // Line from right side of second-from-bottom grey circle to center of top grey circle (drawn before mount to appear behind)
+          ctx.beginPath();
+          ctx.moveTo(
+            movablePulleyX + smallerBottomPulleyRadius,
+            smallerBottomPulleyY
+          ); // Right side of second-from-bottom circle
+          ctx.lineTo(fixedPulleyX, fixedPulleyY); // Center of top grey circle
+          ctx.stroke();
+
+          // Draw extended pulley mount - rectangle that covers both pulleys with gap - BLACK
+          const extendedMountHeight =
+            smallerPulleyY +
+            smallerPulleyRadius -
+            (fixedPulleyY - mountHeight / 2);
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            fixedPulleyX - mountWidth / 2,
+            fixedPulleyY - mountHeight / 2,
+            mountWidth,
+            extendedMountHeight
+          );
+
+          // Draw black rectangle connecting smaller bottom pulley to bottom movable pulley (only for 4:1)
+          // This connects the two bottom pulleys with a gap
+          const bottomExtendedMountHeight =
+            movablePulleyY +
+            movablePulleyRadius -
+            (smallerBottomPulleyY - smallerBottomPulleyRadius);
+          ctx.fillStyle = "#000";
+          ctx.fillRect(
+            movablePulleyX - bottomMountWidth / 2,
+            smallerBottomPulleyY - smallerBottomPulleyRadius,
+            bottomMountWidth,
+            bottomExtendedMountHeight
+          );
+        }
+      }
+
+      // Mouse event handlers for interactive rope pulling
+      function setupInteractiveRope() {
+        canvas = document.getElementById("pulleyCanvas");
+        if (!canvas) return;
+
+        canvas.addEventListener("mousedown", handleMouseDown);
+        canvas.addEventListener("mousemove", handleMouseMove);
+        canvas.addEventListener("mouseup", handleMouseUp);
+        canvas.addEventListener("mouseleave", handleMouseUp);
+        
+        // Touch support
+        canvas.addEventListener("touchstart", handleTouchStart);
+        canvas.addEventListener("touchmove", handleTouchMove);
+        canvas.addEventListener("touchend", handleTouchEnd);
+      }
+
+      function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+
+      function getTouchPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0] || e.changedTouches[0];
+        return {
+          x: touch.clientX - rect.left,
+          y: touch.clientY - rect.top
+        };
+      }
+
+      function isNearPullEnd(x, y) {
+        const threshold = 30; // Distance threshold for clicking on rope end
+        const distance = Math.sqrt(
+          Math.pow(x - pullRopeX, 2) + Math.pow(y - pullEndY, 2)
+        );
+        return distance < threshold;
+      }
+
+      function handleMouseDown(e) {
+        const pos = getMousePos(e);
+        if (isNearPullEnd(pos.x, pos.y)) {
+          isDragging = true;
+          canvas.style.cursor = "grabbing";
+        }
+      }
+
+      function handleMouseMove(e) {
+        if (isDragging) {
+          const pos = getMousePos(e);
+          // Constrain Y position (allow pulling up and down)
+          // Minimum Y is near the top pulley, maximum Y is near bottom of canvas
+          const minY = 150;
+          const maxY = 450;
+          pullEndY = Math.max(minY, Math.min(maxY, pos.y));
+          drawPulleySystem(currentMass, mechanicalAdvantage);
+        } else {
+          const pos = getMousePos(e);
+          if (isNearPullEnd(pos.x, pos.y)) {
+            canvas.style.cursor = "grab";
+          } else {
+            canvas.style.cursor = "default";
+          }
+        }
+      }
+
+      function handleMouseUp(e) {
+        if (isDragging) {
+          isDragging = false;
+          canvas.style.cursor = "default";
+        }
+      }
+
+      function handleTouchStart(e) {
+        e.preventDefault();
+        const pos = getTouchPos(e);
+        if (isNearPullEnd(pos.x, pos.y)) {
+          isDragging = true;
+        }
+      }
+
+      function handleTouchMove(e) {
+        e.preventDefault();
+        if (isDragging) {
+          const pos = getTouchPos(e);
+          const minY = 150;
+          const maxY = 450;
+          pullEndY = Math.max(minY, Math.min(maxY, pos.y));
+          drawPulleySystem(currentMass, mechanicalAdvantage);
+        }
+      }
+
+      function handleTouchEnd(e) {
+        e.preventDefault();
+        isDragging = false;
+      }
+
+      // Initialize the pulley system on page load
+      window.addEventListener("load", function () {
+        setupInteractiveRope();
+        drawPulleySystem();
+      });
+    </script>
+  </body>
+</html>
+
